@@ -103,12 +103,7 @@
       border-color: var(--primary);
       background: #fff;
     }
-    input[readonly] {
-      background: #eef2f7;
-      color: var(--accent-light);
-      font-weight: 600;
-    }
-    .row { display: flex; gap: 12px; }
+.row { display: flex; gap: 12px; }
     .row .field { flex: 1; }
 
     /* Radio group */
@@ -305,11 +300,63 @@
     .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--muted); }
     .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
+    @page {
+      size: A4;
+      margin: 12mm 14mm;
+    }
+
     @media print {
-      body { background: #fff; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+      body { background: #fff !important; }
       header, .container > .card:not(#preview), .btn-wrap { display: none !important; }
-      #preview { display: block !important; box-shadow: none; padding: 0; }
-      .container { display: block; }
+
+      .container {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      #preview {
+        display: block !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      /* Preserve gradient backgrounds */
+      .economy-banner  { background: linear-gradient(135deg, #1a3c5e, #2a5a8a) !important; }
+      .investment-banner { background: linear-gradient(135deg, #2d6a2d, #3a8a3a) !important; }
+      .detail-table th { background: #1a3c5e !important; }
+      .spec-box { background: #f4f6f9 !important; }
+
+      /* Compact sizing for print */
+      .proposal-header { margin-bottom: 16px; padding-bottom: 12px; }
+      .proposal-logo { font-size: 24px; }
+      .proposal-client { margin-bottom: 14px; }
+      .proposal-client p { font-size: 15px; }
+
+      .spec-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 12px !important;
+      }
+      .spec-box { padding: 10px 12px !important; break-inside: avoid; }
+      .spec-box .spec-value { font-size: 15px !important; }
+
+      .investment-banner,
+      .economy-banner {
+        padding: 14px 20px !important;
+        margin-bottom: 10px !important;
+        break-inside: avoid;
+      }
+      .eco-value, .inv-value { font-size: 22px !important; }
+
+      /* Hide the detail table — visual summary is enough for the client */
+      .detail-table-wrap { display: none !important; }
+
+      .footer-note { margin-top: 14px; padding-top: 10px; font-size: 10px; }
     }
   </style>
 </head>
@@ -371,12 +418,12 @@
 
     <div class="row">
       <div class="field">
-        <label>Potência Total (kVp)</label>
-        <input id="totalPower" type="text" readonly placeholder="—" />
+        <label>Potência Total (kVp) <span style="font-weight:400;text-transform:none;color:#aaa">· calculado, editável</span></label>
+        <input id="totalPower" type="text" placeholder="Ex: 9,35 kVp" />
       </div>
       <div class="field">
-        <label>Geração Mensal (kWh)</label>
-        <input id="monthlyGen" type="text" readonly placeholder="—" />
+        <label>Geração Mensal (kWh) <span style="font-weight:400;text-transform:none;color:#aaa">· calculado, editável</span></label>
+        <input id="monthlyGen" type="text" placeholder="Ex: 960 kWh" />
       </div>
     </div>
 
@@ -429,20 +476,30 @@
 </div>
 
 <script>
-  // ── Auto-calculate ──────────────────────────────────────────────
+  // ── Auto-calculate (fills only if field is empty or was auto-filled) ──
+  let autoFilled = { totalPower: false, monthlyGen: false };
+
   function recalc() {
     const qty = parseFloat(document.getElementById('modQty').value) || 0;
     const pw  = parseFloat(document.getElementById('modPower').value) || 0;
 
-    const kVp   = qty > 0 && pw > 0 ? (qty * pw / 1000).toFixed(2) : '';
-    const genKwh = qty > 0 ? (qty * 60).toFixed(0) : '';
-
-    document.getElementById('totalPower').value  = kVp    ? kVp + ' kVp'  : '';
-    document.getElementById('monthlyGen').value  = genKwh ? genKwh + ' kWh' : '';
+    if (qty > 0 && pw > 0) {
+      const kVp    = (qty * pw / 1000).toFixed(2);
+      const genKwh = (qty * 60).toFixed(0);
+      const tpEl   = document.getElementById('totalPower');
+      const mgEl   = document.getElementById('monthlyGen');
+      if (!tpEl.value || autoFilled.totalPower)  { tpEl.value = kVp + ' kVp';   autoFilled.totalPower  = true; }
+      if (!mgEl.value || autoFilled.monthlyGen)  { mgEl.value = genKwh + ' kWh'; autoFilled.monthlyGen = true; }
+    }
   }
 
   ['modQty', 'modPower'].forEach(id =>
     document.getElementById(id).addEventListener('input', recalc)
+  );
+
+  // If user manually edits the calculated fields, mark them as manual
+  ['totalPower', 'monthlyGen'].forEach(id =>
+    document.getElementById(id).addEventListener('input', () => { autoFilled[id] = false; })
   );
 
   // ── Battery toggle ──────────────────────────────────────────────
@@ -512,7 +569,7 @@
         <div class="spec-box">
           <div class="spec-label">Geração Mensal</div>
           <div class="spec-value">${genKwh} kWh</div>
-          <div class="spec-sub">${modQty} módulos × 60 kWh</div>
+          <div class="spec-sub">Estimativa mensal</div>
         </div>
         <div class="spec-box">
           <div class="spec-label">Módulos</div>
@@ -556,12 +613,9 @@
           <div class="eco-value">R$ ${ecoBill !== '—' ? parseFloat(ecoBill).toLocaleString('pt-BR', {minimumFractionDigits:2}) : '—'}</div>
           <div class="eco-year">${ecoYear !== '—' ? 'Economia anual estimada: R$ ' + parseFloat(ecoYear).toLocaleString('pt-BR', {minimumFractionDigits:2}) : ''}</div>
         </div>
-        <div style="text-align:right">
-          <div style="font-size:12px;opacity:.75">Taxa de economia aplicada</div>
-          <div style="font-size:22px;font-weight:800;color:var(--primary)">R$ 0,85 / kWh</div>
-        </div>
       </div>
 
+      <div class="detail-table-wrap">
       <table class="detail-table">
         <thead>
           <tr>
@@ -604,14 +658,8 @@
           </tr>
           <tr>
             <td>Geração Mensal Estimada</td>
-            <td>${modQty} módulos × 60 kWh</td>
+            <td>${modQty} módulos</td>
             <td>${genKwh} kWh/mês</td>
-            <td><span class="badge">Estimado</span></td>
-          </tr>
-          <tr>
-            <td>Economia na Fatura</td>
-            <td>R$ 0,85 por kWh gerado</td>
-            <td>R$ ${ecoBill !== '—' ? parseFloat(ecoBill).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—'}/mês</td>
             <td><span class="badge">Estimado</span></td>
           </tr>
           ${projectVal ? `
@@ -630,6 +678,7 @@
           </tr>` : ''}` : ''}
         </tbody>
       </table>
+      </div>
 
       <div class="footer-note">
         Esta proposta é de caráter informativo e os valores de geração e economia são estimados.<br>
@@ -644,6 +693,7 @@
   // ── Reset ───────────────────────────────────────────────────────
   function resetForm() {
     document.querySelectorAll('input:not([type=radio]):not([type=checkbox])').forEach(i => { i.value = ''; });
+    autoFilled = { totalPower: false, monthlyGen: false };
     document.querySelector('input[name=installType][value="Residencial"]').checked = true;
     document.getElementById('hasBattery').checked = false;
     document.getElementById('batteryField').style.display = 'none';
