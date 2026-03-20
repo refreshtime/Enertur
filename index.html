@@ -467,12 +467,30 @@
       <label>Conta de Energia Mensal (R$)</label>
       <input id="billValue" type="number" min="0" step="0.01" placeholder="Ex: 800" />
     </div>
+    <div class="row">
+      <div class="field">
+        <label>Consumo Atual (kWh/mês)</label>
+        <input id="consumoAtual" type="number" min="0" step="1" placeholder="Ex: 900" />
+      </div>
+      <div class="field">
+        <label>Tarifa (R$/kWh)</label>
+        <input id="tarifa" type="number" min="0" step="0.001" placeholder="Ex: 0,85" />
+      </div>
+    </div>
     <div class="field">
       <label>Tipo de Instalação</label>
       <div class="radio-group">
         <label><input type="radio" name="installType" value="Residencial" checked /> Residencial</label>
         <label><input type="radio" name="installType" value="Industrial" /> Industrial</label>
         <label><input type="radio" name="installType" value="Condomínio" /> Condomínio</label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Padrão de Conexão</label>
+      <div class="radio-group">
+        <label><input type="radio" name="conexaoType" value="Monofásico" checked /> Monofásico <span style="font-size:11px;color:#aaa">(mín. 30 kWh)</span></label>
+        <label><input type="radio" name="conexaoType" value="Bifásico" /> Bifásico <span style="font-size:11px;color:#aaa">(mín. 50 kWh)</span></label>
+        <label><input type="radio" name="conexaoType" value="Trifásico" /> Trifásico <span style="font-size:11px;color:#aaa">(mín. 100 kWh)</span></label>
       </div>
     </div>
   </div>
@@ -610,21 +628,36 @@
     const hasBat    = document.getElementById('hasBattery').checked;
     const batKwh    = getN('batteryKwh');
     const instType    = document.querySelector('input[name=installType]:checked').value;
+    const conexaoType = document.querySelector('input[name=conexaoType]:checked').value;
     const projectVal  = getN('projectValue');
 
     const kVp        = modQty && modPower ? (modQty * modPower / 1000).toFixed(2) : '—';
     const genKwhNum  = parseFloat(get('monthlyGen')) || (modQty * 60);
     const genKwh     = get('monthlyGen') || (modQty ? modQty * 60 + ' kWh' : '—');
     const totalPwDisp = get('totalPower') || (kVp !== '—' ? kVp + ' kVp' : '—');
-    const ecoMonthly = genKwhNum * 0.85;
+
+    // Mínimo faturado por padrão de conexão
+    const minKwhMap  = { 'Monofásico': 30, 'Bifásico': 50, 'Trifásico': 100 };
+    const minKwh     = minKwhMap[conexaoType] || 30;
+    const consumoAtual = getN('consumoAtual');
+    const tarifa       = getN('tarifa');
+
+    // Economia = (consumo antigo - mínimo faturado) × tarifa
+    const ecoMonthly = (consumoAtual && tarifa)
+      ? Math.max(0, (consumoAtual - minKwh) * tarifa)
+      : 0;
     const ecoAnual   = ecoMonthly * 12;
 
-    const paybackMonths = (projectVal && ecoMonthly)
-      ? Math.ceil(projectVal / ecoMonthly) : null;
-    const paybackStr = paybackMonths
-      ? (paybackMonths >= 12
-          ? Math.floor(paybackMonths/12) + ' anos e ' + (paybackMonths % 12) + ' meses'
-          : paybackMonths + ' meses')
+    // Payback = investimento total ÷ economia anual
+    const paybackYears = (projectVal && ecoAnual) ? projectVal / ecoAnual : null;
+    const paybackStr = paybackYears
+      ? (() => {
+          const anos   = Math.floor(paybackYears);
+          const meses  = Math.round((paybackYears - anos) * 12);
+          if (anos === 0) return meses + ' meses';
+          if (meses === 0) return anos + ' anos';
+          return anos + ' anos e ' + meses + ' meses';
+        })()
       : null;
 
     const today = new Date().toLocaleDateString('pt-BR');
@@ -751,8 +784,10 @@
           <tr><td>Quantidade de Inversores</td><td>${invQty || '—'} unidade(s)</td><td>—</td></tr>
           <tr><td>Bateria</td><td>${hasBat ? 'Armazenamento ' + batKwh + ' kWh' : 'Não inclusa'}</td><td>${hasBat ? batKwh + ' kWh' : '—'}</td></tr>
           <tr><td>Geração Mensal Estimada</td><td>${modQty} módulos</td><td>${genKwh}/mês</td></tr>
+          ${consumoAtual ? '<tr><td>Consumo Atual</td><td>Antes do sistema solar</td><td>' + consumoAtual + ' kWh/mês</td></tr>' : ''}
+          ${tarifa ? '<tr><td>Tarifa</td><td>Mínimo faturado: ' + minKwh + ' kWh (' + conexaoType + ')</td><td>' + fmtBRL(tarifa) + '/kWh</td></tr>' : ''}
           ${projectVal ? '<tr style="background:#f0faf0"><td><strong>Valor Total do Projeto</strong></td><td>Investimento total</td><td><strong>' + fmtBRL(projectVal) + '</strong></td></tr>' : ''}
-          ${paybackStr ? '<tr style="background:#f0faf0"><td>Retorno do Investimento</td><td>Valor total ÷ economia mensal</td><td>' + paybackStr + '</td></tr>' : ''}
+          ${paybackStr ? '<tr style="background:#f0faf0"><td>Retorno do Investimento</td><td>Investimento ÷ economia anual</td><td>' + paybackStr + '</td></tr>' : ''}
         </tbody>
       </table>
       </div>
