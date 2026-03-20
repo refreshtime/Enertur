@@ -200,6 +200,17 @@
     .proposal-client p { font-size: 18px; font-weight: 700; color: var(--accent); }
     .proposal-client .addr { font-size: 13px; color: var(--muted); font-weight: 400; }
 
+    .p-client-banner {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 10px;
+      padding: 18px 24px;
+      margin-bottom: 22px;
+    }
+    .p-client-label { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; opacity: .7; }
+    .p-client-name  { font-size: 26px; font-weight: 900; margin-top: 4px; }
+    .p-client-addr  { font-size: 13px; opacity: .75; margin-top: 4px; }
+
     .spec-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -272,6 +283,59 @@
       background: #e8f5e9;
       color: var(--success);
     }
+
+    /* ── Seções 3-7 ── */
+    .p-section { margin-bottom: 20px; }
+    .p-section-title {
+      font-size: 13px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--accent);
+      border-left: 4px solid var(--primary);
+      padding-left: 10px; margin-bottom: 12px;
+    }
+    .p-pay-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    @media (max-width:600px) { .p-pay-grid { grid-template-columns: 1fr; } }
+    .p-pay-card {
+      background: var(--bg); border-radius: 10px; padding: 14px 16px;
+      border-top: 3px solid var(--primary);
+    }
+    .p-pay-card strong { display: block; font-size: 13px; color: var(--accent); margin-bottom: 6px; }
+    .p-pay-card span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .p-pay-stage { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .p-pay-stage::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--primary); flex-shrink:0; }
+    .p-timeline { display: flex; gap: 16px; flex-wrap: wrap; }
+    .p-tl-item { flex:1; min-width:180px; background:var(--bg); border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:12px; }
+    .p-tl-num { font-size:28px; font-weight:900; color:var(--primary); line-height:1; }
+    .p-tl-desc { font-size:12px; color:var(--muted); }
+    .p-tl-desc strong { display:block; color:var(--accent); font-size:13px; margin-bottom:2px; }
+    .p-warranty-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    @media (max-width:600px) { .p-warranty-grid { grid-template-columns:1fr 1fr; } }
+    .p-warranty-card { background:var(--bg); border-radius:10px; padding:14px 12px; text-align:center; }
+    .p-warranty-years { font-size:22px; font-weight:900; color:var(--accent); }
+    .p-warranty-unit  { font-size:11px; color:var(--primary); font-weight:700; text-transform:uppercase; }
+    .p-warranty-item  { font-size:11px; color:var(--muted); margin-top:4px; }
+    .p-resp-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media (max-width:600px) { .p-resp-grid { grid-template-columns:1fr; } }
+    .p-resp-card { background:var(--bg); border-radius:10px; padding:14px 16px; }
+    .p-resp-card strong { display:block; font-size:13px; color:var(--accent); margin-bottom:8px; }
+    .p-resp-item { font-size:12px; color:var(--muted); padding:3px 0; border-bottom:1px solid var(--border); }
+    .p-resp-item:last-child { border-bottom:none; }
+    .p-validity { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; border-radius:10px; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:8px; }
+    .p-validity .pv-label { font-size:13px; opacity:.9; }
+    .p-validity .pv-days  { font-size:28px; font-weight:900; }
+
+    /* ── Logo + Stats + Hero foto ── */
+    .p-hero { display:flex; align-items:stretch; gap:0; margin-bottom:20px; border-radius:12px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.1); }
+    .p-hero-left { background:var(--accent); color:#fff; padding:24px 28px; display:flex; flex-direction:column; justify-content:space-between; min-width:220px; }
+    .p-hero-logo { font-size:28px; font-weight:900; letter-spacing:1px; }
+    .p-hero-logo span { color:var(--primary); }
+    .p-hero-tagline { font-size:10px; letter-spacing:2.5px; color:var(--primary); margin-top:2px; }
+    .p-stats { display:flex; gap:24px; margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,.15); }
+    .p-stat-value { font-size:22px; font-weight:900; color:var(--primary); }
+    .p-stat-label { font-size:10px; color:rgba(255,255,255,.7); margin-top:2px; }
+    .p-hero-photo-wrap { flex:1; position:relative; min-height:140px; background:linear-gradient(135deg,#1a4a2e 0%,#2d7a3a 40%,#1a3c5e 100%); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .p-hero-photo { width:100%; height:100%; object-fit:cover; display:block; }
+    .p-hero-photo-fallback { text-align:center; color:rgba(255,255,255,.4); font-size:32px; }
+    @media (max-width:600px) { .p-hero { flex-direction:column; } .p-hero-photo-wrap { min-height:120px; } }
 
     .footer-note {
       margin-top: 24px;
@@ -355,6 +419,22 @@
 
       /* Hide the detail table — visual summary is enough for the client */
       .detail-table-wrap { display: none !important; }
+
+      .p-hero { border-radius: 8px !important; margin-bottom: 12px !important; }
+      .p-hero-left { min-width: 180px !important; padding: 16px 20px !important; }
+      .p-hero-logo { font-size: 22px !important; }
+      .p-stat-value { font-size: 16px !important; }
+      .p-hero-photo-wrap { min-height: 100px !important; }
+      .p-client-banner { padding: 12px 18px !important; margin-bottom: 12px !important; }
+      .p-client-name { font-size: 20px !important; }
+      .p-pay-grid { grid-template-columns: repeat(3,1fr) !important; }
+      .p-warranty-grid { grid-template-columns: repeat(4,1fr) !important; }
+      .p-resp-grid { grid-template-columns: 1fr 1fr !important; }
+      .p-section { margin-bottom: 12px !important; break-inside: avoid; }
+      .p-validity { padding: 12px 18px !important; margin-bottom: 12px !important; break-inside: avoid; }
+      .p-hero-left { background: #1a3c5e !important; }
+      .p-pay-card, .p-tl-item, .p-warranty-card, .p-resp-card { background: #f4f6f9 !important; }
+      .p-validity { background: linear-gradient(135deg,#f5a623,#d4891a) !important; }
 
       .footer-note { margin-top: 14px; padding-top: 10px; font-size: 10px; }
     }
@@ -507,6 +587,12 @@
     document.getElementById('batteryField').style.display = this.checked ? '' : 'none';
   });
 
+  // ── Moeda brasileira ────────────────────────────────────────────
+  function fmtBRL(val) {
+    if (!val && val !== 0) return '—';
+    return 'R$\u00a0' + Number(val).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+
   // ── Generate proposal ───────────────────────────────────────────
   function generateProposal() {
     const get   = id => document.getElementById(id).value.trim();
@@ -526,13 +612,15 @@
     const instType    = document.querySelector('input[name=installType]:checked').value;
     const projectVal  = getN('projectValue');
 
-    const kVp       = modQty && modPower ? (modQty * modPower / 1000).toFixed(2) : '—';
-    const genKwh    = modQty ? modQty * 60 : 0;
-    const ecoBill   = genKwh ? (genKwh * 0.85).toFixed(2) : '—';   // R$ 0,85 por kWh
-    const ecoYear   = ecoBill !== '—' ? (parseFloat(ecoBill) * 12).toFixed(2) : '—';
+    const kVp        = modQty && modPower ? (modQty * modPower / 1000).toFixed(2) : '—';
+    const genKwhNum  = parseFloat(get('monthlyGen')) || (modQty * 60);
+    const genKwh     = get('monthlyGen') || (modQty ? modQty * 60 + ' kWh' : '—');
+    const totalPwDisp = get('totalPower') || (kVp !== '—' ? kVp + ' kVp' : '—');
+    const ecoMonthly = genKwhNum * 0.85;
+    const ecoAnual   = ecoMonthly * 12;
 
-    const paybackMonths = (projectVal && ecoBill !== '—')
-      ? Math.ceil(projectVal / parseFloat(ecoBill)) : null;
+    const paybackMonths = (projectVal && ecoMonthly)
+      ? Math.ceil(projectVal / ecoMonthly) : null;
     const paybackStr = paybackMonths
       ? (paybackMonths >= 12
           ? Math.floor(paybackMonths/12) + ' anos e ' + (paybackMonths % 12) + ' meses'
@@ -543,37 +631,79 @@
 
     const preview = document.getElementById('preview');
     preview.innerHTML = `
+      <div class="p-hero">
+        <div class="p-hero-left">
+          <div>
+            <div class="p-hero-logo">ENER<span>TUR</span></div>
+            <div class="p-hero-tagline">— ENERGIA SOLAR —</div>
+          </div>
+          <div class="p-stats">
+            <div>
+              <div class="p-stat-value">7 anos</div>
+              <div class="p-stat-label">No mercado Solar</div>
+            </div>
+            <div>
+              <div class="p-stat-value">+500</div>
+              <div class="p-stat-label">Clientes satisfeitos</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-hero-photo-wrap">
+          <img src="foto-instalacao.jpg" class="p-hero-photo" alt="Instalação solar Enertur"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="p-hero-photo-fallback" style="display:none;flex-direction:column;align-items:center;gap:8px">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="28" cy="20" r="9" fill="#f5a623"/>
+              <line x1="28" y1="6" x2="28" y2="2" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="28" y1="38" x2="28" y2="42" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="14" y1="20" x2="10" y2="20" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="42" y1="20" x2="46" y2="20" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="18.5" y1="9.5" x2="15.5" y2="6.5" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="37.5" y1="30.5" x2="40.5" y2="33.5" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="37.5" y1="9.5" x2="40.5" y2="6.5" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="18.5" y1="30.5" x2="15.5" y2="33.5" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="20" y="38" width="16" height="12" rx="1" fill="#1a3c5e" stroke="#f5a623" stroke-width="1"/>
+              <line x1="25" y1="38" x2="25" y2="50" stroke="#f5a623" stroke-width=".8"/>
+              <line x1="31" y1="38" x2="31" y2="50" stroke="#f5a623" stroke-width=".8"/>
+              <line x1="20" y1="43" x2="36" y2="43" stroke="#f5a623" stroke-width=".8"/>
+              <line x1="20" y1="47" x2="36" y2="47" stroke="#f5a623" stroke-width=".8"/>
+            </svg>
+            <span style="font-size:11px;color:rgba(255,255,255,.5)">Coloque foto-instalacao.jpg na pasta</span>
+          </div>
+        </div>
+      </div>
+
       <div class="proposal-header">
-        <div>
-          <div class="proposal-logo">ENER<span>TUR</span></div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px">Soluções em Energia Solar</div>
+        <div class="proposal-logo">ENER<span>TUR</span>
+          <div style="font-size:11px;font-weight:500;letter-spacing:2px;color:var(--primary);margin-top:2px">— ENERGIA SOLAR —</div>
         </div>
         <div class="proposal-meta">
           <strong>PROPOSTA COMERCIAL</strong><br>
-          Data: ${today}<br>
+          Data: ${today} &nbsp;|&nbsp; Válida por <strong>15 dias</strong><br>
           Tipo: ${instType}
         </div>
       </div>
 
-      <div class="proposal-client">
-        <h3>Proposta para</h3>
-        <p>${name} ${addr ? `<span class="addr">— ${addr}</span>` : ''}</p>
+      <div class="p-client-banner">
+        <div class="p-client-label">Proposta para</div>
+        <div class="p-client-name">${name}</div>
+        ${addr ? '<div class="p-client-addr">' + addr + '</div>' : ''}
       </div>
 
       <div class="spec-grid">
         <div class="spec-box">
           <div class="spec-label">Potência Total</div>
-          <div class="spec-value">${kVp} kVp</div>
-          <div class="spec-sub">${modQty} módulos × ${modPower} W</div>
+          <div class="spec-value">${totalPwDisp}</div>
+          <div class="spec-sub">${modQty ? modQty + ' módulos × ' + modPower + ' W' : ''}</div>
         </div>
         <div class="spec-box">
           <div class="spec-label">Geração Mensal</div>
-          <div class="spec-value">${genKwh} kWh</div>
+          <div class="spec-value">${genKwh}</div>
           <div class="spec-sub">Estimativa mensal</div>
         </div>
         <div class="spec-box">
           <div class="spec-label">Módulos</div>
-          <div class="spec-value">${modQty}</div>
+          <div class="spec-value">${modQty || '—'}</div>
           <div class="spec-sub">${modModel}</div>
         </div>
         <div class="spec-box">
@@ -589,7 +719,7 @@
         <div class="spec-box">
           <div class="spec-label">Instalação</div>
           <div class="spec-value" style="font-size:16px">${instType}</div>
-          <div class="spec-sub">${bill ? 'Conta atual: R$ ' + bill.toFixed(2) : 'Sem conta informada'}</div>
+          <div class="spec-sub">${bill ? 'Conta atual: ' + fmtBRL(bill) : 'Sem conta informada'}</div>
         </div>
       </div>
 
@@ -597,91 +727,130 @@
       <div class="investment-banner">
         <div>
           <div class="inv-label">Valor Total do Projeto</div>
-          <div class="inv-value">R$ ${projectVal.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+          <div class="inv-value">${fmtBRL(projectVal)}</div>
           <div class="inv-sub">${paybackStr ? 'Retorno estimado em ' + paybackStr : ''}</div>
         </div>
-        <div style="text-align:right">
-          <div style="font-size:12px;opacity:.75">Investimento</div>
-          <div style="font-size:22px;font-weight:800;color:#a8f0a8">${paybackStr ? paybackStr : '—'}</div>
-          <div style="font-size:11px;opacity:.65">${paybackStr ? 'de retorno' : ''}</div>
-        </div>
+        ${paybackStr ? '<div style="text-align:right"><div style="font-size:12px;opacity:.75">Retorno estimado</div><div style="font-size:22px;font-weight:800;color:#a8f0a8">' + paybackStr + '</div></div>' : ''}
       </div>` : ''}
 
       <div class="economy-banner">
         <div>
           <div class="eco-label">Economia mensal estimada na fatura</div>
-          <div class="eco-value">R$ ${ecoBill !== '—' ? parseFloat(ecoBill).toLocaleString('pt-BR', {minimumFractionDigits:2}) : '—'}</div>
-          <div class="eco-year">${ecoYear !== '—' ? 'Economia anual estimada: R$ ' + parseFloat(ecoYear).toLocaleString('pt-BR', {minimumFractionDigits:2}) : ''}</div>
+          <div class="eco-value">${fmtBRL(ecoMonthly)}</div>
+          <div class="eco-year">${ecoAnual ? 'Economia anual estimada: ' + fmtBRL(ecoAnual) : ''}</div>
         </div>
       </div>
 
       <div class="detail-table-wrap">
       <table class="detail-table">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Detalhe</th>
-            <th>Valor</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Item</th><th>Detalhe</th><th>Valor</th><th>Status</th></tr></thead>
         <tbody>
-          <tr>
-            <td>Módulo Solar</td>
-            <td>${modModel}</td>
-            <td>${modPower} W / unid.</td>
-            <td><span class="badge">Incluso</span></td>
-          </tr>
-          <tr>
-            <td>Quantidade de Módulos</td>
-            <td>${modQty} unidades</td>
-            <td>${kVp} kVp total</td>
-            <td><span class="badge">Incluso</span></td>
-          </tr>
-          <tr>
-            <td>Inversor</td>
-            <td>${invModel}</td>
-            <td>${invPower ? invPower + ' kW' : '—'}</td>
-            <td><span class="badge">Incluso</span></td>
-          </tr>
-          <tr>
-            <td>Quantidade de Inversores</td>
-            <td>${invQty || '—'} unidade(s)</td>
-            <td>—</td>
-            <td><span class="badge">Incluso</span></td>
-          </tr>
-          <tr>
-            <td>Bateria</td>
-            <td>${hasBat ? 'Armazenamento ' + batKwh + ' kWh' : 'Não inclusa'}</td>
-            <td>${hasBat ? batKwh + ' kWh' : '—'}</td>
-            <td><span class="badge" style="${hasBat ? '' : 'background:#fff0f0;color:#c0392b'}">${hasBat ? 'Incluso' : 'Opcional'}</span></td>
-          </tr>
-          <tr>
-            <td>Geração Mensal Estimada</td>
-            <td>${modQty} módulos</td>
-            <td>${genKwh} kWh/mês</td>
-            <td><span class="badge">Estimado</span></td>
-          </tr>
-          ${projectVal ? `
-          <tr style="background:#f0faf0">
-            <td><strong>Valor Total do Projeto</strong></td>
-            <td>Investimento total</td>
-            <td><strong>R$ ${projectVal.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong></td>
-            <td><span class="badge" style="background:#d0f0d0;color:#1a6b1a">Proposta</span></td>
-          </tr>
-          ${paybackStr ? `
-          <tr style="background:#f0faf0">
-            <td>Retorno do Investimento</td>
-            <td>Valor total ÷ economia mensal</td>
-            <td>${paybackStr}</td>
-            <td><span class="badge" style="background:#d0f0d0;color:#1a6b1a">Estimado</span></td>
-          </tr>` : ''}` : ''}
+          <tr><td>Módulo Solar</td><td>${modModel}</td><td>${modPower ? modPower + ' W / unid.' : '—'}</td><td><span class="badge">Incluso</span></td></tr>
+          <tr><td>Quantidade de Módulos</td><td>${modQty} unidades</td><td>${totalPwDisp}</td><td><span class="badge">Incluso</span></td></tr>
+          <tr><td>Inversor</td><td>${invModel}</td><td>${invPower ? invPower + ' kW' : '—'}</td><td><span class="badge">Incluso</span></td></tr>
+          <tr><td>Quantidade de Inversores</td><td>${invQty || '—'} unidade(s)</td><td>—</td><td><span class="badge">Incluso</span></td></tr>
+          <tr><td>Bateria</td><td>${hasBat ? 'Armazenamento ' + batKwh + ' kWh' : 'Não inclusa'}</td><td>${hasBat ? batKwh + ' kWh' : '—'}</td><td><span class="badge" style="${hasBat ? '' : 'background:#fff0f0;color:#c0392b'}">${hasBat ? 'Incluso' : 'Opcional'}</span></td></tr>
+          <tr><td>Geração Mensal Estimada</td><td>${modQty} módulos</td><td>${genKwh}/mês</td><td><span class="badge">Estimado</span></td></tr>
+          ${projectVal ? '<tr style="background:#f0faf0"><td><strong>Valor Total do Projeto</strong></td><td>Investimento total</td><td><strong>' + fmtBRL(projectVal) + '</strong></td><td><span class="badge" style="background:#d0f0d0;color:#1a6b1a">Proposta</span></td></tr>' : ''}
+          ${paybackStr ? '<tr style="background:#f0faf0"><td>Retorno do Investimento</td><td>Valor total ÷ economia mensal</td><td>' + paybackStr + '</td><td><span class="badge" style="background:#d0f0d0;color:#1a6b1a">Estimado</span></td></tr>' : ''}
         </tbody>
       </table>
       </div>
 
+      <div class="p-section">
+        <div class="p-section-title">Formas de Pagamento</div>
+        <div class="p-pay-grid">
+          <div class="p-pay-card">
+            <strong>À Vista — Pix / Boleto</strong>
+            <div class="p-pay-stage">70% na assinatura do contrato</div>
+            <div class="p-pay-stage">15% na entrega dos equipamentos</div>
+            <div class="p-pay-stage">15% após conclusão da instalação</div>
+          </div>
+          <div class="p-pay-card">
+            <strong>Cartão de Crédito</strong>
+            <span>Até 12× sem juros</span>
+            <span>Até 21× com juros</span>
+          </div>
+          <div class="p-pay-card">
+            <strong>Financiamento Bancário</strong>
+            <span>Taxas e condições a consultar</span>
+            <span>Sujeito à análise de crédito</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <div class="p-section-title">Prazos</div>
+        <div class="p-timeline">
+          <div class="p-tl-item">
+            <div class="p-tl-num">20</div>
+            <div class="p-tl-desc"><strong>Dias úteis</strong>Entrega dos equipamentos</div>
+          </div>
+          <div class="p-tl-item">
+            <div class="p-tl-num">20</div>
+            <div class="p-tl-desc"><strong>Dias úteis</strong>Instalação (condicionado ao clima)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <div class="p-section-title">Garantias</div>
+        <div class="p-warranty-grid">
+          <div class="p-warranty-card">
+            <div class="p-warranty-years">25</div>
+            <div class="p-warranty-unit">Anos</div>
+            <div class="p-warranty-item">Eficiência dos painéis solares</div>
+          </div>
+          <div class="p-warranty-card">
+            <div class="p-warranty-years">12</div>
+            <div class="p-warranty-unit">Anos</div>
+            <div class="p-warranty-item">Microinversores</div>
+          </div>
+          <div class="p-warranty-card">
+            <div class="p-warranty-years">10</div>
+            <div class="p-warranty-unit">Anos</div>
+            <div class="p-warranty-item">Inversor String</div>
+          </div>
+          <div class="p-warranty-card">
+            <div class="p-warranty-years">6</div>
+            <div class="p-warranty-unit">Meses</div>
+            <div class="p-warranty-item">Mão de obra</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <div class="p-section-title">Responsabilidades</div>
+        <div class="p-resp-grid">
+          <div class="p-resp-card">
+            <strong>Enertur</strong>
+            <div class="p-resp-item">Projeto técnico e elétrico</div>
+            <div class="p-resp-item">Fornecimento e instalação dos equipamentos</div>
+            <div class="p-resp-item">Homologação junto à concessionária</div>
+            <div class="p-resp-item">Suporte técnico pós-instalação</div>
+          </div>
+          <div class="p-resp-card">
+            <strong>Cliente</strong>
+            <div class="p-resp-item">Acesso ao local de instalação</div>
+            <div class="p-resp-item">Documentos do imóvel (para homologação)</div>
+            <div class="p-resp-item">Conta de energia atualizada</div>
+            <div class="p-resp-item">Infraestrutura civil, se necessária</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-validity">
+        <div>
+          <div class="pv-label">Validade desta proposta</div>
+          <div class="pv-days">15 dias</div>
+        </div>
+        <div style="text-align:right;font-size:12px;opacity:.85">
+          Válida até ${new Date(Date.now()+15*864e5).toLocaleDateString('pt-BR')}
+        </div>
+      </div>
+
       <div class="footer-note">
-        Esta proposta é de caráter informativo e os valores de geração e economia são estimados.<br>
+        Esta proposta é de caráter informativo. Valores de geração e economia são estimados.<br>
         <strong>Enertur Energia Solar</strong> &mdash; Gerado em ${today}
       </div>
     `;
