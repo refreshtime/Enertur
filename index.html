@@ -743,16 +743,16 @@
 
       <div class="detail-table-wrap">
       <table class="detail-table">
-        <thead><tr><th>Item</th><th>Detalhe</th><th>Valor</th><th>Status</th></tr></thead>
+        <thead><tr><th>Item</th><th>Detalhe</th><th>Valor</th></tr></thead>
         <tbody>
-          <tr><td>Módulo Solar</td><td>${modModel}</td><td>${modPower ? modPower + ' W / unid.' : '—'}</td><td><span class="badge">Incluso</span></td></tr>
-          <tr><td>Quantidade de Módulos</td><td>${modQty} unidades</td><td>${totalPwDisp}</td><td><span class="badge">Incluso</span></td></tr>
-          <tr><td>Inversor</td><td>${invModel}</td><td>${invPower ? invPower + ' kW' : '—'}</td><td><span class="badge">Incluso</span></td></tr>
-          <tr><td>Quantidade de Inversores</td><td>${invQty || '—'} unidade(s)</td><td>—</td><td><span class="badge">Incluso</span></td></tr>
-          <tr><td>Bateria</td><td>${hasBat ? 'Armazenamento ' + batKwh + ' kWh' : 'Não inclusa'}</td><td>${hasBat ? batKwh + ' kWh' : '—'}</td><td><span class="badge" style="${hasBat ? '' : 'background:#fff0f0;color:#c0392b'}">${hasBat ? 'Incluso' : 'Opcional'}</span></td></tr>
-          <tr><td>Geração Mensal Estimada</td><td>${modQty} módulos</td><td>${genKwh}/mês</td><td><span class="badge">Estimado</span></td></tr>
-          ${projectVal ? '<tr style="background:#f0faf0"><td><strong>Valor Total do Projeto</strong></td><td>Investimento total</td><td><strong>' + fmtBRL(projectVal) + '</strong></td><td><span class="badge" style="background:#d0f0d0;color:#1a6b1a">Proposta</span></td></tr>' : ''}
-          ${paybackStr ? '<tr style="background:#f0faf0"><td>Retorno do Investimento</td><td>Valor total ÷ economia mensal</td><td>' + paybackStr + '</td><td><span class="badge" style="background:#d0f0d0;color:#1a6b1a">Estimado</span></td></tr>' : ''}
+          <tr><td>Módulo Solar</td><td>${modModel}</td><td>${modPower ? modPower + ' W / unid.' : '—'}</td></tr>
+          <tr><td>Quantidade de Módulos</td><td>${modQty} unidades</td><td>${totalPwDisp}</td></tr>
+          <tr><td>Inversor</td><td>${invModel}</td><td>${invPower ? invPower + ' kW' : '—'}</td></tr>
+          <tr><td>Quantidade de Inversores</td><td>${invQty || '—'} unidade(s)</td><td>—</td></tr>
+          <tr><td>Bateria</td><td>${hasBat ? 'Armazenamento ' + batKwh + ' kWh' : 'Não inclusa'}</td><td>${hasBat ? batKwh + ' kWh' : '—'}</td></tr>
+          <tr><td>Geração Mensal Estimada</td><td>${modQty} módulos</td><td>${genKwh}/mês</td></tr>
+          ${projectVal ? '<tr style="background:#f0faf0"><td><strong>Valor Total do Projeto</strong></td><td>Investimento total</td><td><strong>' + fmtBRL(projectVal) + '</strong></td></tr>' : ''}
+          ${paybackStr ? '<tr style="background:#f0faf0"><td>Retorno do Investimento</td><td>Valor total ÷ economia mensal</td><td>' + paybackStr + '</td></tr>' : ''}
         </tbody>
       </table>
       </div>
