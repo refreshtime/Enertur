@@ -223,6 +223,22 @@
     .spec-box .spec-value { font-size: 20px; font-weight: 800; color: var(--accent); margin-top: 2px; }
     .spec-box .spec-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
+    .investment-banner {
+      background: linear-gradient(135deg, #2d6a2d, #3a8a3a);
+      color: #fff;
+      border-radius: 12px;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .investment-banner .inv-label { font-size: 14px; opacity: .85; }
+    .investment-banner .inv-value { font-size: 32px; font-weight: 900; color: #a8f0a8; }
+    .investment-banner .inv-sub { font-size: 13px; opacity: .75; }
+
     .economy-banner {
       background: linear-gradient(135deg, var(--accent), var(--accent-light));
       color: #fff;
@@ -379,6 +395,11 @@
       <input id="invModel" type="text" placeholder="Ex: Fronius Symo 5kW" />
     </div>
 
+    <div class="field">
+      <label>Valor Total do Projeto (R$)</label>
+      <input id="projectValue" type="number" min="0" step="0.01" placeholder="Ex: 25000" />
+    </div>
+
     <!-- Bateria -->
     <div class="toggle-wrap">
       <label class="toggle">
@@ -445,12 +466,21 @@
     const invModel  = get('invModel') || '—';
     const hasBat    = document.getElementById('hasBattery').checked;
     const batKwh    = getN('batteryKwh');
-    const instType  = document.querySelector('input[name=installType]:checked').value;
+    const instType    = document.querySelector('input[name=installType]:checked').value;
+    const projectVal  = getN('projectValue');
 
     const kVp       = modQty && modPower ? (modQty * modPower / 1000).toFixed(2) : '—';
     const genKwh    = modQty ? modQty * 60 : 0;
     const ecoBill   = genKwh ? (genKwh * 0.85).toFixed(2) : '—';   // R$ 0,85 por kWh
     const ecoYear   = ecoBill !== '—' ? (parseFloat(ecoBill) * 12).toFixed(2) : '—';
+
+    const paybackMonths = (projectVal && ecoBill !== '—')
+      ? Math.ceil(projectVal / parseFloat(ecoBill)) : null;
+    const paybackStr = paybackMonths
+      ? (paybackMonths >= 12
+          ? Math.floor(paybackMonths/12) + ' anos e ' + (paybackMonths % 12) + ' meses'
+          : paybackMonths + ' meses')
+      : null;
 
     const today = new Date().toLocaleDateString('pt-BR');
 
@@ -505,6 +535,20 @@
           <div class="spec-sub">${bill ? 'Conta atual: R$ ' + bill.toFixed(2) : 'Sem conta informada'}</div>
         </div>
       </div>
+
+      ${projectVal ? `
+      <div class="investment-banner">
+        <div>
+          <div class="inv-label">Valor Total do Projeto</div>
+          <div class="inv-value">R$ ${projectVal.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+          <div class="inv-sub">${paybackStr ? 'Retorno estimado em ' + paybackStr : ''}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;opacity:.75">Investimento</div>
+          <div style="font-size:22px;font-weight:800;color:#a8f0a8">${paybackStr ? paybackStr : '—'}</div>
+          <div style="font-size:11px;opacity:.65">${paybackStr ? 'de retorno' : ''}</div>
+        </div>
+      </div>` : ''}
 
       <div class="economy-banner">
         <div>
@@ -570,6 +614,20 @@
             <td>R$ ${ecoBill !== '—' ? parseFloat(ecoBill).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—'}/mês</td>
             <td><span class="badge">Estimado</span></td>
           </tr>
+          ${projectVal ? `
+          <tr style="background:#f0faf0">
+            <td><strong>Valor Total do Projeto</strong></td>
+            <td>Investimento total</td>
+            <td><strong>R$ ${projectVal.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong></td>
+            <td><span class="badge" style="background:#d0f0d0;color:#1a6b1a">Proposta</span></td>
+          </tr>
+          ${paybackStr ? `
+          <tr style="background:#f0faf0">
+            <td>Retorno do Investimento</td>
+            <td>Valor total ÷ economia mensal</td>
+            <td>${paybackStr}</td>
+            <td><span class="badge" style="background:#d0f0d0;color:#1a6b1a">Estimado</span></td>
+          </tr>` : ''}` : ''}
         </tbody>
       </table>
 
@@ -585,7 +643,7 @@
 
   // ── Reset ───────────────────────────────────────────────────────
   function resetForm() {
-    document.querySelectorAll('input:not([type=radio]):not([type=checkbox])').forEach(i => i.value = '');
+    document.querySelectorAll('input:not([type=radio]):not([type=checkbox])').forEach(i => { i.value = ''; });
     document.querySelector('input[name=installType][value="Residencial"]').checked = true;
     document.getElementById('hasBattery').checked = false;
     document.getElementById('batteryField').style.display = 'none';
