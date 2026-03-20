@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enertur - Gerador de Proposta Solar</title>
+  <style>
+    :root {
+      --primary: #f5a623;
+      --primary-dark: #d4891a;
+      --accent: #1a3c5e;
+      --accent-light: #2a5a8a;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #666;
+      --border: #dde1e7;
+      --success: #27ae60;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header .logo {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    header .logo span { color: var(--primary); }
+    header p { font-size: 13px; opacity: .75; margin-top: 2px; }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 760px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      padding: 28px;
+    }
+    .card h2 {
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--accent);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+      margin-bottom: 22px;
+    }
+    .card.full { grid-column: 1 / -1; }
+
+    /* ── Form ── */
+    .field { margin-bottom: 16px; }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text);
+      background: #fafbfc;
+      transition: border-color .2s;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+    input[readonly] {
+      background: #eef2f7;
+      color: var(--accent-light);
+      font-weight: 600;
+    }
+    .row { display: flex; gap: 12px; }
+    .row .field { flex: 1; }
+
+    /* Radio group */
+    .radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .radio-group label {
+      text-transform: none;
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      transition: all .2s;
+      background: #fafbfc;
+    }
+    .radio-group input[type=radio] { width: auto; }
+    .radio-group label:has(input:checked) {
+      border-color: var(--primary);
+      background: #fff8ee;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Toggle battery */
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle .slider {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 24px;
+      cursor: pointer;
+      transition: .3s;
+    }
+    .toggle .slider::before {
+      content: '';
+      position: absolute;
+      height: 18px; width: 18px;
+      left: 3px; bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: .3s;
+    }
+    .toggle input:checked + .slider { background: var(--primary); }
+    .toggle input:checked + .slider::before { transform: translateX(20px); }
+    .toggle-label { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+    /* ── Proposal preview ── */
+    #preview {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      padding: 36px 40px;
+      grid-column: 1 / -1;
+      display: none;
+    }
+    #preview.visible { display: block; }
+
+    .proposal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid var(--primary);
+    }
+    .proposal-logo {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+    .proposal-logo span { color: var(--primary); }
+    .proposal-meta { text-align: right; font-size: 12px; color: var(--muted); }
+    .proposal-meta strong { color: var(--text); font-size: 13px; }
+
+    .proposal-client { margin-bottom: 24px; }
+    .proposal-client h3 { font-size: 13px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; }
+    .proposal-client p { font-size: 18px; font-weight: 700; color: var(--accent); }
+    .proposal-client .addr { font-size: 13px; color: var(--muted); font-weight: 400; }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .spec-grid { grid-template-columns: 1fr 1fr; } }
+
+    .spec-box {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--primary);
+    }
+    .spec-box .spec-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .spec-box .spec-value { font-size: 20px; font-weight: 800; color: var(--accent); margin-top: 2px; }
+    .spec-box .spec-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .economy-banner {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: #fff;
+      border-radius: 12px;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .economy-banner .eco-label { font-size: 14px; opacity: .85; }
+    .economy-banner .eco-value { font-size: 32px; font-weight: 900; color: var(--primary); }
+    .economy-banner .eco-year { font-size: 13px; opacity: .75; }
+
+    .detail-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .detail-table th {
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .detail-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    .detail-table tr:last-child td { border-bottom: none; }
+    .detail-table tr:nth-child(even) td { background: #f9fafb; }
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #e8f5e9;
+      color: var(--success);
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    /* ── Buttons ── */
+    .btn-wrap { grid-column: 1 / -1; display: flex; gap: 12px; justify-content: flex-end; }
+    .btn {
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: var(--accent); color: #fff; }
+    .btn-secondary:hover { background: var(--accent-light); }
+    .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--muted); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    @media print {
+      body { background: #fff; }
+      header, .container > .card:not(#preview), .btn-wrap { display: none !important; }
+      #preview { display: block !important; box-shadow: none; padding: 0; }
+      .container { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">ENER<span>TUR</span></div>
+    <p>Energia Solar &mdash; Gerador de Propostas</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ── Cliente ── -->
+  <div class="card">
+    <h2>Dados do Cliente</h2>
+
+    <div class="field">
+      <label>Nome / Empresa</label>
+      <input id="clientName" type="text" placeholder="Ex: João Silva" />
+    </div>
+    <div class="field">
+      <label>Endereço</label>
+      <input id="clientAddr" type="text" placeholder="Rua, número, cidade" />
+    </div>
+    <div class="field">
+      <label>Conta de Energia Mensal (R$)</label>
+      <input id="billValue" type="number" min="0" step="0.01" placeholder="Ex: 800" />
+    </div>
+    <div class="field">
+      <label>Tipo de Instalação</label>
+      <div class="radio-group">
+        <label><input type="radio" name="installType" value="Residencial" checked /> Residencial</label>
+        <label><input type="radio" name="installType" value="Industrial" /> Industrial</label>
+        <label><input type="radio" name="installType" value="Condomínio" /> Condomínio</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Sistema ── -->
+  <div class="card">
+    <h2>Sistema Solar</h2>
+
+    <div class="row">
+      <div class="field">
+        <label>Módulos QTD</label>
+        <input id="modQty" type="number" min="1" step="1" placeholder="Ex: 10" />
+      </div>
+      <div class="field">
+        <label>Potência do Módulo (W)</label>
+        <input id="modPower" type="number" min="1" step="1" placeholder="Ex: 550" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Modelo do Módulo</label>
+      <input id="modModel" type="text" placeholder="Ex: Canadian Solar HiKu6 550W" />
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Potência Total (kVp)</label>
+        <input id="totalPower" type="text" readonly placeholder="—" />
+      </div>
+      <div class="field">
+        <label>Geração Mensal (kWh)</label>
+        <input id="monthlyGen" type="text" readonly placeholder="—" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Inversores QTD</label>
+        <input id="invQty" type="number" min="1" step="1" placeholder="Ex: 1" />
+      </div>
+      <div class="field">
+        <label>Potência do Inversor (kW)</label>
+        <input id="invPower" type="number" min="0" step="0.1" placeholder="Ex: 5" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Modelo / Marca do Inversor</label>
+      <input id="invModel" type="text" placeholder="Ex: Fronius Symo 5kW" />
+    </div>
+
+    <!-- Bateria -->
+    <div class="toggle-wrap">
+      <label class="toggle">
+        <input type="checkbox" id="hasBattery" />
+        <span class="slider"></span>
+      </label>
+      <span class="toggle-label">Inclui Bateria</span>
+    </div>
+    <div id="batteryField" class="field" style="display:none">
+      <label>Armazenamento da Bateria (kWh)</label>
+      <input id="batteryKwh" type="number" min="0" step="0.1" placeholder="Ex: 10" />
+    </div>
+  </div>
+
+  <!-- ── Buttons ── -->
+  <div class="btn-wrap">
+    <button class="btn btn-outline" onclick="resetForm()">Limpar</button>
+    <button class="btn btn-secondary" onclick="generateProposal()">Gerar Proposta</button>
+    <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+  </div>
+
+  <!-- ── Preview ── -->
+  <div id="preview" class="card full">
+    <!-- filled by JS -->
+  </div>
+
+</div>
+
+<script>
+  // ── Auto-calculate ──────────────────────────────────────────────
+  function recalc() {
+    const qty = parseFloat(document.getElementById('modQty').value) || 0;
+    const pw  = parseFloat(document.getElementById('modPower').value) || 0;
+
+    const kVp   = qty > 0 && pw > 0 ? (qty * pw / 1000).toFixed(2) : '';
+    const genKwh = qty > 0 ? (qty * 60).toFixed(0) : '';
+
+    document.getElementById('totalPower').value  = kVp    ? kVp + ' kVp'  : '';
+    document.getElementById('monthlyGen').value  = genKwh ? genKwh + ' kWh' : '';
+  }
+
+  ['modQty', 'modPower'].forEach(id =>
+    document.getElementById(id).addEventListener('input', recalc)
+  );
+
+  // ── Battery toggle ──────────────────────────────────────────────
+  document.getElementById('hasBattery').addEventListener('change', function () {
+    document.getElementById('batteryField').style.display = this.checked ? '' : 'none';
+  });
+
+  // ── Generate proposal ───────────────────────────────────────────
+  function generateProposal() {
+    const get   = id => document.getElementById(id).value.trim();
+    const getN  = id => parseFloat(document.getElementById(id).value) || 0;
+
+    const name      = get('clientName') || 'Cliente';
+    const addr      = get('clientAddr');
+    const bill      = getN('billValue');
+    const modQty    = getN('modQty');
+    const modPower  = getN('modPower');
+    const modModel  = get('modModel') || '—';
+    const invQty    = getN('invQty');
+    const invPower  = getN('invPower');
+    const invModel  = get('invModel') || '—';
+    const hasBat    = document.getElementById('hasBattery').checked;
+    const batKwh    = getN('batteryKwh');
+    const instType  = document.querySelector('input[name=installType]:checked').value;
+
+    const kVp       = modQty && modPower ? (modQty * modPower / 1000).toFixed(2) : '—';
+    const genKwh    = modQty ? modQty * 60 : 0;
+    const ecoBill   = genKwh ? (genKwh * 0.85).toFixed(2) : '—';   // R$ 0,85 por kWh
+    const ecoYear   = ecoBill !== '—' ? (parseFloat(ecoBill) * 12).toFixed(2) : '—';
+
+    const today = new Date().toLocaleDateString('pt-BR');
+
+    const preview = document.getElementById('preview');
+    preview.innerHTML = `
+      <div class="proposal-header">
+        <div>
+          <div class="proposal-logo">ENER<span>TUR</span></div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">Soluções em Energia Solar</div>
+        </div>
+        <div class="proposal-meta">
+          <strong>PROPOSTA COMERCIAL</strong><br>
+          Data: ${today}<br>
+          Tipo: ${instType}
+        </div>
+      </div>
+
+      <div class="proposal-client">
+        <h3>Proposta para</h3>
+        <p>${name} ${addr ? `<span class="addr">— ${addr}</span>` : ''}</p>
+      </div>
+
+      <div class="spec-grid">
+        <div class="spec-box">
+          <div class="spec-label">Potência Total</div>
+          <div class="spec-value">${kVp} kVp</div>
+          <div class="spec-sub">${modQty} módulos × ${modPower} W</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Geração Mensal</div>
+          <div class="spec-value">${genKwh} kWh</div>
+          <div class="spec-sub">${modQty} módulos × 60 kWh</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Módulos</div>
+          <div class="spec-value">${modQty}</div>
+          <div class="spec-sub">${modModel}</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Inversores</div>
+          <div class="spec-value">${invQty || '—'}</div>
+          <div class="spec-sub">${invModel}${invPower ? ' · ' + invPower + ' kW' : ''}</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Bateria</div>
+          <div class="spec-value">${hasBat ? batKwh + ' kWh' : '—'}</div>
+          <div class="spec-sub">${hasBat ? 'Armazenamento incluso' : 'Sem armazenamento'}</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Instalação</div>
+          <div class="spec-value" style="font-size:16px">${instType}</div>
+          <div class="spec-sub">${bill ? 'Conta atual: R$ ' + bill.toFixed(2) : 'Sem conta informada'}</div>
+        </div>
+      </div>
+
+      <div class="economy-banner">
+        <div>
+          <div class="eco-label">Economia mensal estimada na fatura</div>
+          <div class="eco-value">R$ ${ecoBill !== '—' ? parseFloat(ecoBill).toLocaleString('pt-BR', {minimumFractionDigits:2}) : '—'}</div>
+          <div class="eco-year">${ecoYear !== '—' ? 'Economia anual estimada: R$ ' + parseFloat(ecoYear).toLocaleString('pt-BR', {minimumFractionDigits:2}) : ''}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;opacity:.75">Taxa de economia aplicada</div>
+          <div style="font-size:22px;font-weight:800;color:var(--primary)">R$ 0,85 / kWh</div>
+        </div>
+      </div>
+
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Detalhe</th>
+            <th>Valor</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Módulo Solar</td>
+            <td>${modModel}</td>
+            <td>${modPower} W / unid.</td>
+            <td><span class="badge">Incluso</span></td>
+          </tr>
+          <tr>
+            <td>Quantidade de Módulos</td>
+            <td>${modQty} unidades</td>
+            <td>${kVp} kVp total</td>
+            <td><span class="badge">Incluso</span></td>
+          </tr>
+          <tr>
+            <td>Inversor</td>
+            <td>${invModel}</td>
+            <td>${invPower ? invPower + ' kW' : '—'}</td>
+            <td><span class="badge">Incluso</span></td>
+          </tr>
+          <tr>
+            <td>Quantidade de Inversores</td>
+            <td>${invQty || '—'} unidade(s)</td>
+            <td>—</td>
+            <td><span class="badge">Incluso</span></td>
+          </tr>
+          <tr>
+            <td>Bateria</td>
+            <td>${hasBat ? 'Armazenamento ' + batKwh + ' kWh' : 'Não inclusa'}</td>
+            <td>${hasBat ? batKwh + ' kWh' : '—'}</td>
+            <td><span class="badge" style="${hasBat ? '' : 'background:#fff0f0;color:#c0392b'}">${hasBat ? 'Incluso' : 'Opcional'}</span></td>
+          </tr>
+          <tr>
+            <td>Geração Mensal Estimada</td>
+            <td>${modQty} módulos × 60 kWh</td>
+            <td>${genKwh} kWh/mês</td>
+            <td><span class="badge">Estimado</span></td>
+          </tr>
+          <tr>
+            <td>Economia na Fatura</td>
+            <td>R$ 0,85 por kWh gerado</td>
+            <td>R$ ${ecoBill !== '—' ? parseFloat(ecoBill).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—'}/mês</td>
+            <td><span class="badge">Estimado</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="footer-note">
+        Esta proposta é de caráter informativo e os valores de geração e economia são estimados.<br>
+        <strong>Enertur Energia Solar</strong> &mdash; Gerado em ${today}
+      </div>
+    `;
+
+    preview.classList.add('visible');
+    preview.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ── Reset ───────────────────────────────────────────────────────
+  function resetForm() {
+    document.querySelectorAll('input:not([type=radio]):not([type=checkbox])').forEach(i => i.value = '');
+    document.querySelector('input[name=installType][value="Residencial"]').checked = true;
+    document.getElementById('hasBattery').checked = false;
+    document.getElementById('batteryField').style.display = 'none';
+    document.getElementById('preview').classList.remove('visible');
+  }
+</script>
+</body>
+</html>
