@@ -819,7 +819,6 @@
           ${hasBat && batDesc ? '<tr><td></td><td colspan="2" style="font-size:12px;color:var(--muted);font-style:italic">' + batDesc + '</td></tr>' : ''}
           <tr><td>Geração Mensal Estimada</td><td>${modQty} módulos</td><td>${genKwh}/mês</td></tr>
           ${consumoAtual ? '<tr><td>Consumo Atual</td><td>Antes do sistema solar</td><td>' + consumoAtual + ' kWh/mês</td></tr>' : ''}
-          ${tarifa ? '<tr><td>Tarifa</td><td>Mínimo faturado: ' + minKwh + ' kWh (' + conexaoType + ')</td><td>' + fmtBRL(tarifa) + '/kWh</td></tr>' : ''}
           ${projectVal ? '<tr style="background:#f0faf0"><td><strong>Valor Total do Projeto</strong></td><td>Investimento total</td><td><strong>' + fmtBRL(projectVal) + '</strong></td></tr>' : ''}
           ${paybackStr ? '<tr style="background:#f0faf0"><td>Retorno do Investimento</td><td>Investimento ÷ economia anual</td><td>' + paybackStr + '</td></tr>' : ''}
         </tbody>
