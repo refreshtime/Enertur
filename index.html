@@ -480,6 +480,10 @@
       </div>
     </div>
     <div class="field">
+      <label>Validade da Proposta (dias)</label>
+      <input id="validityDays" type="number" min="1" step="1" value="15" placeholder="Ex: 15" />
+    </div>
+    <div class="field">
       <label>Tipo de Instalação</label>
       <div class="radio-group">
         <label><input type="radio" name="installType" value="Residencial" checked /> Residencial</label>
@@ -654,6 +658,7 @@
     const conexaoType = document.querySelector('input[name=conexaoType]:checked').value;
     const projectVal  = getN('projectValue');
     const [vendNome, vendFone] = document.querySelector('input[name=vendedora]:checked').value.split('|');
+    const validity  = parseInt(document.getElementById('validityDays').value) || 15;
 
     const kVp        = modQty && modPower ? (modQty * modPower / 1000).toFixed(2) : '—';
     const genKwhNum  = parseFloat(get('monthlyGen')) || (modQty * 60);
@@ -740,7 +745,7 @@
         </div>
         <div class="proposal-meta">
           <strong>PROPOSTA COMERCIAL</strong><br>
-          Data: ${today} &nbsp;|&nbsp; Válida por <strong>15 dias</strong><br>
+          Data: ${today} &nbsp;|&nbsp; Válida por <strong>${validity} dias</strong><br>
           Tipo: ${instType}
         </div>
       </div>
@@ -906,10 +911,10 @@
       <div class="p-validity">
         <div>
           <div class="pv-label">Validade desta proposta</div>
-          <div class="pv-days">15 dias</div>
+          <div class="pv-days">${validity} dias</div>
         </div>
         <div style="text-align:right;font-size:12px;opacity:.85">
-          Válida até ${new Date(Date.now()+15*864e5).toLocaleDateString('pt-BR')}
+          Válida até ${new Date(Date.now()+validity*864e5).toLocaleDateString('pt-BR')}
         </div>
       </div>
 
