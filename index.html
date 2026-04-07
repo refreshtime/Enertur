@@ -6,10 +6,11 @@
   <title>Enertur - Gerador de Proposta Solar</title>
   <style>
     :root {
-      --primary: #f5a623;
-      --primary-dark: #d4891a;
-      --accent: #1a3c5e;
-      --accent-light: #2a5a8a;
+      --primary: #c9a84c;
+      --primary-dark: #a88432;
+      --primary-light: #e8d080;
+      --accent: #1a1a10;
+      --accent-light: #2c2c1a;
       --bg: #f4f6f9;
       --card: #ffffff;
       --text: #222;
@@ -126,7 +127,7 @@
     .radio-group input[type=radio] { width: auto; }
     .radio-group label:has(input:checked) {
       border-color: var(--primary);
-      background: #fff8ee;
+      background: #fdf7e3;
       color: var(--accent);
       font-weight: 700;
     }
@@ -334,7 +335,7 @@
     .p-stats { display:flex; gap:24px; margin-top:16px; padding-top:14px; border-top:1px solid #eee; }
     .p-stat-value { font-size:20px; font-weight:900; color:var(--primary); }
     .p-stat-label { font-size:10px; color:var(--muted); margin-top:2px; }
-    .p-hero-photo-wrap { flex:1; position:relative; min-height:140px; background:linear-gradient(135deg,#1a4a2e 0%,#2d7a3a 40%,#1a3c5e 100%); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .p-hero-photo-wrap { flex:1; position:relative; min-height:140px; background:linear-gradient(135deg,#1a4a2e 0%,#2d7a3a 40%,#1a1a10 100%); display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .p-hero-photo { width:100%; height:100%; object-fit:cover; display:block; }
     .p-hero-photo-fallback { text-align:center; color:rgba(255,255,255,.4); font-size:32px; }
     @media (max-width:600px) { .p-hero { flex-direction:column; } .p-hero-photo-wrap { min-height:120px; } }
@@ -366,6 +367,30 @@
     .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--muted); }
     .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
+    /* ── Equipment table ── */
+    .equip-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .equip-table th { background:var(--accent); color:#fff; padding:8px 10px; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+    .equip-table td { padding:6px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    .equip-table tr:last-child td { border-bottom:none; }
+    .equip-table tr.equip-active td { background:#fdf7e3; }
+    .equip-table input[type=number] { width:100%; padding:4px 7px; border:1px solid var(--border); border-radius:6px; font-size:13px; background:#fff; }
+    .equip-table input[type=text]   { width:100%; padding:4px 7px; border:1px solid var(--border); border-radius:6px; font-size:13px; background:#fff; }
+    .equip-table input[type=checkbox] { width:16px; height:16px; accent-color:var(--primary); cursor:pointer; }
+    .equip-table .eff-power { font-weight:700; color:var(--accent); }
+    .equip-del-btn { background:none; border:none; cursor:pointer; color:#bbb; font-size:16px; padding:2px 6px; border-radius:4px; }
+    .equip-del-btn:hover { color:#e55; background:#fee; }
+
+    /* ── Proposal equipment section ── */
+    .p-equip-table { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:10px; }
+    .p-equip-table th { background:var(--accent); color:#fff; padding:7px 10px; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.4px; }
+    .p-equip-table td { padding:7px 10px; border-bottom:1px solid var(--border); }
+    .p-equip-table tr:last-child td { border-bottom:none; }
+    .p-equip-table tr:nth-child(even) td { background:#f9fafb; }
+    .p-autonomy-box { background:var(--accent); color:#fff; border-radius:10px; padding:16px 22px; display:flex; align-items:center; gap:20px; margin-top:12px; flex-wrap:wrap; }
+    .p-autonomy-value { font-size:32px; font-weight:900; color:var(--primary); line-height:1; }
+    .p-autonomy-label { font-size:13px; opacity:.85; }
+    .p-autonomy-sub   { font-size:11px; opacity:.65; margin-top:3px; }
+
     @page {
       size: A4;
       margin: 12mm 14mm;
@@ -375,7 +400,9 @@
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
       body { background: #fff !important; }
-      header, .container > .card:not(#preview), .btn-wrap, .vendedora-select { display: none !important; }
+      header, .container > .card:not(#preview), .btn-wrap, .vendedora-select, #equipmentCard { display: none !important; }
+      .p-equip-table th { background: #1a1a10 !important; }
+      .p-autonomy-box { background: #1a1a10 !important; }
 
       .container {
         display: block !important;
@@ -392,9 +419,9 @@
       }
 
       /* Preserve gradient backgrounds */
-      .economy-banner  { background: linear-gradient(135deg, #1a3c5e, #2a5a8a) !important; }
+      .economy-banner  { background: linear-gradient(135deg, #1a1a10, #2c2c1a) !important; }
       .investment-banner { background: linear-gradient(135deg, #2d6a2d, #3a8a3a) !important; }
-      .detail-table th { background: #1a3c5e !important; }
+      .detail-table th { background: #1a1a10 !important; }
       .spec-box { background: #f4f6f9 !important; }
 
       /* Compact sizing for print */
@@ -436,7 +463,7 @@
       .p-validity { padding: 12px 18px !important; margin-bottom: 12px !important; break-inside: avoid; }
       .p-hero-left { background: #fff !important; border-right: 1px solid #ddd !important; }
       .p-pay-card, .p-tl-item, .p-warranty-card, .p-resp-card { background: #f4f6f9 !important; }
-      .p-validity { background: linear-gradient(135deg,#f5a623,#d4891a) !important; }
+      .p-validity { background: linear-gradient(135deg,#c9a84c,#a88432) !important; }
 
       .footer-note { margin-top: 14px; padding-top: 10px; font-size: 10px; }
     }
@@ -478,6 +505,10 @@
         <label>Tarifa (R$/kWh)</label>
         <input id="tarifa" type="number" min="0" step="0.001" placeholder="Ex: 0,85" />
       </div>
+    </div>
+    <div class="field">
+      <label>Economia Mensal (R$) <span style="font-weight:400;text-transform:none;color:#aaa">· calculado, editável</span></label>
+      <input id="ecoOverride" type="number" min="0" step="0.01" placeholder="Calculado automaticamente se vazio" />
     </div>
     <div class="field">
       <label>Validade da Proposta (dias)</label>
@@ -574,6 +605,44 @@
       </div>
     </div>
   </div>
+  <!-- ── Equipamentos e Autonomia ── -->
+  <div class="card full" id="equipmentCard">
+    <h2>Equipamentos e Autonomia da Bateria</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Selecione os equipamentos do projeto. O sistema calcula a potência total e, quando há bateria, a autonomia estimada em horas. Todos os valores são editáveis.</p>
+    <div style="overflow-x:auto">
+      <table class="equip-table" id="equipTableEl">
+        <thead>
+          <tr>
+            <th style="width:42px">Ativo</th>
+            <th>Equipamento</th>
+            <th style="width:110px">Potência (W)</th>
+            <th style="width:60px">Qtd</th>
+            <th style="width:90px">Ciclo de Uso (%)</th>
+            <th style="width:130px">Pot. Efetiva (W)</th>
+            <th style="width:36px"></th>
+          </tr>
+        </thead>
+        <tbody id="equipTableBody">
+          <!-- preenchido por JS -->
+        </tbody>
+        <tfoot>
+          <tr id="equipTotalsRow" style="font-weight:700;background:#f4f6f9">
+            <td colspan="2" style="padding:8px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)">Total</td>
+            <td id="equipTotalSimult" style="padding:8px 10px;color:var(--accent)">0 W</td>
+            <td style="padding:8px 10px"></td>
+            <td style="padding:8px 10px"></td>
+            <td id="equipTotalEffective" style="padding:8px 10px;color:var(--accent)">0 W</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-outline" onclick="addCustomEquipment()" style="padding:8px 18px;font-size:13px">+ Adicionar Equipamento</button>
+      <span id="equipAutonomyBadge" style="display:none;background:var(--accent);color:var(--primary);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700"></span>
+    </div>
+  </div>
+
   <!-- ── Vendedora ── -->
   <div class="field vendedora-select" style="margin-top:8px">
     <label>Consultor(a) Responsável</label>
@@ -599,6 +668,111 @@
 </div>
 
 <script>
+  // ── Equipment data ─────────────────────────────────────────────
+  // Duty cycle (%) reflects average real usage relative to rated power.
+  // Sources: INMETRO energy labels, manufacturer specs, and field usage patterns.
+  const DEFAULT_EQUIPMENT = [
+    { name: 'Chuveiro Elétrico',          power: 3800, qty: 0, dutyCycle: 100 },
+    { name: 'Ar Condicionado 12.000 BTU', power: 1085, qty: 0, dutyCycle: 60  },
+    { name: 'Ar Condicionado 18.000 BTU', power: 1625, qty: 0, dutyCycle: 60  },
+    { name: 'Cooktop (1 boca)',           power: 2500, qty: 0, dutyCycle: 100 },
+    { name: 'Forno e Fryer',             power: 1700, qty: 0, dutyCycle: 100 },
+    { name: 'Máquina de Lavar',          power: 1500, qty: 0, dutyCycle: 70  },
+    { name: 'Aquecedor Elétrico',         power: 600,  qty: 0, dutyCycle: 100 },
+    { name: 'Bomba Pressurizadora',       power: 120,  qty: 0, dutyCycle: 50  },
+    { name: 'Geladeira Duplex',           power: 300,  qty: 0, dutyCycle: 35  },
+    { name: 'Geladeira',                  power: 260,  qty: 0, dutyCycle: 35  },
+    { name: 'Freezer',                    power: 200,  qty: 0, dutyCycle: 35  },
+    { name: 'Tomadas de Uso Geral',       power: 960,  qty: 0, dutyCycle: 100 },
+    { name: 'Aparelho de TV',             power: 100,  qty: 0, dutyCycle: 100 },
+    { name: 'Roteador WiFi',              power: 6,    qty: 0, dutyCycle: 100 },
+    { name: 'Iluminação LED (25 un)',     power: 180,  qty: 0, dutyCycle: 100 },
+    { name: 'Refletor 50W',              power: 50,   qty: 0, dutyCycle: 100 },
+  ];
+  let equipmentList = JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT));
+
+  function renderEquipmentTable() {
+    const tbody = document.getElementById('equipTableBody');
+    tbody.innerHTML = '';
+    equipmentList.forEach((eq, i) => {
+      const active = eq.qty > 0;
+      const effective = (eq.power * eq.qty * eq.dutyCycle / 100).toFixed(0);
+      const tr = document.createElement('tr');
+      if (active) tr.classList.add('equip-active');
+      tr.innerHTML = `
+        <td style="text-align:center">
+          <input type="checkbox" ${active ? 'checked' : ''} onchange="toggleEquip(${i}, this.checked)" />
+        </td>
+        <td><input type="text" value="${eq.name}" onchange="updateEquip(${i},'name',this.value)" style="min-width:160px" /></td>
+        <td><input type="number" value="${eq.power}" min="1" step="1" onchange="updateEquip(${i},'power',+this.value)" onkeyup="updateEquip(${i},'power',+this.value)" /></td>
+        <td><input type="number" value="${eq.qty}" min="0" step="1" onchange="updateEquip(${i},'qty',+this.value)" onkeyup="updateEquip(${i},'qty',+this.value)" style="width:54px" /></td>
+        <td><input type="number" value="${eq.dutyCycle}" min="1" max="100" step="1" onchange="updateEquip(${i},'dutyCycle',+this.value)" onkeyup="updateEquip(${i},'dutyCycle',+this.value)" style="width:70px" /></td>
+        <td class="eff-power">${active ? effective + ' W' : '—'}</td>
+        <td><button class="equip-del-btn" onclick="removeEquip(${i})" title="Remover">×</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    recalcAutonomy();
+  }
+
+  function updateEquip(i, field, val) {
+    equipmentList[i][field] = field === 'name' ? val : (isNaN(val) ? equipmentList[i][field] : val);
+    renderEquipmentTable();
+  }
+
+  function toggleEquip(i, checked) {
+    equipmentList[i].qty = checked ? (equipmentList[i].qty || 1) : 0;
+    renderEquipmentTable();
+  }
+
+  function removeEquip(i) {
+    equipmentList.splice(i, 1);
+    renderEquipmentTable();
+  }
+
+  function addCustomEquipment() {
+    equipmentList.push({ name: 'Novo Equipamento', power: 100, qty: 1, dutyCycle: 100 });
+    renderEquipmentTable();
+    // scroll to last row
+    const tbody = document.getElementById('equipTableBody');
+    const lastRow = tbody.lastElementChild;
+    if (lastRow) lastRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function recalcAutonomy() {
+    const active = equipmentList.filter(e => e.qty > 0);
+    const totalSimult    = active.reduce((s, e) => s + e.power * e.qty, 0);
+    const totalEffective = active.reduce((s, e) => s + e.power * e.qty * (e.dutyCycle / 100), 0);
+
+    document.getElementById('equipTotalSimult').textContent    = totalSimult.toLocaleString('pt-BR') + ' W';
+    document.getElementById('equipTotalEffective').textContent = Math.round(totalEffective).toLocaleString('pt-BR') + ' W';
+
+    const batKwh = parseFloat(document.getElementById('batteryKwh').value) || 0;
+    const badge  = document.getElementById('equipAutonomyBadge');
+    if (batKwh > 0 && totalEffective > 0) {
+      const hours = (batKwh * 1000 / totalEffective).toFixed(1);
+      badge.textContent = 'Autonomia estimada: ' + hours + ' horas';
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  // ── Eco override placeholder ─────────────────────────────────
+  function updateEcoPlaceholder() {
+    const consumo  = parseFloat(document.getElementById('consumoAtual').value) || 0;
+    const tarifa   = parseFloat(document.getElementById('tarifa').value) || 0;
+    const conexao  = document.querySelector('input[name=conexaoType]:checked')?.value || 'Monofásico';
+    const minMap   = { 'Monofásico': 30, 'Bifásico': 50, 'Trifásico': 100 };
+    const eco      = consumo && tarifa
+      ? Math.max(0, (consumo - (minMap[conexao] || 30)) * tarifa)
+      : null;
+    const el = document.getElementById('ecoOverride');
+    el.placeholder = eco !== null
+      ? 'Auto: R$ ' + eco.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      : 'Calculado automaticamente se vazio';
+  }
+
   // ── Auto-calculate (fills only if field is empty or was auto-filled) ──
   let autoFilled = { totalPower: false, monthlyGen: false };
 
@@ -628,7 +802,84 @@
   // ── Battery toggle ──────────────────────────────────────────────
   document.getElementById('hasBattery').addEventListener('change', function () {
     document.getElementById('batteryField').style.display = this.checked ? '' : 'none';
+    recalcAutonomy();
   });
+
+  // Update autonomy when battery kWh changes
+  document.getElementById('batteryKwh').addEventListener('input', recalcAutonomy);
+
+  // Eco override placeholder listeners
+  ['consumoAtual', 'tarifa'].forEach(id =>
+    document.getElementById(id).addEventListener('input', updateEcoPlaceholder)
+  );
+  document.querySelectorAll('input[name=conexaoType]').forEach(r =>
+    r.addEventListener('change', updateEcoPlaceholder)
+  );
+
+  // Init equipment table on load
+  renderEquipmentTable();
+
+  // ── Equipment section HTML builder ─────────────────────────────
+  function buildEquipmentSection(hasBat, batKwh) {
+    const active = equipmentList.filter(e => e.qty > 0);
+    if (active.length === 0) return '';
+
+    const totalSimult    = active.reduce((s, e) => s + e.power * e.qty, 0);
+    const totalEffective = active.reduce((s, e) => s + e.power * e.qty * (e.dutyCycle / 100), 0);
+    const autonomyHours  = hasBat && batKwh > 0 && totalEffective > 0
+      ? (batKwh * 1000 / totalEffective).toFixed(1)
+      : null;
+
+    const rows = active.map(e => {
+      const eff = Math.round(e.power * e.qty * e.dutyCycle / 100);
+      return `<tr>
+        <td>${e.name}</td>
+        <td style="text-align:center">${e.qty}</td>
+        <td style="text-align:right">${(e.power * e.qty).toLocaleString('pt-BR')} W</td>
+        <td style="text-align:center">${e.dutyCycle}%</td>
+        <td style="text-align:right;font-weight:700">${eff.toLocaleString('pt-BR')} W</td>
+      </tr>`;
+    }).join('');
+
+    const autonomyBlock = autonomyHours ? `
+      <div class="p-autonomy-box">
+        <div>
+          <div class="p-autonomy-label">Autonomia Estimada da Bateria</div>
+          <div class="p-autonomy-value">${autonomyHours} horas</div>
+          <div class="p-autonomy-sub">Baseado em ${batKwh} kWh · ${Math.round(totalEffective).toLocaleString('pt-BR')} W efetivos</div>
+        </div>
+        <div style="text-align:right;font-size:12px;opacity:.7">
+          Potência simultânea total<br>
+          <strong style="font-size:16px;color:var(--primary)">${totalSimult.toLocaleString('pt-BR')} W</strong>
+        </div>
+      </div>` : '';
+
+    return `
+      <div class="p-section">
+        <div class="p-section-title">Equipamentos Selecionados</div>
+        <table class="p-equip-table">
+          <thead>
+            <tr>
+              <th>Equipamento</th>
+              <th style="text-align:center">Qtd</th>
+              <th style="text-align:right">Pot. Total</th>
+              <th style="text-align:center">Ciclo de Uso</th>
+              <th style="text-align:right">Pot. Efetiva</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+          <tfoot>
+            <tr style="background:#f4f6f9;font-weight:700">
+              <td colspan="2" style="padding:7px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#666">Total</td>
+              <td style="padding:7px 10px;text-align:right">${totalSimult.toLocaleString('pt-BR')} W</td>
+              <td></td>
+              <td style="padding:7px 10px;text-align:right;color:var(--accent)">${Math.round(totalEffective).toLocaleString('pt-BR')} W</td>
+            </tr>
+          </tfoot>
+        </table>
+        ${autonomyBlock}
+      </div>`;
+  }
 
   // ── Moeda brasileira ────────────────────────────────────────────
   function fmtBRL(val) {
@@ -671,10 +922,12 @@
     const consumoAtual = getN('consumoAtual');
     const tarifa       = getN('tarifa');
 
-    // Economia = (consumo antigo - mínimo faturado) × tarifa
-    const ecoMonthly = (consumoAtual && tarifa)
+    // Economia — usa override se preenchido, senão calcula automaticamente
+    const ecoOverride    = parseFloat(document.getElementById('ecoOverride').value);
+    const ecoMonthlyCalc = (consumoAtual && tarifa)
       ? Math.max(0, (consumoAtual - minKwh) * tarifa)
       : 0;
+    const ecoMonthly = !isNaN(ecoOverride) && ecoOverride >= 0 ? ecoOverride : ecoMonthlyCalc;
     const ecoAnual   = ecoMonthly * 12;
 
     // Payback = investimento total ÷ economia anual
@@ -719,20 +972,20 @@
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="p-hero-photo-fallback" style="display:none;flex-direction:column;align-items:center;gap:8px">
             <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="28" cy="20" r="9" fill="#f5a623"/>
-              <line x1="28" y1="6" x2="28" y2="2" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="28" y1="38" x2="28" y2="42" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="14" y1="20" x2="10" y2="20" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="42" y1="20" x2="46" y2="20" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="18.5" y1="9.5" x2="15.5" y2="6.5" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="37.5" y1="30.5" x2="40.5" y2="33.5" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="37.5" y1="9.5" x2="40.5" y2="6.5" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="18.5" y1="30.5" x2="15.5" y2="33.5" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
-              <rect x="20" y="38" width="16" height="12" rx="1" fill="#1a3c5e" stroke="#f5a623" stroke-width="1"/>
-              <line x1="25" y1="38" x2="25" y2="50" stroke="#f5a623" stroke-width=".8"/>
-              <line x1="31" y1="38" x2="31" y2="50" stroke="#f5a623" stroke-width=".8"/>
-              <line x1="20" y1="43" x2="36" y2="43" stroke="#f5a623" stroke-width=".8"/>
-              <line x1="20" y1="47" x2="36" y2="47" stroke="#f5a623" stroke-width=".8"/>
+              <circle cx="28" cy="20" r="9" fill="#c9a84c"/>
+              <line x1="28" y1="6" x2="28" y2="2" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="28" y1="38" x2="28" y2="42" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="14" y1="20" x2="10" y2="20" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="42" y1="20" x2="46" y2="20" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="18.5" y1="9.5" x2="15.5" y2="6.5" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="37.5" y1="30.5" x2="40.5" y2="33.5" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="37.5" y1="9.5" x2="40.5" y2="6.5" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="18.5" y1="30.5" x2="15.5" y2="33.5" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="20" y="38" width="16" height="12" rx="1" fill="#1a1a10" stroke="#c9a84c" stroke-width="1"/>
+              <line x1="25" y1="38" x2="25" y2="50" stroke="#c9a84c" stroke-width=".8"/>
+              <line x1="31" y1="38" x2="31" y2="50" stroke="#c9a84c" stroke-width=".8"/>
+              <line x1="20" y1="43" x2="36" y2="43" stroke="#c9a84c" stroke-width=".8"/>
+              <line x1="20" y1="47" x2="36" y2="47" stroke="#c9a84c" stroke-width=".8"/>
             </svg>
             <span style="font-size:11px;color:rgba(255,255,255,.5)">Coloque foto-instalacao.jpg na pasta</span>
           </div>
@@ -824,6 +1077,8 @@
         </tbody>
       </table>
       </div>
+
+      ${buildEquipmentSection(hasBat, batKwh)}
 
       <div class="p-section">
         <div class="p-section-title">Formas de Pagamento</div>
@@ -938,6 +1193,12 @@
     document.getElementById('hasBattery').checked = false;
     document.getElementById('batteryField').style.display = 'none';
     document.getElementById('preview').classList.remove('visible');
+    document.getElementById('validityDays').value = '15';
+    // Reset equipment list to defaults
+    equipmentList = JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT));
+    renderEquipmentTable();
+    // Reset eco override placeholder
+    document.getElementById('ecoOverride').placeholder = 'Calculado automaticamente se vazio';
   }
 </script>
 </body>
