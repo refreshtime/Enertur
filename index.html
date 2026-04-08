@@ -400,6 +400,7 @@
 
     /* ── Comparison chart ── */
     .p-chart-section { margin-bottom:20px; break-inside:avoid; }
+    .p-page-break { display:none; }
     .p-chart-title { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--accent); margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--primary); display:flex; align-items:center; gap:8px; }
     .p-chart-wrap { background:#fff; border-radius:10px; border:1px solid var(--border); padding:20px 20px 14px; }
     .p-chart-summary { display:flex; gap:0; margin-top:14px; border-top:1px solid var(--border); padding-top:12px; }
@@ -514,6 +515,7 @@
       /* ── Footer ── */
       .footer-note { margin-top: 10px; padding-top: 8px; font-size: 10px; }
       .p-chart-section { break-inside: avoid; margin-bottom: 12px !important; }
+      .p-page-break { display: block !important; break-after: page; height: 0; }
       .p-chart-wrap { padding: 12px 14px 10px !important; }
       .p-chart-sum-val { font-size: 13px !important; }
     }
@@ -1263,6 +1265,8 @@
       </div>
 
       ${buildComparisonChart(bill, ecoMonthly, projectVal)}
+
+      <div class="p-page-break"></div>
 
       <div class="detail-table-wrap">
       <table class="detail-table">
