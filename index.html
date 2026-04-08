@@ -803,7 +803,8 @@
     const badge  = document.getElementById('equipAutonomyBadge');
     if (batKwh > 0 && totalEffective > 0) {
       const hours = (batKwh * 1000 / totalEffective).toFixed(1);
-      badge.textContent = 'Autonomia estimada: ' + hours + ' horas';
+      const hoursHalf = (parseFloat(hours) * 2).toFixed(1);
+      badge.textContent = 'Autonomia estimada: ' + hours + 'h (simultâneo) – ' + hoursHalf + 'h (não simultâneo)';
       badge.style.display = '';
     } else {
       badge.style.display = 'none';
@@ -893,12 +894,14 @@
       </tr>`;
     }).join('');
 
+    const autonomyHalf = autonomyHours ? (parseFloat(autonomyHours) * 2).toFixed(1) : null;
     const autonomyBlock = autonomyHours ? `
       <div class="p-autonomy-box">
         <div>
           <div class="p-autonomy-label">Autonomia Estimada da Bateria</div>
-          <div class="p-autonomy-value">${autonomyHours} horas</div>
-          <div class="p-autonomy-sub">Baseado em ${batKwh} kWh · ${Math.round(totalEffective).toLocaleString('pt-BR')} W efetivos</div>
+          <div class="p-autonomy-value">${autonomyHours}h – ${autonomyHalf}h</div>
+          <div class="p-autonomy-sub">Uso simultâneo: ${autonomyHours}h &nbsp;|&nbsp; Uso não simultâneo: ${autonomyHalf}h</div>
+          <div class="p-autonomy-sub" style="margin-top:4px;font-style:italic;opacity:.5">* Baseado em ${batKwh} kWh · ${Math.round(totalEffective).toLocaleString('pt-BR')} W efetivos (50% para não simultâneo)</div>
         </div>
         <div style="text-align:right;font-size:12px;opacity:.7">
           Potência simultânea total<br>
@@ -1266,7 +1269,7 @@
 
       ${buildComparisonChart(bill, ecoMonthly, projectVal)}
 
-      <div class="p-page-break"></div>
+      ${(bill && projectVal) ? '<div class="p-page-break"></div>' : ''}
 
       <div class="detail-table-wrap">
       <table class="detail-table">
