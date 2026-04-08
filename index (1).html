@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enertur - Gerador de Proposta Solar</title>
+  <style>
+    :root {
+      --primary: #c9a84c;
+      --primary-dark: #a88432;
+      --primary-light: #e8d080;
+      --accent: #1a1a10;
+      --accent-light: #2c2c1a;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #666;
+      --border: #dde1e7;
+      --success: #27ae60;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header .logo {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    header .logo span { color: var(--primary); }
+    header p { font-size: 13px; opacity: .75; margin-top: 2px; }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 760px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      padding: 28px;
+    }
+    .card h2 {
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--accent);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+      margin-bottom: 22px;
+    }
+    .card.full { grid-column: 1 / -1; }
+
+    /* ── Form ── */
+    .field { margin-bottom: 16px; }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text);
+      background: #fafbfc;
+      transition: border-color .2s;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+.row { display: flex; gap: 12px; }
+    .row .field { flex: 1; }
+
+    /* Radio group */
+    .radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .radio-group label {
+      text-transform: none;
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      transition: all .2s;
+      background: #fafbfc;
+    }
+    .radio-group input[type=radio] { width: auto; }
+    .radio-group label:has(input:checked) {
+      border-color: var(--primary);
+      background: #fdf7e3;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Toggle battery */
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle .slider {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 24px;
+      cursor: pointer;
+      transition: .3s;
+    }
+    .toggle .slider::before {
+      content: '';
+      position: absolute;
+      height: 18px; width: 18px;
+      left: 3px; bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: .3s;
+    }
+    .toggle input:checked + .slider { background: var(--primary); }
+    .toggle input:checked + .slider::before { transform: translateX(20px); }
+    .toggle-label { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+    /* ── Proposal preview ── */
+    #preview {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      padding: 36px 40px;
+      grid-column: 1 / -1;
+      display: none;
+    }
+    #preview.visible { display: block; }
+
+    .proposal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid var(--primary);
+    }
+    .proposal-logo {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+    .proposal-logo span { color: var(--primary); }
+    .proposal-meta { text-align: right; font-size: 12px; color: var(--muted); }
+    .proposal-meta strong { color: var(--text); font-size: 13px; }
+
+    .proposal-client { margin-bottom: 24px; }
+    .proposal-client h3 { font-size: 13px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; }
+    .proposal-client p { font-size: 18px; font-weight: 700; color: var(--accent); }
+    .proposal-client .addr { font-size: 13px; color: var(--muted); font-weight: 400; }
+
+    .p-client-banner {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 12px;
+      padding: 24px 32px;
+      margin-bottom: 18px;
+    }
+    .p-client-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: .6; }
+    .p-client-name  { font-size: 38px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; line-height: 1.15; margin-top: 8px; }
+    .p-client-addr  { font-size: 13px; opacity: .7; margin-top: 6px; }
+
+    /* ── Company credentials strip ── */
+    .p-company-strip { display:flex; align-items:center; gap:28px; padding:14px 24px; background:var(--bg); border-radius:10px; margin-bottom:18px; border-left:4px solid var(--primary); }
+    .p-company-stat  { display:flex; flex-direction:column; }
+    .p-cs-value      { font-size:22px; font-weight:900; color:var(--primary); line-height:1; }
+    .p-cs-label      { font-size:11px; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:.5px; }
+    .p-cs-sep        { font-size:30px; color:var(--border); font-weight:200; }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .spec-grid { grid-template-columns: 1fr 1fr; } }
+
+    .spec-box {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--primary);
+    }
+    .spec-box .spec-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .spec-box .spec-value { font-size: 20px; font-weight: 800; color: var(--accent); margin-top: 2px; }
+    .spec-box .spec-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .investment-banner {
+      background: linear-gradient(135deg, #2d6a2d, #3a8a3a);
+      color: #fff;
+      border-radius: 12px;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .investment-banner .inv-label { font-size: 14px; opacity: .85; }
+    .investment-banner .inv-value { font-size: 32px; font-weight: 900; color: #a8f0a8; }
+    .investment-banner .inv-sub { font-size: 13px; opacity: .75; }
+
+    .economy-banner {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: #fff;
+      border-radius: 12px;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .economy-banner .eco-label { font-size: 14px; opacity: .85; }
+    .economy-banner .eco-value { font-size: 32px; font-weight: 900; color: var(--primary); }
+    .economy-banner .eco-year { font-size: 13px; opacity: .75; }
+
+    .detail-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .detail-table th {
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .detail-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    .detail-table tr:last-child td { border-bottom: none; }
+    .detail-table tr:nth-child(even) td { background: #f9fafb; }
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #e8f5e9;
+      color: var(--success);
+    }
+
+    /* ── Seções 3-7 ── */
+    .p-section { margin-bottom: 20px; }
+    .p-section-title {
+      font-size: 13px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--accent);
+      border-left: 4px solid var(--primary);
+      padding-left: 10px; margin-bottom: 12px;
+    }
+    .p-pay-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    @media (max-width:600px) { .p-pay-grid { grid-template-columns: 1fr; } }
+    .p-pay-card {
+      background: var(--bg); border-radius: 10px; padding: 14px 16px;
+      border-top: 3px solid var(--primary);
+    }
+    .p-pay-card strong { display: block; font-size: 13px; color: var(--accent); margin-bottom: 6px; }
+    .p-pay-card span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .p-pay-stage { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .p-pay-stage::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--primary); flex-shrink:0; }
+    .p-timeline { display: flex; gap: 16px; flex-wrap: wrap; }
+    .p-tl-item { flex:1; min-width:180px; background:var(--bg); border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:12px; }
+    .p-tl-num { font-size:28px; font-weight:900; color:var(--primary); line-height:1; }
+    .p-tl-desc { font-size:12px; color:var(--muted); }
+    .p-tl-desc strong { display:block; color:var(--accent); font-size:13px; margin-bottom:2px; }
+    .p-warranty-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    @media (max-width:600px) { .p-warranty-grid { grid-template-columns:1fr 1fr; } }
+    .p-warranty-card { background:var(--bg); border-radius:10px; padding:14px 12px; text-align:center; }
+    .p-warranty-years { font-size:22px; font-weight:900; color:var(--accent); }
+    .p-warranty-unit  { font-size:11px; color:var(--primary); font-weight:700; text-transform:uppercase; }
+    .p-warranty-item  { font-size:11px; color:var(--muted); margin-top:4px; }
+    .p-resp-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media (max-width:600px) { .p-resp-grid { grid-template-columns:1fr; } }
+    .p-resp-card { background:var(--bg); border-radius:10px; padding:14px 16px; }
+    .p-resp-card strong { display:block; font-size:13px; color:var(--accent); margin-bottom:8px; }
+    .p-resp-item { font-size:12px; color:var(--muted); padding:3px 0; border-bottom:1px solid var(--border); }
+    .p-resp-item:last-child { border-bottom:none; }
+    .p-validity { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; border-radius:10px; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:8px; }
+    .p-validity .pv-label { font-size:13px; opacity:.9; }
+    .p-validity .pv-days  { font-size:28px; font-weight:900; }
+
+    /* ── Logo + Stats + Hero foto ── */
+    .p-hero { display:flex; align-items:stretch; gap:0; margin-bottom:20px; border-radius:12px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.1); }
+    .p-hero-left { background:#fff; color:var(--accent); padding:16px 20px; display:flex; flex-direction:column; justify-content:space-between; min-width:220px; border-right:1px solid #eee; }
+    .p-hero-logo-wrap { display:flex; align-items:center; justify-content:center; }
+    .p-hero-logo-img  { max-width:160px; max-height:120px; object-fit:contain; display:block; }
+    .p-hero-logo { font-size:28px; font-weight:900; letter-spacing:1px; }
+    .p-hero-logo span { color:var(--primary); }
+    .p-hero-tagline { font-size:10px; letter-spacing:2.5px; color:var(--primary); margin-top:2px; }
+    .p-stats { display:flex; gap:24px; margin-top:16px; padding-top:14px; border-top:1px solid #eee; }
+    .p-stat-value { font-size:20px; font-weight:900; color:var(--primary); }
+    .p-stat-label { font-size:10px; color:var(--muted); margin-top:2px; }
+    .p-hero-photo-wrap { flex:1; position:relative; min-height:140px; background:linear-gradient(135deg,#1a4a2e 0%,#2d7a3a 40%,#1a1a10 100%); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .p-hero-photo { width:100%; height:100%; object-fit:cover; display:block; }
+    .p-hero-photo-fallback { text-align:center; color:rgba(255,255,255,.4); font-size:32px; }
+    .p-hero-deco { flex:1; position:relative; background:linear-gradient(135deg,#1a1a10 0%,#2c2c1a 60%,#1a1a10 100%); display:flex; align-items:center; padding:24px 32px; overflow:hidden; }
+    .p-hero-deco::before { content:''; position:absolute; right:-50px; top:50%; transform:translateY(-50%); width:200px; height:200px; border-radius:50%; border:1.5px solid rgba(201,168,76,0.25); box-shadow:0 0 0 28px rgba(201,168,76,0.05),0 0 0 56px rgba(201,168,76,0.025); pointer-events:none; }
+    .p-hero-deco::after { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(180deg,transparent,var(--primary),transparent); }
+    .p-hero-deco-inner { position:relative; z-index:1; }
+    .p-hero-deco-title { font-size:13px; font-weight:800; letter-spacing:3px; color:var(--primary); text-transform:uppercase; margin-bottom:14px; }
+    .p-hero-deco-meta { display:flex; flex-direction:column; gap:5px; font-size:12px; color:rgba(255,255,255,0.7); font-weight:500; line-height:1.5; }
+    .p-hero-deco-meta strong { color:#fff; font-weight:700; }
+    @media (max-width:600px) { .p-hero { flex-direction:column; } .p-hero-photo-wrap { min-height:120px; } }
+
+    .footer-note {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    /* ── Buttons ── */
+    .btn-wrap { grid-column: 1 / -1; display: flex; gap: 12px; justify-content: flex-end; }
+    .btn {
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: var(--accent); color: #fff; }
+    .btn-secondary:hover { background: var(--accent-light); }
+    .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--muted); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Equipment table ── */
+    .equip-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .equip-table th { background:var(--accent); color:#fff; padding:8px 10px; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+    .equip-table td { padding:6px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    .equip-table tr:last-child td { border-bottom:none; }
+    .equip-table tr.equip-active td { background:#fdf7e3; }
+    .equip-table input[type=number] { width:100%; padding:4px 7px; border:1px solid var(--border); border-radius:6px; font-size:13px; background:#fff; }
+    .equip-table input[type=text]   { width:100%; padding:4px 7px; border:1px solid var(--border); border-radius:6px; font-size:13px; background:#fff; }
+    .equip-table input[type=checkbox] { width:16px; height:16px; accent-color:var(--primary); cursor:pointer; }
+    .equip-table .eff-power { font-weight:700; color:var(--accent); }
+    .equip-del-btn { background:none; border:none; cursor:pointer; color:#bbb; font-size:16px; padding:2px 6px; border-radius:4px; }
+    .equip-del-btn:hover { color:#e55; background:#fee; }
+
+    /* ── Page break divider ── */
+    .p-page-break {
+      break-after: page;
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--accent) 0%, #c9a84c 45%, #e8d080 55%, var(--accent) 100%);
+      border-radius: 4px;
+      position: relative;
+      overflow: visible;
+    }
+    .p-page-break::before, .p-page-break::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #c9a84c;
+      box-shadow: 0 0 0 3px #fff, 0 0 0 5px #c9a84c;
+    }
+    .p-page-break::before { left: 0; }
+    .p-page-break::after  { right: 0; }
+
+    /* ── Comparison chart ── */
+    .p-chart-section { margin-bottom:20px; break-inside:avoid; }
+    .p-chart-title { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--accent); margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--primary); display:flex; align-items:center; gap:8px; }
+    .p-chart-wrap { background:#fff; border-radius:10px; border:1px solid var(--border); padding:20px 20px 14px; }
+    .p-chart-summary { display:flex; gap:0; margin-top:14px; border-top:1px solid var(--border); padding-top:12px; }
+    .p-chart-sum-item { flex:1; text-align:center; border-right:1px solid var(--border); padding:0 12px; }
+    .p-chart-sum-item:last-child { border-right:none; }
+    .p-chart-sum-val { font-size:15px; font-weight:900; color:var(--accent); }
+    .p-chart-sum-val.green { color:#27a350; }
+    .p-chart-sum-val.red { color:#c0392b; }
+    .p-chart-sum-lbl { font-size:10px; color:var(--muted); margin-top:2px; text-transform:uppercase; letter-spacing:.4px; }
+    .p-chart-legend { display:flex; gap:20px; margin-top:12px; justify-content:center; }
+    .p-chart-leg-item { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); }
+    .p-chart-leg-line { width:18px; height:3px; border-radius:2px; }
+
+    /* ── Proposal equipment section ── */
+    .p-equip-table { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:10px; }
+    .p-equip-table th { background:var(--accent); color:#fff; padding:7px 10px; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.4px; }
+    .p-equip-table td { padding:7px 10px; border-bottom:1px solid var(--border); }
+    .p-equip-table tr:last-child td { border-bottom:none; }
+    .p-equip-table tr:nth-child(even) td { background:#f9fafb; }
+    .p-autonomy-box { background:var(--accent); color:#fff; border-radius:10px; padding:16px 22px; display:flex; align-items:center; gap:20px; margin-top:12px; flex-wrap:wrap; }
+    .p-autonomy-value { font-size:32px; font-weight:900; color:var(--primary); line-height:1; }
+    .p-autonomy-label { font-size:13px; opacity:.85; }
+    .p-autonomy-sub   { font-size:11px; opacity:.65; margin-top:3px; }
+
+    @page {
+      size: A4;
+      margin: 10mm 12mm;
+    }
+
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+      body { background: #fff !important; }
+      header, .container > .card:not(#preview), .btn-wrap, .vendedora-select, #equipmentCard { display: none !important; }
+
+      .container {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      #preview {
+        display: block !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      /* ── Preserve gradient backgrounds ── */
+      .economy-banner   { background: linear-gradient(135deg, #1a1a10, #2c2c1a) !important; }
+      .investment-banner { background: linear-gradient(135deg, #2d6a2d, #3a8a3a) !important; }
+      .detail-table th  { background: #1a1a10 !important; }
+      .p-equip-table th { background: #1a1a10 !important; }
+      .p-autonomy-box   { background: #1a1a10 !important; }
+      .spec-box         { background: #f4f6f9 !important; }
+      .p-client-banner  { background: #1a1a10 !important; }
+
+      /* ── Hero: compact ── */
+      .p-hero            { border-radius: 6px !important; margin-bottom: 8px !important; break-inside: avoid; }
+      .p-hero-left       { min-width: 155px !important; padding: 10px 14px !important; background: #fff !important; border-right: 1px solid #ddd !important; }
+      .p-hero-logo       { font-size: 20px !important; }
+      .p-hero-photo-wrap { min-height: 75px !important; }
+      .p-hero-deco { min-height: 75px !important; padding: 10px 20px !important; }
+      .p-hero-deco-title { font-size: 11px !important; margin-bottom: 8px !important; }
+      .p-hero-deco-meta { font-size: 11px !important; }
+
+      /* ── Company strip: compact ── */
+      .p-company-strip { padding: 8px 14px !important; margin-bottom: 10px !important; break-inside: avoid; }
+      .p-cs-value      { font-size: 16px !important; }
+
+      /* ── Client banner ── */
+      .p-client-banner { padding: 14px 22px !important; margin-bottom: 12px !important; break-inside: avoid; }
+      .p-client-name   { font-size: 26px !important; }
+
+      /* ── Spec grid ── */
+      .spec-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 7px !important;
+        margin-bottom: 10px !important;
+      }
+      .spec-box            { padding: 8px 10px !important; break-inside: avoid; }
+      .spec-box .spec-value { font-size: 14px !important; }
+      .spec-box .spec-label { font-size: 10px !important; }
+
+      /* ── Banners ── */
+      .investment-banner,
+      .economy-banner {
+        padding: 12px 18px !important;
+        margin-bottom: 8px !important;
+        break-inside: avoid;
+      }
+      .eco-value, .inv-value { font-size: 20px !important; }
+
+      /* ── Hide detail table (summary banners are enough) ── */
+      .detail-table-wrap { display: none !important; }
+
+      /* ── Payment / timeline / warranty / responsibilities ── */
+      .p-section        { margin-bottom: 10px !important; break-inside: avoid; }
+      .p-section-title  { font-size: 11px !important; margin-bottom: 8px !important; }
+      .p-pay-grid       { grid-template-columns: repeat(3,1fr) !important; gap: 7px !important; }
+      .p-pay-card       { padding: 8px 10px !important; font-size: 11px !important; break-inside: avoid; }
+      .p-pay-card strong { font-size: 11px !important; }
+      .p-pay-stage      { font-size: 10px !important; }
+      .p-timeline       { gap: 8px !important; }
+      .p-tl-item        { padding: 8px 10px !important; break-inside: avoid; }
+      .p-tl-num         { font-size: 20px !important; }
+      .p-warranty-grid  { grid-template-columns: repeat(4,1fr) !important; gap: 7px !important; }
+      .p-warranty-card  { padding: 8px 6px !important; break-inside: avoid; }
+      .p-warranty-years { font-size: 18px !important; }
+      .p-warranty-unit  { font-size: 10px !important; }
+      .p-warranty-item  { font-size: 10px !important; }
+      .p-resp-grid      { grid-template-columns: 1fr 1fr !important; gap: 7px !important; }
+      .p-resp-card      { padding: 8px 10px !important; break-inside: avoid; }
+      .p-resp-item      { font-size: 10px !important; }
+      .p-page-break     { margin: 4px 0 12px !important; height: 6px !important; break-inside: avoid; }
+      .p-pay-card, .p-tl-item, .p-warranty-card, .p-resp-card { background: #f4f6f9 !important; }
+
+      /* ── Autonomy / equipment section ── */
+      .p-equip-table td, .p-equip-table th { padding: 5px 8px !important; font-size: 11px !important; }
+      .p-autonomy-box   { padding: 10px 16px !important; }
+      .p-autonomy-value { font-size: 22px !important; }
+
+      /* ── Validity ── */
+      .p-validity { padding: 10px 16px !important; margin-bottom: 10px !important; break-inside: avoid; background: linear-gradient(135deg,#c9a84c,#a88432) !important; }
+
+      /* ── Footer ── */
+      .footer-note { margin-top: 10px; padding-top: 8px; font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">ENER<span>TUR</span></div>
+    <p>Energia Solar &mdash; Gerador de Propostas</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ── Cliente ── -->
+  <div class="card">
+    <h2>Dados do Cliente</h2>
+
+    <div class="field">
+      <label>Nome / Empresa</label>
+      <input id="clientName" type="text" placeholder="Ex: João Silva" />
+    </div>
+    <div class="field">
+      <label>Endereço</label>
+      <input id="clientAddr" type="text" placeholder="Rua, número, cidade" />
+    </div>
+    <div class="field">
+      <label>Conta de Energia Mensal (R$)</label>
+      <input id="billValue" type="number" min="0" step="0.01" placeholder="Ex: 800" />
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Consumo Atual (kWh/mês)</label>
+        <input id="consumoAtual" type="number" min="0" step="1" placeholder="Ex: 900" />
+      </div>
+      <div class="field">
+        <label>Tarifa (R$/kWh)</label>
+        <input id="tarifa" type="number" min="0" step="0.001" placeholder="Ex: 0,85" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Economia Mensal (R$) <span style="font-weight:400;text-transform:none;color:#aaa">· calculado, editável</span></label>
+      <input id="ecoOverride" type="number" min="0" step="0.01" placeholder="Calculado automaticamente se vazio" />
+    </div>
+    <div class="field">
+      <label>Validade da Proposta (dias)</label>
+      <input id="validityDays" type="number" min="1" step="1" value="15" placeholder="Ex: 15" />
+    </div>
+    <div class="field">
+      <label>Tipo de Instalação</label>
+      <div class="radio-group">
+        <label><input type="radio" name="installType" value="Residencial" checked /> Residencial</label>
+        <label><input type="radio" name="installType" value="Industrial" /> Industrial</label>
+        <label><input type="radio" name="installType" value="Condomínio" /> Condomínio</label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Padrão de Conexão</label>
+      <div class="radio-group">
+        <label><input type="radio" name="conexaoType" value="Monofásico" checked /> Monofásico <span style="font-size:11px;color:#aaa">(mín. 30 kWh)</span></label>
+        <label><input type="radio" name="conexaoType" value="Bifásico" /> Bifásico <span style="font-size:11px;color:#aaa">(mín. 50 kWh)</span></label>
+        <label><input type="radio" name="conexaoType" value="Trifásico" /> Trifásico <span style="font-size:11px;color:#aaa">(mín. 100 kWh)</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Sistema ── -->
+  <div class="card">
+    <h2>Sistema Solar</h2>
+
+    <div class="row">
+      <div class="field">
+        <label>Módulos QTD</label>
+        <input id="modQty" type="number" min="1" step="1" placeholder="Ex: 10" />
+      </div>
+      <div class="field">
+        <label>Potência do Módulo (W)</label>
+        <input id="modPower" type="number" min="1" step="1" placeholder="Ex: 550" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Modelo do Módulo</label>
+      <input id="modModel" type="text" placeholder="Ex: Canadian Solar HiKu6 550W" />
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Potência Total (kVp) <span style="font-weight:400;text-transform:none;color:#aaa">· calculado, editável</span></label>
+        <input id="totalPower" type="text" placeholder="Ex: 9,35 kVp" />
+      </div>
+      <div class="field">
+        <label>Geração Mensal (kWh) <span style="font-weight:400;text-transform:none;color:#aaa">· calculado, editável</span></label>
+        <input id="monthlyGen" type="text" placeholder="Ex: 960 kWh" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Inversores QTD</label>
+        <input id="invQty" type="number" min="1" step="1" placeholder="Ex: 1" />
+      </div>
+      <div class="field">
+        <label>Potência do Inversor (kW)</label>
+        <input id="invPower" type="number" min="0" step="0.1" placeholder="Ex: 5" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Modelo / Marca do Inversor</label>
+      <input id="invModel" type="text" placeholder="Ex: Fronius Symo 5kW" />
+    </div>
+
+    <div class="field">
+      <label>Valor Total do Projeto (R$)</label>
+      <input id="projectValue" type="number" min="0" step="0.01" placeholder="Ex: 25000" />
+    </div>
+
+    <!-- Bateria -->
+    <div class="toggle-wrap">
+      <label class="toggle">
+        <input type="checkbox" id="hasBattery" />
+        <span class="slider"></span>
+      </label>
+      <span class="toggle-label">Inclui Bateria</span>
+    </div>
+    <div id="batteryField" style="display:none">
+      <div class="field">
+        <label>Armazenamento da Bateria (kWh)</label>
+        <input id="batteryKwh" type="number" min="0" step="0.1" placeholder="Ex: 10" />
+      </div>
+      <div class="field">
+        <label>Modelo da Bateria</label>
+        <input id="batModel" type="text" placeholder="Ex: Pylontech US5000 5.12 kWh" />
+      </div>
+      <div class="field">
+        <label>Descrição / Observações da Bateria</label>
+        <textarea id="batDesc" rows="3" placeholder="Ex: Bateria de lítio LiFePO4, ciclo de vida longo, monitoramento via app..." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;resize:vertical"></textarea>
+      </div>
+    </div>
+  </div>
+  <!-- ── Equipamentos e Autonomia ── -->
+  <div class="card full" id="equipmentCard">
+    <h2>Equipamentos e Autonomia da Bateria</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Selecione os equipamentos do projeto. O sistema calcula a potência total e, quando há bateria, a autonomia estimada em horas. Todos os valores são editáveis.</p>
+    <div style="overflow-x:auto">
+      <table class="equip-table" id="equipTableEl">
+        <thead>
+          <tr>
+            <th style="width:42px">Ativo</th>
+            <th>Equipamento</th>
+            <th style="width:110px">Potência (W)</th>
+            <th style="width:60px">Qtd</th>
+            <th style="width:90px">Ciclo de Uso (%)</th>
+            <th style="width:130px">Pot. Efetiva (W)</th>
+            <th style="width:36px"></th>
+          </tr>
+        </thead>
+        <tbody id="equipTableBody">
+          <!-- preenchido por JS -->
+        </tbody>
+        <tfoot>
+          <tr id="equipTotalsRow" style="font-weight:700;background:#f4f6f9">
+            <td colspan="2" style="padding:8px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)">Total</td>
+            <td id="equipTotalSimult" style="padding:8px 10px;color:var(--accent)">0 W</td>
+            <td style="padding:8px 10px"></td>
+            <td style="padding:8px 10px"></td>
+            <td id="equipTotalEffective" style="padding:8px 10px;color:var(--accent)">0 W</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-outline" onclick="addCustomEquipment()" style="padding:8px 18px;font-size:13px">+ Adicionar Equipamento</button>
+      <span id="equipAutonomyBadge" style="display:none;background:var(--accent);color:var(--primary);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700"></span>
+    </div>
+  </div>
+
+  <!-- ── Vendedora ── -->
+  <div class="field vendedora-select" style="margin-top:8px">
+    <label>Consultor(a) Responsável</label>
+    <div class="radio-group">
+      <label><input type="radio" name="vendedora" value="Hingrid Oliveira|(11) 95860-4828" checked /> Hingrid Oliveira</label>
+      <label><input type="radio" name="vendedora" value="Lucas Vieira|(11) 94556-0188" /> Lucas Vieira</label>
+    </div>
+  </div>
+
+  
+  <!-- ── Buttons ── -->
+  <div class="btn-wrap">
+    <button class="btn btn-outline" onclick="resetForm()">Limpar</button>
+    <button class="btn btn-secondary" onclick="generateProposal()">Gerar Proposta</button>
+    <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+  </div>
+
+  <!-- ── Preview ── -->
+  <div id="preview" class="card full">
+    <!-- filled by JS -->
+  </div>
+
+</div>
+
+<script>
+  // ── Equipment data ─────────────────────────────────────────────
+  // Duty cycle (%) reflects average real usage relative to rated power.
+  // Sources: INMETRO energy labels, manufacturer specs, and field usage patterns.
+  const DEFAULT_EQUIPMENT = [
+    { name: 'Chuveiro Elétrico',          power: 3800, qty: 0, dutyCycle: 100 },
+    { name: 'Ar Condicionado 12.000 BTU', power: 1085, qty: 0, dutyCycle: 60  },
+    { name: 'Ar Condicionado 18.000 BTU', power: 1625, qty: 0, dutyCycle: 60  },
+    { name: 'Cooktop (1 boca)',           power: 2500, qty: 0, dutyCycle: 100 },
+    { name: 'Forno e Fryer',             power: 1700, qty: 0, dutyCycle: 100 },
+    { name: 'Máquina de Lavar',          power: 1500, qty: 0, dutyCycle: 70  },
+    { name: 'Aquecedor Elétrico',         power: 600,  qty: 0, dutyCycle: 100 },
+    { name: 'Bomba Pressurizadora',       power: 120,  qty: 0, dutyCycle: 50  },
+    { name: 'Geladeira Duplex',           power: 300,  qty: 0, dutyCycle: 35  },
+    { name: 'Geladeira',                  power: 260,  qty: 0, dutyCycle: 35  },
+    { name: 'Freezer',                    power: 200,  qty: 0, dutyCycle: 35  },
+    { name: 'Tomadas de Uso Geral',       power: 960,  qty: 0, dutyCycle: 100 },
+    { name: 'Aparelho de TV',             power: 100,  qty: 0, dutyCycle: 100 },
+    { name: 'Roteador WiFi',              power: 6,    qty: 0, dutyCycle: 100 },
+    { name: 'Iluminação LED (25 un)',     power: 180,  qty: 0, dutyCycle: 100 },
+    { name: 'Refletor 50W',              power: 50,   qty: 0, dutyCycle: 100 },
+  ];
+  let equipmentList = JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT));
+
+  function renderEquipmentTable() {
+    const tbody = document.getElementById('equipTableBody');
+    tbody.innerHTML = '';
+    equipmentList.forEach((eq, i) => {
+      const active = eq.qty > 0;
+      const effective = (eq.power * eq.qty * eq.dutyCycle / 100).toFixed(0);
+      const tr = document.createElement('tr');
+      if (active) tr.classList.add('equip-active');
+      tr.innerHTML = `
+        <td style="text-align:center">
+          <input type="checkbox" ${active ? 'checked' : ''} onchange="toggleEquip(${i}, this.checked)" />
+        </td>
+        <td><input type="text" value="${eq.name}" onchange="updateEquip(${i},'name',this.value)" style="min-width:160px" /></td>
+        <td><input type="number" value="${eq.power}" min="1" step="1" onchange="updateEquip(${i},'power',+this.value)" onkeyup="updateEquip(${i},'power',+this.value)" /></td>
+        <td><input type="number" value="${eq.qty}" min="0" step="1" onchange="updateEquip(${i},'qty',+this.value)" onkeyup="updateEquip(${i},'qty',+this.value)" style="width:54px" /></td>
+        <td><input type="number" value="${eq.dutyCycle}" min="1" max="100" step="1" onchange="updateEquip(${i},'dutyCycle',+this.value)" onkeyup="updateEquip(${i},'dutyCycle',+this.value)" style="width:70px" /></td>
+        <td class="eff-power">${active ? effective + ' W' : '—'}</td>
+        <td><button class="equip-del-btn" onclick="removeEquip(${i})" title="Remover">×</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    recalcAutonomy();
+  }
+
+  function updateEquip(i, field, val) {
+    equipmentList[i][field] = field === 'name' ? val : (isNaN(val) ? equipmentList[i][field] : val);
+    renderEquipmentTable();
+  }
+
+  function toggleEquip(i, checked) {
+    equipmentList[i].qty = checked ? (equipmentList[i].qty || 1) : 0;
+    renderEquipmentTable();
+  }
+
+  function removeEquip(i) {
+    equipmentList.splice(i, 1);
+    renderEquipmentTable();
+  }
+
+  function addCustomEquipment() {
+    equipmentList.push({ name: 'Novo Equipamento', power: 100, qty: 1, dutyCycle: 100 });
+    renderEquipmentTable();
+    // scroll to last row
+    const tbody = document.getElementById('equipTableBody');
+    const lastRow = tbody.lastElementChild;
+    if (lastRow) lastRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function recalcAutonomy() {
+    const active = equipmentList.filter(e => e.qty > 0);
+    const totalSimult    = active.reduce((s, e) => s + e.power * e.qty, 0);
+    const totalEffective = active.reduce((s, e) => s + e.power * e.qty * (e.dutyCycle / 100), 0);
+
+    document.getElementById('equipTotalSimult').textContent    = totalSimult.toLocaleString('pt-BR') + ' W';
+    document.getElementById('equipTotalEffective').textContent = Math.round(totalEffective).toLocaleString('pt-BR') + ' W';
+
+    const batKwh = parseFloat(document.getElementById('batteryKwh').value) || 0;
+    const badge  = document.getElementById('equipAutonomyBadge');
+    if (batKwh > 0 && totalEffective > 0) {
+      const hours = (batKwh * 1000 / totalEffective).toFixed(1);
+      badge.textContent = 'Autonomia estimada: ' + hours + ' horas';
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  // ── Eco override placeholder ─────────────────────────────────
+  function updateEcoPlaceholder() {
+    const consumo  = parseFloat(document.getElementById('consumoAtual').value) || 0;
+    const tarifa   = parseFloat(document.getElementById('tarifa').value) || 0;
+    const conexao  = document.querySelector('input[name=conexaoType]:checked')?.value || 'Monofásico';
+    const minMap   = { 'Monofásico': 30, 'Bifásico': 50, 'Trifásico': 100 };
+    const eco      = consumo && tarifa
+      ? Math.max(0, (consumo - (minMap[conexao] || 30)) * tarifa)
+      : null;
+    const el = document.getElementById('ecoOverride');
+    el.placeholder = eco !== null
+      ? 'Auto: R$ ' + eco.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      : 'Calculado automaticamente se vazio';
+  }
+
+  // ── Auto-calculate (fills only if field is empty or was auto-filled) ──
+  let autoFilled = { totalPower: false, monthlyGen: false };
+
+  function recalc() {
+    const qty = parseFloat(document.getElementById('modQty').value) || 0;
+    const pw  = parseFloat(document.getElementById('modPower').value) || 0;
+
+    if (qty > 0 && pw > 0) {
+      const kVp    = (qty * pw / 1000).toFixed(2);
+      const genKwh = (qty * 60).toFixed(0);
+      const tpEl   = document.getElementById('totalPower');
+      const mgEl   = document.getElementById('monthlyGen');
+      if (!tpEl.value || autoFilled.totalPower)  { tpEl.value = kVp + ' kVp';   autoFilled.totalPower  = true; }
+      if (!mgEl.value || autoFilled.monthlyGen)  { mgEl.value = genKwh + ' kWh'; autoFilled.monthlyGen = true; }
+    }
+  }
+
+  ['modQty', 'modPower'].forEach(id =>
+    document.getElementById(id).addEventListener('input', recalc)
+  );
+
+  // If user manually edits the calculated fields, mark them as manual
+  ['totalPower', 'monthlyGen'].forEach(id =>
+    document.getElementById(id).addEventListener('input', () => { autoFilled[id] = false; })
+  );
+
+  // ── Battery toggle ──────────────────────────────────────────────
+  document.getElementById('hasBattery').addEventListener('change', function () {
+    document.getElementById('batteryField').style.display = this.checked ? '' : 'none';
+    recalcAutonomy();
+  });
+
+  // Update autonomy when battery kWh changes
+  document.getElementById('batteryKwh').addEventListener('input', recalcAutonomy);
+
+  // Eco override placeholder listeners
+  ['consumoAtual', 'tarifa'].forEach(id =>
+    document.getElementById(id).addEventListener('input', updateEcoPlaceholder)
+  );
+  document.querySelectorAll('input[name=conexaoType]').forEach(r =>
+    r.addEventListener('change', updateEcoPlaceholder)
+  );
+
+  // Init equipment table on load
+  renderEquipmentTable();
+
+  // ── Equipment section HTML builder ─────────────────────────────
+  function buildEquipmentSection(hasBat, batKwh) {
+    const active = equipmentList.filter(e => e.qty > 0);
+    if (active.length === 0) return '';
+
+    const totalSimult    = active.reduce((s, e) => s + e.power * e.qty, 0);
+    const totalEffective = active.reduce((s, e) => s + e.power * e.qty * (e.dutyCycle / 100), 0);
+    const autonomyHours  = hasBat && batKwh > 0 && totalEffective > 0
+      ? (batKwh * 1000 / totalEffective).toFixed(1)
+      : null;
+
+    const rows = active.map(e => {
+      const eff = Math.round(e.power * e.qty * e.dutyCycle / 100);
+      return `<tr>
+        <td>${e.name}</td>
+        <td style="text-align:center">${e.qty}</td>
+        <td style="text-align:right">${(e.power * e.qty).toLocaleString('pt-BR')} W</td>
+        <td style="text-align:right;font-weight:700">${eff.toLocaleString('pt-BR')} W</td>
+      </tr>`;
+    }).join('');
+
+    const autonomyBlock = autonomyHours ? `
+      <div class="p-autonomy-box">
+        <div>
+          <div class="p-autonomy-label">Autonomia Estimada da Bateria</div>
+          <div class="p-autonomy-value">${autonomyHours} horas</div>
+          <div class="p-autonomy-sub">Baseado em ${batKwh} kWh · ${Math.round(totalEffective).toLocaleString('pt-BR')} W efetivos</div>
+        </div>
+        <div style="text-align:right;font-size:12px;opacity:.7">
+          Potência simultânea total<br>
+          <strong style="font-size:16px;color:var(--primary)">${totalSimult.toLocaleString('pt-BR')} W</strong>
+        </div>
+      </div>` : '';
+
+    return `
+      <div class="p-section">
+        <div class="p-section-title">Equipamentos Selecionados</div>
+        <table class="p-equip-table">
+          <thead>
+            <tr>
+              <th>Equipamento</th>
+              <th style="text-align:center">Qtd</th>
+              <th style="text-align:right">Potência Total</th>
+              <th style="text-align:right">Consumo Efetivo</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+          <tfoot>
+            <tr style="background:#f4f6f9;font-weight:700">
+              <td colspan="2" style="padding:7px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#666">Total</td>
+              <td style="padding:7px 10px;text-align:right">${totalSimult.toLocaleString('pt-BR')} W</td>
+              <td style="padding:7px 10px;text-align:right;color:var(--accent)">${Math.round(totalEffective).toLocaleString('pt-BR')} W</td>
+            </tr>
+          </tfoot>
+        </table>
+        ${autonomyBlock}
+      </div>`;
+  }
+
+  // ── Moeda brasileira ────────────────────────────────────────────
+  function buildComparisonChart(bill, ecoMonthly, projectVal) {
+    if (!bill) return '';
+    if (!ecoMonthly) ecoMonthly = bill * 0.85;
+    const YEARS = 25, GROWTH = 0.08;
+    const billWithSolar = Math.max(0, bill - ecoMonthly);
+    const invest = projectVal || 0;
+
+    // Cumulative cost per year
+    let cumSem = 0, cumCom = invest;
+    const ptsSem = [], ptsCom = [];
+    for (let y = 0; y <= YEARS; y++) {
+      ptsSem.push(cumSem); ptsCom.push(cumCom);
+      const factor = Math.pow(1 + GROWTH, y);
+      cumSem += bill * 12 * factor;
+      cumCom += billWithSolar * 12 * factor;
+    }
+
+    const maxV = ptsSem[YEARS];
+    const W = 520, H = 180, pL = 68, pR = 16, pT = 18, pB = 36;
+    const cW = W - pL - pR, cH = H - pT - pB;
+    const tx = y => pL + (y / YEARS) * cW;
+    const ty = v => pT + cH - (v / maxV) * cH;
+
+    const lineSem = ptsSem.map((v,i)=>(i?'L':'M')+tx(i).toFixed(1)+','+ty(v).toFixed(1)).join(' ');
+    const lineCom = ptsCom.map((v,i)=>(i?'L':'M')+tx(i).toFixed(1)+','+ty(v).toFixed(1)).join(' ');
+    const areaSem = lineSem+` L${tx(YEARS).toFixed(1)},${(pT+cH).toFixed(1)} L${pL},${(pT+cH).toFixed(1)} Z`;
+    const areaCom = lineCom+` L${tx(YEARS).toFixed(1)},${(pT+cH).toFixed(1)} L${pL},${(pT+cH).toFixed(1)} Z`;
+
+    const fmt = v => 'R$\u00a0' + Number(v).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});
+    const economia25 = ptsSem[YEARS] - ptsCom[YEARS];
+
+    // Y-axis labels (3 levels)
+    const yLbls = [0, 0.5, 1].map(f => {
+      const v = maxV * f;
+      const y = ty(v);
+      const lbl = f === 0 ? 'R$0' : (v >= 1e6 ? (v/1e6).toFixed(1)+'M' : (v/1e3).toFixed(0)+'k');
+      return `<text x="${pL-6}" y="${y+4}" text-anchor="end" font-size="9" fill="#999">${lbl}</text>
+              <line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="#eee" stroke-width="1"/>`;
+    }).join('');
+
+    // X-axis labels at 0,5,10,15,20,25
+    const xLbls = [0,5,10,15,20,25].map(y =>
+      `<text x="${tx(y).toFixed(1)}" y="${pT+cH+16}" text-anchor="middle" font-size="9" fill="#999">${y === 0 ? 'Hoje' : y+'a'}</text>`
+    ).join('');
+
+    // Payback marker
+    let paybackMarker = '';
+    if (invest > 0) {
+      for (let y = 1; y <= YEARS; y++) {
+        if (ptsCom[y] <= ptsSem[y] && ptsCom[y-1] > ptsSem[y-1]) {
+          const px = tx(y), py = ty(ptsSem[y]);
+          paybackMarker = `<line x1="${px}" y1="${pT}" x2="${px}" y2="${pT+cH}" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="${px+4}" y="${pT+12}" font-size="9" fill="#c9a84c" font-weight="700">Payback</text>`;
+          break;
+        }
+      }
+    }
+
+    return `
+    <div class="p-chart-section">
+      <div class="p-chart-title">📊 Comparativo: Com Solar × Sem Solar</div>
+      <div class="p-chart-wrap">
+        <svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">
+          ${yLbls}
+          ${xLbls}
+          <defs>
+            <linearGradient id="gradSem" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e74c3c" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#e74c3c" stop-opacity=".02"/>
+            </linearGradient>
+            <linearGradient id="gradCom" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#c9a84c" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#c9a84c" stop-opacity=".02"/>
+            </linearGradient>
+          </defs>
+          <path d="${areaSem}" fill="url(#gradSem)"/>
+          <path d="${areaCom}" fill="url(#gradCom)"/>
+          <path d="${lineSem}" fill="none" stroke="#e74c3c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="${lineCom}" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          ${paybackMarker}
+          <!-- end labels -->
+          <text x="${(tx(YEARS)+4).toFixed(1)}" y="${ty(ptsSem[YEARS]).toFixed(1)}" font-size="9" fill="#e74c3c" font-weight="700">${fmt(ptsSem[YEARS])}</text>
+          <text x="${(tx(YEARS)+4).toFixed(1)}" y="${(ty(ptsCom[YEARS])+4).toFixed(1)}" font-size="9" fill="#c9a84c" font-weight="700">${fmt(ptsCom[YEARS])}</text>
+        </svg>
+        <div class="p-chart-legend">
+          <div class="p-chart-leg-item"><div class="p-chart-leg-line" style="background:#e74c3c"></div>Sem solar (fatura crescendo)</div>
+          <div class="p-chart-leg-item"><div class="p-chart-leg-line" style="background:#c9a84c"></div>Com solar (custo total)</div>
+        </div>
+        <div class="p-chart-summary">
+          <div class="p-chart-sum-item">
+            <div class="p-chart-sum-val red">${fmt(ptsSem[YEARS])}</div>
+            <div class="p-chart-sum-lbl">Sem solar em 25 anos</div>
+          </div>
+          <div class="p-chart-sum-item">
+            <div class="p-chart-sum-val">${fmt(ptsCom[YEARS])}</div>
+            <div class="p-chart-sum-lbl">Com solar em 25 anos</div>
+          </div>
+          <div class="p-chart-sum-item">
+            <div class="p-chart-sum-val green">${fmt(economia25)}</div>
+            <div class="p-chart-sum-lbl">Economia total projetada</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function fmtBRL(val) {
+    if (!val && val !== 0) return '—';
+    return 'R$\u00a0' + Number(val).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+
+  // ── Generate proposal ───────────────────────────────────────────
+  function generateProposal() {
+    const get   = id => document.getElementById(id).value.trim();
+    const getN  = id => parseFloat(document.getElementById(id).value) || 0;
+
+    const name      = get('clientName') || 'Cliente';
+    const addr      = get('clientAddr');
+    const bill      = getN('billValue');
+    const modQty    = getN('modQty');
+    const modPower  = getN('modPower');
+    const modModel  = get('modModel') || '—';
+    const invQty    = getN('invQty');
+    const invPower  = getN('invPower');
+    const invModel  = get('invModel') || '—';
+    const hasBat    = document.getElementById('hasBattery').checked;
+    const batKwh    = getN('batteryKwh');
+    const batModel  = get('batModel');
+    const batDesc   = get('batDesc');
+    const instType    = document.querySelector('input[name=installType]:checked').value;
+    const conexaoType = document.querySelector('input[name=conexaoType]:checked').value;
+    const projectVal  = getN('projectValue');
+    const [vendNome, vendFone] = document.querySelector('input[name=vendedora]:checked').value.split('|');
+    const validity  = parseInt(document.getElementById('validityDays').value) || 15;
+
+    const kVp        = modQty && modPower ? (modQty * modPower / 1000).toFixed(2) : '—';
+    const genKwhNum  = parseFloat(get('monthlyGen')) || (modQty * 60);
+    const genKwh     = get('monthlyGen') || (modQty ? modQty * 60 + ' kWh' : '—');
+    const totalPwDisp = get('totalPower') || (kVp !== '—' ? kVp + ' kVp' : '—');
+
+    // Mínimo faturado por padrão de conexão
+    const minKwhMap  = { 'Monofásico': 30, 'Bifásico': 50, 'Trifásico': 100 };
+    const minKwh     = minKwhMap[conexaoType] || 30;
+    const consumoAtual = getN('consumoAtual');
+    const tarifa       = getN('tarifa');
+
+    // Economia — usa override se preenchido, senão calcula automaticamente
+    const ecoOverride    = parseFloat(document.getElementById('ecoOverride').value);
+    const ecoMonthlyCalc = (consumoAtual && tarifa)
+      ? Math.max(0, (consumoAtual - minKwh) * tarifa)
+      : 0;
+    const ecoMonthly = !isNaN(ecoOverride) && ecoOverride >= 0 ? ecoOverride : ecoMonthlyCalc;
+    const ecoAnual   = ecoMonthly * 12;
+
+    // Payback = investimento total ÷ economia anual
+    const paybackYears = (projectVal && ecoAnual) ? projectVal / ecoAnual : null;
+    const paybackStr = paybackYears
+      ? (() => {
+          const anos   = Math.floor(paybackYears);
+          const meses  = Math.round((paybackYears - anos) * 12);
+          if (anos === 0) return meses + ' meses';
+          if (meses === 0) return anos + ' anos';
+          return anos + ' anos e ' + meses + ' meses';
+        })()
+      : null;
+
+    const today = new Date().toLocaleDateString('pt-BR');
+
+    const preview = document.getElementById('preview');
+    preview.innerHTML = `
+      <div class="p-hero">
+        <div class="p-hero-left">
+          <div class="p-hero-logo-wrap">
+            <img src="logo.png" class="p-hero-logo-img" alt="Enertur Energia Solar"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+            <div class="p-hero-logo-fallback" style="display:none">
+              <div class="p-hero-logo">ENER<span>TUR</span></div>
+              <div class="p-hero-tagline">— ENERGIA SOLAR —</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-hero-deco">
+          <div class="p-hero-deco-inner">
+            <div class="p-hero-deco-title">Proposta Comercial</div>
+            <div class="p-hero-deco-meta">
+              <span>Data: <strong>${today}</strong></span>
+              <span>Válida por <strong>${validity} dias</strong></span>
+              <span>Tipo: <strong>${instType}</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-company-strip">
+        <div class="p-company-stat">
+          <span class="p-cs-value">7 anos</span>
+          <span class="p-cs-label">No mercado Solar</span>
+        </div>
+        <div class="p-cs-sep">|</div>
+        <div class="p-company-stat">
+          <span class="p-cs-value">+500</span>
+          <span class="p-cs-label">Clientes satisfeitos</span>
+        </div>
+      </div>
+      <div class="p-client-banner">
+        <div class="p-client-label">Proposta para</div>
+        <div class="p-client-name">${name}</div>
+        ${addr ? '<div class="p-client-addr">' + addr + '</div>' : ''}
+      </div>
+
+      <div class="spec-grid">
+        <div class="spec-box">
+          <div class="spec-label">Potência Total</div>
+          <div class="spec-value">${totalPwDisp}</div>
+          <div class="spec-sub">${modQty ? modQty + ' módulos × ' + modPower + ' W' : ''}</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Geração Mensal</div>
+          <div class="spec-value">${genKwh}</div>
+          <div class="spec-sub">Estimativa mensal</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Módulos</div>
+          <div class="spec-value">${modQty || '—'}</div>
+          <div class="spec-sub">${modModel}</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Inversores</div>
+          <div class="spec-value">${invQty > 1 ? invQty + ' un.' : (invQty || '—')}</div>
+          <div class="spec-sub">${invModel}${invPower ? (invQty > 1 ? ' · ' + invPower + ' kW/un. (' + (invQty * invPower).toFixed(1) + ' kW total)' : ' · ' + invPower + ' kW') : ''}</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Bateria</div>
+          <div class="spec-value">${hasBat ? batKwh + ' kWh' : '—'}</div>
+          <div class="spec-sub">${hasBat ? 'Armazenamento incluso' : 'Sem armazenamento'}</div>
+        </div>
+        <div class="spec-box">
+          <div class="spec-label">Instalação</div>
+          <div class="spec-value" style="font-size:16px">${instType}</div>
+          <div class="spec-sub">${bill ? 'Conta atual: ' + fmtBRL(bill) : 'Sem conta informada'}</div>
+        </div>
+      </div>
+
+      ${projectVal ? `
+      <div class="investment-banner">
+        <div>
+          <div class="inv-label">Valor Total do Projeto</div>
+          <div class="inv-value">${fmtBRL(projectVal)}</div>
+          <div class="inv-sub">${paybackStr ? 'Retorno estimado em ' + paybackStr : ''}</div>
+        </div>
+        ${paybackStr ? '<div style="text-align:right"><div style="font-size:12px;opacity:.75">Retorno estimado</div><div style="font-size:22px;font-weight:800;color:#a8f0a8">' + paybackStr + '</div></div>' : ''}
+      </div>` : ''}
+
+      <div class="economy-banner">
+        <div>
+          <div class="eco-label">Economia mensal estimada na fatura</div>
+          <div class="eco-value">${fmtBRL(ecoMonthly)}</div>
+          <div class="eco-year">${ecoAnual ? 'Economia anual estimada: ' + fmtBRL(ecoAnual) : ''}</div>
+        </div>
+      </div>
+
+      ${buildComparisonChart(bill, ecoMonthly, projectVal)}
+
+      <div class="p-page-break"></div>
+
+      <div class="detail-table-wrap">
+      <table class="detail-table">
+        <thead><tr><th>Item</th><th>Detalhe</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Módulo Solar</td><td>${modModel}</td><td>${modPower ? modPower + ' W / unid.' : '—'}</td></tr>
+          <tr><td>Quantidade de Módulos</td><td>${modQty} unidades</td><td>${totalPwDisp}</td></tr>
+          <tr><td>${invQty > 1 ? invQty + ' Inversores' : 'Inversor'}</td><td>${invModel}</td><td>${invPower ? invPower + ' kW' + (invQty > 1 ? ' / unid.' : '') : '—'}</td></tr>
+          ${invQty > 1 ? '<tr><td></td><td>Potência total dos inversores</td><td>' + (invQty * invPower).toFixed(1) + ' kW</td></tr>' : ''}
+          <tr><td>Bateria</td><td>${hasBat ? (batModel || 'Armazenamento') + ' — ' + batKwh + ' kWh' : 'Não inclusa'}</td><td>${hasBat ? batKwh + ' kWh' : '—'}</td></tr>
+          ${hasBat && batDesc ? '<tr><td></td><td colspan="2" style="font-size:12px;color:var(--muted);font-style:italic">' + batDesc + '</td></tr>' : ''}
+          <tr><td>Geração Mensal Estimada</td><td>${modQty} módulos</td><td>${genKwh}/mês</td></tr>
+          ${consumoAtual ? '<tr><td>Consumo Atual</td><td>Antes do sistema solar</td><td>' + consumoAtual + ' kWh/mês</td></tr>' : ''}
+          ${projectVal ? '<tr style="background:#f0faf0"><td><strong>Valor Total do Projeto</strong></td><td>Investimento total</td><td><strong>' + fmtBRL(projectVal) + '</strong></td></tr>' : ''}
+          ${paybackStr ? '<tr style="background:#f0faf0"><td>Retorno do Investimento</td><td>Investimento ÷ economia anual</td><td>' + paybackStr + '</td></tr>' : ''}
+        </tbody>
+      </table>
+      </div>
+
+      ${buildEquipmentSection(hasBat, batKwh)}
+
+      <div class="p-section">
+        <div class="p-section-title">Formas de Pagamento</div>
+        <div class="p-pay-grid">
+          <div class="p-pay-card">
+            <strong>À Vista — Pix / Boleto</strong>
+            <div class="p-pay-stage">70% na assinatura do contrato</div>
+            <div class="p-pay-stage">15% na entrega dos equipamentos</div>
+            <div class="p-pay-stage">15% após conclusão da instalação</div>
+          </div>
+          <div class="p-pay-card">
+            <strong>Cartão de Crédito</strong>
+            <span>Até 12× com juros</span>
+            <span>Até 21× com juros</span>
+          </div>
+          <div class="p-pay-card">
+            <strong>Financiamento Bancário</strong>
+            <span>Taxas e condições a consultar</span>
+            <span>Sujeito à análise de crédito</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <div class="p-section-title">Prazos</div>
+        <div class="p-timeline">
+          <div class="p-tl-item">
+            <div class="p-tl-num">20</div>
+            <div class="p-tl-desc"><strong>Dias úteis</strong>Entrega dos equipamentos</div>
+          </div>
+          <div class="p-tl-item">
+            <div class="p-tl-num">20</div>
+            <div class="p-tl-desc"><strong>Dias úteis</strong>Instalação (condicionado ao clima)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <div class="p-section-title">Garantias</div>
+        <div class="p-warranty-grid">
+          <div class="p-warranty-card">
+            <div class="p-warranty-years">25</div>
+            <div class="p-warranty-unit">Anos</div>
+            <div class="p-warranty-item">Eficiência dos painéis solares</div>
+          </div>
+          <div class="p-warranty-card">
+            <div class="p-warranty-years">12</div>
+            <div class="p-warranty-unit">Anos</div>
+            <div class="p-warranty-item">Microinversores</div>
+          </div>
+          <div class="p-warranty-card">
+            <div class="p-warranty-years">10</div>
+            <div class="p-warranty-unit">Anos</div>
+            <div class="p-warranty-item">Inversor String</div>
+          </div>
+          <div class="p-warranty-card">
+            <div class="p-warranty-years">6</div>
+            <div class="p-warranty-unit">Meses</div>
+            <div class="p-warranty-item">Mão de obra</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <div class="p-section-title">Responsabilidades</div>
+        <div class="p-resp-grid">
+          <div class="p-resp-card">
+            <strong>Enertur</strong>
+            <div class="p-resp-item">Projeto técnico e elétrico</div>
+            <div class="p-resp-item">Fornecimento e instalação dos equipamentos</div>
+            <div class="p-resp-item">Homologação junto à concessionária</div>
+            <div class="p-resp-item">Suporte técnico pós-instalação</div>
+          </div>
+          <div class="p-resp-card">
+            <strong>Cliente</strong>
+            <div class="p-resp-item">Acesso ao local de instalação</div>
+            <div class="p-resp-item">Documentos do titular da fatura (para homologação)</div>
+            <div class="p-resp-item">Conta de energia atualizada</div>
+            <div class="p-resp-item">Infraestrutura civil, se necessária</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-validity">
+        <div>
+          <div class="pv-label">Validade desta proposta</div>
+          <div class="pv-days">${validity} dias</div>
+        </div>
+        <div style="text-align:right;font-size:12px;opacity:.85">
+          Válida até ${new Date(Date.now()+validity*864e5).toLocaleDateString('pt-BR')}
+        </div>
+      </div>
+
+      <div class="footer-note">
+        Esta proposta é de caráter informativo. Valores de geração e economia são estimados.<br>
+        <strong>Enertur Energia Solar</strong> &mdash; Gerado em ${today}<br>
+        <span style="margin-top:6px;display:inline-block">
+          Consultor(a): <strong>${vendNome}</strong> &nbsp;·&nbsp; ${vendFone}
+        </span>
+      </div>
+    `;
+
+    preview.classList.add('visible');
+    preview.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ── Reset ───────────────────────────────────────────────────────
+  function resetForm() {
+    document.querySelectorAll('input:not([type=radio]):not([type=checkbox])').forEach(i => { i.value = ''; });
+    autoFilled = { totalPower: false, monthlyGen: false };
+    document.querySelector('input[name=installType][value="Residencial"]').checked = true;
+    document.getElementById('hasBattery').checked = false;
+    document.getElementById('batteryField').style.display = 'none';
+    document.getElementById('preview').classList.remove('visible');
+    document.getElementById('validityDays').value = '15';
+    // Reset equipment list to defaults
+    equipmentList = JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT));
+    renderEquipmentTable();
+    // Reset eco override placeholder
+    document.getElementById('ecoOverride').placeholder = 'Calculado automaticamente se vazio';
+  }
+</script>
+</body>
+</html>
