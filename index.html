@@ -237,8 +237,62 @@
     .spec-box .spec-value { font-size: 20px; font-weight: 800; color: var(--accent); margin-top: 2px; }
     .spec-box .spec-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
+    /* ── Financial Hero Dashboard ── */
+    .financial-hero {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 600px) { .financial-hero { grid-template-columns: 1fr; } }
+    .fh-card {
+      background: #fff;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 2px 16px rgba(0,0,0,.06);
+      position: relative;
+      overflow: hidden;
+    }
+    .fh-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--primary);
+    }
+    .fh-card.fh-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .fh-card.fh-primary::before { background: var(--primary); }
+    .fh-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .fh-card.fh-primary .fh-label { color: rgba(255,255,255,.6); }
+    .fh-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      letter-spacing: -0.5px;
+    }
+    .fh-card.fh-primary .fh-value { color: var(--primary); font-size: 32px; }
+    .fh-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .fh-card.fh-primary .fh-sub { color: rgba(255,255,255,.5); }
+
     .investment-banner {
-      background: linear-gradient(135deg, #2d6a2d, #3a8a3a);
+      background: #0d0d0d;
       color: #fff;
       border-radius: 12px;
       padding: 22px 28px;
@@ -250,7 +304,7 @@
       gap: 12px;
     }
     .investment-banner .inv-label { font-size: 14px; opacity: .85; }
-    .investment-banner .inv-value { font-size: 32px; font-weight: 900; color: #a8f0a8; }
+    .investment-banner .inv-value { font-size: 32px; font-weight: 900; color: var(--primary); }
     .investment-banner .inv-sub { font-size: 13px; opacity: .75; }
 
     .economy-banner {
@@ -1288,6 +1342,40 @@
     <div style="margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
       <button class="btn btn-outline" onclick="addCustomEquipment()" style="padding:8px 18px;font-size:13px">+ Adicionar Equipamento</button>
       <span id="equipAutonomyBadge" style="display:none;background:var(--accent);color:var(--primary);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700"></span>
+    </div>
+  </div>
+
+  <!-- ── Garantias (editáveis) ── -->
+  <div class="card full">
+    <h2>Garantias</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Valores padrão preenchidos automaticamente. Edite conforme o projeto.</p>
+    <div class="row">
+      <div class="field">
+        <label>Painel Solar (anos)</label>
+        <input id="warPainel" type="number" min="0" step="1" value="25" placeholder="25" />
+      </div>
+      <div class="field">
+        <label>Microinversor (anos)</label>
+        <input id="warMicroinv" type="number" min="0" step="1" value="15" placeholder="15" />
+      </div>
+      <div class="field">
+        <label>Inversor String (anos)</label>
+        <input id="warInvStr" type="number" min="0" step="1" value="10" placeholder="10" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Bateria (anos)</label>
+        <input id="warBateria" type="number" min="0" step="1" value="5" placeholder="5" />
+      </div>
+      <div class="field">
+        <label>Instalação / Mão de obra (anos)</label>
+        <input id="warInstalacao" type="number" min="0" step="1" value="1" placeholder="1" />
+      </div>
+      <div class="field">
+        <label>Assistência técnica</label>
+        <input id="warAssistencia" type="text" value="Inclusa" placeholder="Inclusa" />
+      </div>
     </div>
   </div>
 
