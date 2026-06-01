@@ -539,6 +539,351 @@
     .p-autonomy-label { font-size:13px; opacity:.85; }
     .p-autonomy-sub   { font-size:11px; opacity:.65; margin-top:3px; }
 
+    /* ── Proposal Site (shareable mode) ── */
+    #proposalSite {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: #fff;
+    }
+    /* Sidebar nav */
+    .ps-nav {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 200px;
+      background: var(--accent);
+      color: #fff;
+      padding: 24px 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+    .ps-nav-brand {
+      font-size: 20px;
+      font-weight: 900;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      margin-bottom: 10px;
+    }
+    .ps-nav-brand span { color: var(--primary); }
+    .ps-nav a {
+      display: block;
+      padding: 10px 20px;
+      font-size: 13px;
+      color: rgba(255,255,255,.75);
+      text-decoration: none;
+      transition: all .2s;
+    }
+    .ps-nav a:hover { background: rgba(255,255,255,.08); color: #fff; }
+    .ps-nav a.active { background: rgba(201,168,76,.15); color: var(--primary); border-left: 3px solid var(--primary); }
+    /* Main content area */
+    .ps-main {
+      margin-left: 200px;
+      min-height: 100vh;
+    }
+    /* Sections */
+    .ps-section {
+      padding: 64px 64px;
+    }
+    .ps-section:nth-child(even) { background: #f4f6f9; }
+    .ps-section:nth-child(odd)  { background: #fff; }
+    .ps-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .ps-section-h2 {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--accent);
+      margin-bottom: 32px;
+      line-height: 1.2;
+    }
+    /* Hero */
+    .ps-hero {
+      background: var(--accent);
+      color: #fff;
+      padding: 64px;
+      margin-left: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+    .ps-hero-logo {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+    .ps-hero-logo span { color: var(--primary); }
+    .ps-hero-subtitle {
+      font-size: 14px;
+      opacity: .6;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .ps-hero-right { text-align: right; }
+    .ps-hero-client {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .ps-hero-meta { font-size: 13px; opacity: .7; }
+    /* Stats grid */
+    .ps-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .ps-stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .ps-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    .ps-stat-value { font-size: 26px; font-weight: 900; color: var(--accent); margin-top: 4px; }
+    .ps-stat-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    /* Services grid */
+    .ps-services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .ps-service-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+    }
+    .ps-service-card .icon { font-size: 28px; }
+    .ps-service-card > span:first-child { font-size: 28px; }
+    .ps-service-card > span:last-child { font-size: 13px; font-weight: 600; color: var(--accent); }
+    /* Payment cards */
+    .ps-pay-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .ps-pay-card {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 20px;
+      text-align: center;
+    }
+    .ps-pay-icon { font-size: 36px; margin-bottom: 12px; }
+    .ps-pay-title { font-size: 16px; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+    .ps-pay-desc  { font-size: 13px; color: var(--muted); }
+    /* Warranties grid */
+    .ps-warranty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .ps-warranty-card {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .ps-warranty-years { font-size: 36px; font-weight: 900; color: var(--primary); }
+    .ps-warranty-unit  { font-size: 12px; opacity: .7; margin-bottom: 4px; }
+    .ps-warranty-item  { font-size: 13px; font-weight: 600; }
+    /* About bullets */
+    .ps-diff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .ps-diff-item {
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .ps-diff-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .ps-diff-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+    /* Stats row for About section */
+    .ps-stats-row {
+      display: flex; gap: 16px; flex-wrap: wrap; margin: 24px 0;
+    }
+    .ps-stat-box {
+      flex: 1; min-width: 140px;
+      background: var(--accent); color: #fff;
+      border-radius: 12px; padding: 20px 24px; text-align: center;
+    }
+    .ps-stat-val { font-size: 30px; font-weight: 900; color: var(--primary); }
+    .ps-stat-lbl { font-size: 12px; opacity: .75; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+    /* Diffs grid */
+    .ps-diffs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px; margin-top: 16px;
+    }
+    .ps-diff-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 14px 18px;
+      font-size: 14px; font-weight: 600; color: var(--accent);
+    }
+    /* Hero inner */
+    .ps-hero-inner { max-width: 700px; }
+    .ps-hero-tagline {
+      font-size: 14px; opacity: .65; text-transform: uppercase;
+      letter-spacing: 2px; margin: 6px 0 16px;
+    }
+    /* Spec grid */
+    .ps-spec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px; margin-top: 8px;
+    }
+    .ps-spec-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 20px;
+    }
+    .ps-spec-icon { font-size: 28px; margin-bottom: 8px; }
+    .ps-spec-label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    .ps-spec-value { font-size: 22px; font-weight: 900; color: var(--accent); margin: 4px 0; }
+    .ps-spec-sub { font-size: 12px; color: var(--muted); }
+    /* Eco grid */
+    .ps-eco-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px; margin-top: 8px;
+    }
+    .ps-eco-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 24px 20px; text-align: center;
+    }
+    .ps-eco-card.ps-eco-highlight {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: #fff; border-color: transparent;
+    }
+    .ps-eco-card.ps-eco-highlight .ps-eco-label { color: rgba(255,255,255,.75); }
+    .ps-eco-card.ps-eco-highlight .ps-eco-value { color: var(--primary); }
+    .ps-eco-icon { font-size: 28px; margin-bottom: 8px; }
+    .ps-eco-card .ps-eco-label { font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    .ps-eco-card .ps-eco-value { font-size: 22px; font-weight: 900; color: var(--accent); margin: 4px 0; }
+    .ps-eco-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    /* Payment grid */
+    .ps-payment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px; margin-top: 8px;
+    }
+    .ps-payment-card {
+      background: #fff; border: 2px solid var(--border);
+      border-radius: 14px; padding: 28px 20px; text-align: center;
+    }
+    .ps-payment-icon { font-size: 36px; margin-bottom: 12px; }
+    .ps-payment-name { font-size: 16px; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+    .ps-payment-desc { font-size: 13px; color: var(--muted); }
+    /* Equipment table in proposal site */
+    .ps-equip-table {
+      width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 16px;
+    }
+    .ps-equip-table th {
+      background: var(--accent); color: #fff;
+      padding: 10px 14px; text-align: left; font-size: 12px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .ps-equip-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    .ps-equip-table tr:last-child td { border-bottom: none; }
+    .ps-equip-table tr:nth-child(even) td { background: #f9fafb; }
+    /* Economy banner */
+    .ps-eco-banner {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: #fff;
+      border-radius: 14px;
+      padding: 28px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .ps-eco-value { font-size: 36px; font-weight: 900; color: var(--primary); }
+    .ps-eco-label { font-size: 14px; opacity: .8; }
+    /* WhatsApp float */
+    .ps-whatsapp {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: #25d366;
+      color: #fff;
+      border-radius: 50px;
+      padding: 14px 22px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(37,211,102,.4);
+      z-index: 200;
+      transition: transform .2s;
+    }
+    .ps-whatsapp:hover { transform: translateY(-2px); }
+    /* Bottom bar mobile nav */
+    .ps-bottom-nav { display: none; }
+    @media (max-width: 860px) {
+      .ps-nav { display: none; }
+      .ps-main { margin-left: 0; }
+      .ps-section { padding: 40px 20px; }
+      .ps-hero { padding: 40px 20px; }
+      .ps-hero-client { font-size: 22px; }
+      .ps-hero-logo { font-size: 26px; }
+      .ps-pay-grid { grid-template-columns: 1fr; }
+      .ps-bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        background: var(--accent);
+        z-index: 100;
+        overflow-x: auto;
+        padding: 0;
+      }
+      .ps-bottom-nav a {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: rgba(255,255,255,.7);
+        text-decoration: none;
+        font-size: 9px;
+        padding: 8px 6px;
+        gap: 2px;
+        min-width: 56px;
+        transition: color .2s;
+      }
+      .ps-bottom-nav a:hover, .ps-bottom-nav a.active { color: var(--primary); }
+      .ps-bottom-nav a .nav-icon { font-size: 18px; }
+      .ps-main { padding-bottom: 60px; }
+    }
+    @media print {
+      #proposalSite .ps-nav,
+      #proposalSite .ps-bottom-nav,
+      #proposalSite .ps-whatsapp { display: none !important; }
+      #proposalSite .ps-main { margin-left: 0 !important; }
+    }
+
     @page {
       size: A4;
       margin: 10mm 12mm;
@@ -964,6 +1309,7 @@
     <button class="urgency-toggle" id="paybackToggle" onclick="togglePayback()" style="border-color:var(--primary);color:var(--primary)" title="Mostrar/ocultar payback">📈 Payback</button>
     <button class="urgency-toggle" id="urgencyToggle" onclick="toggleUrgency()" title="Adicionar aviso de urgência à proposta">⚠ Estoque Limitado</button>
     <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+    <button class="btn btn-secondary" onclick="generateLink()" style="background:var(--accent);border-color:var(--accent)">🔗 Gerar Link</button>
   </div>
 
   <!-- ── Preview ── -->
@@ -972,6 +1318,23 @@
   </div>
 
 </div>
+
+<!-- ── Link Modal ── -->
+<div id="linkModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9000;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:32px;max-width:600px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.3)">
+    <h3 style="font-size:16px;font-weight:800;color:var(--accent);margin-bottom:8px">🔗 Link da Proposta Gerado</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Compartilhe este link diretamente com o cliente. Ele abrirá a proposta interativa sem precisar de login.</p>
+    <textarea id="linkOutput" readonly rows="4" style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:monospace;resize:none;background:#f9fafb;color:var(--text)"></textarea>
+    <div style="display:flex;gap:12px;margin-top:16px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="document.getElementById('linkModal').style.display='none'">Fechar</button>
+      <button class="btn btn-primary" onclick="copyLink()">📋 Copiar Link</button>
+    </div>
+    <p id="linkCopied" style="display:none;font-size:12px;color:var(--success);text-align:right;margin-top:8px;font-weight:600">✓ Link copiado!</p>
+  </div>
+</div>
+
+<!-- ── Proposal Site (shareable mode) ── -->
+<div id="proposalSite" style="display:none"></div>
 
 <script>
   // ── Equipment data ─────────────────────────────────────────────
@@ -1682,6 +2045,404 @@
     // Reset eco override placeholder
     document.getElementById('ecoOverride').placeholder = 'Calculado automaticamente se vazio';
   }
+
+  // ── Shareable Link ──────────────────────────────────────────────────────────
+
+  function encodeData(obj) {
+    return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+  }
+
+  function decodeData(str) {
+    return JSON.parse(decodeURIComponent(escape(atob(str))));
+  }
+
+  function collectFormData() {
+    const v = id => document.getElementById(id)?.value || '';
+    const vNum = id => parseFloat(document.getElementById(id)?.value) || 0;
+    const [vendNome, vendFone] = (document.querySelector('input[name=vendedora]:checked')?.value || '|').split('|');
+    const activeEquipments = equipmentList.filter(e => e.active && e.qty > 0).map(e => ({
+      name: e.name, power: e.power, qty: e.qty, dutyCycle: e.dutyCycle
+    }));
+    return {
+      clientName: v('clientName'),
+      clientAddr: v('clientAddr'),
+      billValue: vNum('billValue'),
+      consumoAtual: vNum('consumoAtual'),
+      tarifa: vNum('tarifa'),
+      ecoOverride: v('ecoOverride'),
+      modQty: vNum('modQty'),
+      modPower: vNum('modPower'),
+      modModel: v('modModel'),
+      totalPower: v('totalPower'),
+      monthlyGen: v('monthlyGen'),
+      invQty: vNum('invQty'),
+      invPower: vNum('invPower'),
+      invModel: v('invModel'),
+      projectValue: vNum('projectValue'),
+      validityDays: vNum('validityDays') || 15,
+      installType: document.querySelector('input[name=installType]:checked')?.value || 'Residencial',
+      conexaoType: document.querySelector('input[name=conexaoType]:checked')?.value || 'Monofásico',
+      hasBattery: document.getElementById('hasBattery')?.checked || false,
+      batteryKwh: vNum('batteryKwh'),
+      batModel: v('batModel'),
+      batDesc: v('batDesc'),
+      vendedora: vendNome,
+      vendedoraFone: vendFone,
+      equipamentos: activeEquipments,
+      generatedDate: new Date().toLocaleDateString('pt-BR')
+    };
+  }
+
+  function generateLink() {
+    const data = collectFormData();
+    const encoded = encodeData(data);
+    const url = location.origin + location.pathname + '#data=' + encoded;
+    document.getElementById('linkOutput').value = url;
+    const modal = document.getElementById('linkModal');
+    modal.style.display = 'flex';
+  }
+
+  function copyLink() {
+    const input = document.getElementById('linkOutput');
+    input.select();
+    document.execCommand('copy');
+    const copied = document.getElementById('linkCopied');
+    if (copied) { copied.style.display = 'block'; setTimeout(() => { copied.style.display = 'none'; }, 2000); }
+  }
+
+  function renderProposalSite(data) {
+    // Hide editor UI
+    document.querySelector('header') && (document.querySelector('header').style.display = 'none');
+    document.querySelector('.container') && (document.querySelector('.container').style.display = 'none');
+    document.querySelectorAll('.btn-wrap').forEach(e => e.style.display = 'none');
+    document.querySelector('.vendedora-select') && (document.querySelector('.vendedora-select').style.display = 'none');
+
+    const site = document.getElementById('proposalSite');
+    site.style.display = 'block';
+
+    const fmt = n => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
+    const fmtN = n => new Intl.NumberFormat('pt-BR').format(n);
+
+    // Compute economy values
+    const tarifa = data.tarifa || 0.85;
+    const monthlyGenKwh = parseFloat((data.monthlyGen || '0').replace(/[^\d.]/g, '')) || 0;
+    const ecoMensal = data.ecoOverride ? parseFloat(data.ecoOverride) : (monthlyGenKwh * tarifa);
+    const paybackMeses = data.projectValue && ecoMensal ? Math.round(data.projectValue / ecoMensal) : 0;
+    const eco25anos = ecoMensal * 12 * 25;
+    const valorizacaoMin = data.projectValue ? data.projectValue * 0.03 : 0;
+    const valorizacaoMax = data.projectValue ? data.projectValue * 0.05 : 0;
+    const validity = data.validityDays || 15;
+    const today = data.generatedDate || new Date().toLocaleDateString('pt-BR');
+    const validUntil = new Date(Date.now() + validity * 864e5).toLocaleDateString('pt-BR');
+
+    const hasEquip = data.equipamentos && data.equipamentos.length > 0;
+
+    const phoneRaw = (data.vendedoraFone || '').replace(/\D/g, '');
+
+    const navEquipItem = hasEquip ? `<a href="#ps-equipamentos">🔌 Equipamentos</a>` : '';
+    const equipSection = hasEquip ? `
+      <section class="ps-section" id="ps-equipamentos">
+        <p class="ps-section-title">Seus Equipamentos</p>
+        <h2 class="ps-section-h2">Aparelhos Considerados no Dimensionamento</h2>
+        <table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:16px">
+          <thead>
+            <tr style="background:var(--accent);color:#fff">
+              <th style="padding:10px 14px;text-align:left">Equipamento</th>
+              <th style="padding:10px 14px;text-align:center">Qtd.</th>
+              <th style="padding:10px 14px;text-align:right">Potência</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.equipamentos.map((e,i) => `
+              <tr style="${i%2===1?'background:#f9fafb':''}">
+                <td style="padding:9px 14px;border-bottom:1px solid var(--border)">${e.name}</td>
+                <td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:center">${e.qty}</td>
+                <td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:right">${e.power} W</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+        ${data.hasBattery && data.batteryKwh ? `
+        <div style="margin-top:20px;background:var(--accent);color:#fff;border-radius:12px;padding:20px 28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+          <div style="font-size:36px;font-weight:900;color:var(--primary);line-height:1">${data.batteryKwh} kWh</div>
+          <div>
+            <div style="font-size:14px;font-weight:700">Armazenamento com Bateria</div>
+            <div style="font-size:12px;opacity:.7;margin-top:4px">${data.batModel || ''}</div>
+          </div>
+        </div>` : ''}
+      </section>` : '';
+
+    site.innerHTML = `
+      <!-- Nav lateral -->
+      <nav class="ps-nav">
+        <div class="ps-nav-brand">ENER<span>TUR</span></div>
+        <a href="#ps-sobre">🏢 Sobre Nós</a>
+        <a href="#ps-sistema">☀️ Seu Sistema</a>
+        ${navEquipItem}
+        <a href="#ps-economia">💰 Economia</a>
+        <a href="#ps-servicos">🔧 Serviços</a>
+        <a href="#ps-pagamento">💳 Pagamento</a>
+        <a href="#ps-garantias">🛡️ Garantias</a>
+      </nav>
+
+      <!-- Bottom nav mobile -->
+      <nav class="ps-bottom-nav">
+        <a href="#ps-sobre">🏢</a>
+        <a href="#ps-sistema">☀️</a>
+        ${hasEquip ? '<a href="#ps-equipamentos">🔌</a>' : ''}
+        <a href="#ps-economia">💰</a>
+        <a href="#ps-servicos">🔧</a>
+        <a href="#ps-pagamento">💳</a>
+        <a href="#ps-garantias">🛡️</a>
+      </nav>
+
+      <!-- Main content -->
+      <main class="ps-main">
+
+        <!-- Hero -->
+        <section class="ps-hero" id="ps-hero">
+          <div class="ps-hero-inner">
+            <div class="ps-hero-logo">ENER<span>TUR</span></div>
+            <div class="ps-hero-tagline">Proposta Solar Personalizada</div>
+            <div class="ps-hero-client">${data.clientName || 'Cliente'}</div>
+            <div class="ps-hero-meta">
+              <span>📅 Emitida em ${today}</span>
+              <span>⏳ Válida até ${validUntil}</span>
+              ${data.clientAddr ? `<span>📍 ${data.clientAddr}</span>` : ''}
+            </div>
+          </div>
+        </section>
+
+        <!-- Sobre Nós -->
+        <section class="ps-section" id="ps-sobre">
+          <p class="ps-section-title">Sobre Nós</p>
+          <h2 class="ps-section-h2">Por que escolher a Enertur?</h2>
+          <div class="ps-stats-row">
+            <div class="ps-stat-box">
+              <div class="ps-stat-val">7+</div>
+              <div class="ps-stat-lbl">Anos de mercado</div>
+            </div>
+            <div class="ps-stat-box">
+              <div class="ps-stat-val">500+</div>
+              <div class="ps-stat-lbl">Clientes atendidos</div>
+            </div>
+            <div class="ps-stat-box">
+              <div class="ps-stat-val">100%</div>
+              <div class="ps-stat-lbl">Homologações inclusas</div>
+            </div>
+          </div>
+          <p style="font-size:15px;line-height:1.7;color:var(--muted);margin:24px 0 16px">
+            Nossa missão é democratizar a energia solar, tornando-a acessível e viável para residências, empresas e propriedades rurais em todo o Brasil.
+          </p>
+          <div class="ps-diffs-grid">
+            <div class="ps-diff-card">✅ Instalação com padrão premium</div>
+            <div class="ps-diff-card">✅ Suporte pós-venda dedicado</div>
+            <div class="ps-diff-card">✅ Homologação junto à distribuidora inclusa</div>
+            <div class="ps-diff-card">✅ Projeto técnico e elétrico completo</div>
+          </div>
+        </section>
+
+        <!-- Seu Sistema -->
+        <section class="ps-section" id="ps-sistema">
+          <p class="ps-section-title">Seu Sistema</p>
+          <h2 class="ps-section-h2">Especificações Técnicas do Projeto</h2>
+          <div class="ps-spec-grid">
+            <div class="ps-spec-card">
+              <div class="ps-spec-icon">🔆</div>
+              <div class="ps-spec-label">Módulos Fotovoltaicos</div>
+              <div class="ps-spec-value">${data.modQty || '—'} un.</div>
+              <div class="ps-spec-sub">${data.modModel || ''}</div>
+            </div>
+            <div class="ps-spec-card">
+              <div class="ps-spec-icon">⚡</div>
+              <div class="ps-spec-label">Potência Total</div>
+              <div class="ps-spec-value">${data.totalPower || '—'}</div>
+              <div class="ps-spec-sub">${data.modPower ? data.modPower + ' W por módulo' : ''}</div>
+            </div>
+            <div class="ps-spec-card">
+              <div class="ps-spec-icon">📊</div>
+              <div class="ps-spec-label">Geração Mensal Est.</div>
+              <div class="ps-spec-value">${data.monthlyGen || '—'}</div>
+              <div class="ps-spec-sub">Média estimada</div>
+            </div>
+            <div class="ps-spec-card">
+              <div class="ps-spec-icon">🔄</div>
+              <div class="ps-spec-label">Inversor</div>
+              <div class="ps-spec-value">${data.invQty || '—'} × ${data.invPower || '—'} kW</div>
+              <div class="ps-spec-sub">${data.invModel || ''}</div>
+            </div>
+            ${data.hasBattery && data.batteryKwh ? `
+            <div class="ps-spec-card">
+              <div class="ps-spec-icon">🔋</div>
+              <div class="ps-spec-label">Bateria</div>
+              <div class="ps-spec-value">${data.batteryKwh} kWh</div>
+              <div class="ps-spec-sub">${data.batModel || ''}</div>
+            </div>` : ''}
+            <div class="ps-spec-card">
+              <div class="ps-spec-icon">🏠</div>
+              <div class="ps-spec-label">Tipo de Instalação</div>
+              <div class="ps-spec-value">${data.installType || '—'}</div>
+              <div class="ps-spec-sub">${data.conexaoType || ''}</div>
+            </div>
+          </div>
+        </section>
+
+        ${equipSection}
+
+        <!-- Economia -->
+        <section class="ps-section" id="ps-economia">
+          <p class="ps-section-title">Economia Projetada</p>
+          <h2 class="ps-section-h2">O Retorno do Seu Investimento</h2>
+          <div class="ps-eco-grid">
+            <div class="ps-eco-card ps-eco-highlight">
+              <div class="ps-eco-icon">💵</div>
+              <div class="ps-eco-label">Economia Mensal</div>
+              <div class="ps-eco-value">${fmt(ecoMensal)}</div>
+            </div>
+            <div class="ps-eco-card">
+              <div class="ps-eco-icon">⏱️</div>
+              <div class="ps-eco-label">Payback Estimado</div>
+              <div class="ps-eco-value">${paybackMeses ? paybackMeses + ' meses' : '—'}</div>
+            </div>
+            <div class="ps-eco-card">
+              <div class="ps-eco-icon">📈</div>
+              <div class="ps-eco-label">Economia em 25 anos</div>
+              <div class="ps-eco-value">${fmt(eco25anos)}</div>
+            </div>
+            <div class="ps-eco-card">
+              <div class="ps-eco-icon">🏡</div>
+              <div class="ps-eco-label">Valorização do Imóvel</div>
+              <div class="ps-eco-value">+3% a +5%</div>
+              <div class="ps-eco-sub">Estimativa: ${fmt(valorizacaoMin)} – ${fmt(valorizacaoMax)}</div>
+            </div>
+          </div>
+          ${data.projectValue ? `
+          <div style="margin-top:24px;background:var(--accent);color:#fff;border-radius:14px;padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+            <div>
+              <div style="font-size:12px;opacity:.7;text-transform:uppercase;letter-spacing:1px">Investimento Total</div>
+              <div style="font-size:32px;font-weight:900;color:var(--primary);line-height:1.2">${fmt(data.projectValue)}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:12px;opacity:.7">Retorno em</div>
+              <div style="font-size:24px;font-weight:800">${paybackMeses ? paybackMeses + ' meses' : '—'}</div>
+            </div>
+          </div>` : ''}
+        </section>
+
+        <!-- Serviços -->
+        <section class="ps-section" id="ps-servicos">
+          <p class="ps-section-title">Nossos Serviços</p>
+          <h2 class="ps-section-h2">Soluções Completas em Energia Solar</h2>
+          <div class="ps-services-grid">
+            <div class="ps-service-card"><span>☀️</span>Instalação de Sistema Solar Fotovoltaico</div>
+            <div class="ps-service-card"><span>🔧</span>Manutenção Preventiva e Corretiva</div>
+            <div class="ps-service-card"><span>🧹</span>Limpeza de Painéis Solares</div>
+            <div class="ps-service-card"><span>📡</span>Monitoramento Remoto do Sistema</div>
+            <div class="ps-service-card"><span>📋</span>Homologação junto à Distribuidora</div>
+            <div class="ps-service-card"><span>📄</span>Laudo Técnico para Seguradora</div>
+            <div class="ps-service-card"><span>🔌</span>Ampliação de Sistema Existente</div>
+            <div class="ps-service-card"><span>🚗</span>Instalação de Carregador Veicular (EV Charger)</div>
+            <div class="ps-service-card"><span>💡</span>Consultoria Energética</div>
+          </div>
+        </section>
+
+        <!-- Pagamento -->
+        <section class="ps-section" id="ps-pagamento">
+          <p class="ps-section-title">Formas de Pagamento</p>
+          <h2 class="ps-section-h2">Facilidade para Você Começar</h2>
+          <div class="ps-payment-grid">
+            <div class="ps-payment-card">
+              <div class="ps-payment-icon">💵</div>
+              <div class="ps-payment-name">À Vista</div>
+              <div class="ps-payment-desc">Desconto especial para pagamento antecipado. Melhor condição disponível.</div>
+            </div>
+            <div class="ps-payment-card">
+              <div class="ps-payment-icon">🏦</div>
+              <div class="ps-payment-name">Financiamento</div>
+              <div class="ps-payment-desc">Parcele em até 84 meses com taxas competitivas. Aprovação rápida.</div>
+            </div>
+            <div class="ps-payment-card">
+              <div class="ps-payment-icon">💳</div>
+              <div class="ps-payment-name">Cartão de Crédito</div>
+              <div class="ps-payment-desc">Parcelamento em até 12x. Aceitos todos os principais cartões.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Garantias -->
+        <section class="ps-section" id="ps-garantias">
+          <p class="ps-section-title">Garantias</p>
+          <h2 class="ps-section-h2">Tranquilidade a Longo Prazo</h2>
+          <div class="ps-warranty-grid">
+            <div class="ps-warranty-card">
+              <div class="ps-warranty-years">25</div>
+              <div class="ps-warranty-unit">Anos</div>
+              <div class="ps-warranty-item">Painéis Solares</div>
+            </div>
+            <div class="ps-warranty-card">
+              <div class="ps-warranty-years">12</div>
+              <div class="ps-warranty-unit">Anos</div>
+              <div class="ps-warranty-item">Inversor</div>
+            </div>
+            <div class="ps-warranty-card">
+              <div class="ps-warranty-years">5</div>
+              <div class="ps-warranty-unit">Anos</div>
+              <div class="ps-warranty-item">Bateria</div>
+            </div>
+            <div class="ps-warranty-card">
+              <div class="ps-warranty-years">1</div>
+              <div class="ps-warranty-unit">Ano</div>
+              <div class="ps-warranty-item">Instalação</div>
+            </div>
+            <div class="ps-warranty-card" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
+              <div class="ps-warranty-years" style="color:#fff">✓</div>
+              <div class="ps-warranty-unit" style="color:rgba(255,255,255,.8)">Inclusa</div>
+              <div class="ps-warranty-item" style="color:rgba(255,255,255,.9)">Assistência Técnica</div>
+            </div>
+          </div>
+          <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:32px">
+            Consultor(a): <strong>${data.vendedora || 'Enertur'}</strong>
+            ${data.vendedoraFone ? ' · ' + data.vendedoraFone : ''}
+            · enertur.com.br
+          </p>
+        </section>
+
+      </main>
+
+      <!-- WhatsApp floating button -->
+      <a class="ps-whatsapp" href="https://wa.me/55${phoneRaw}?text=${encodeURIComponent('Olá, tenho interesse na proposta solar!')}" target="_blank" rel="noopener">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        <span>Tenho Interesse</span>
+      </a>
+    `;
+
+    // Activate smooth scroll nav highlight
+    const sections = site.querySelectorAll('section[id]');
+    const navLinks = site.querySelectorAll('.ps-nav a');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const active = site.querySelector(`.ps-nav a[href="#${e.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.4 });
+    sections.forEach(s => observer.observe(s));
+  }
+
+  // ── Init: check for #data= hash ─────────────────────────────────────────────
+  (function init() {
+    const hash = location.hash;
+    if (hash && hash.startsWith('#data=')) {
+      try {
+        const data = decodeData(hash.slice(6));
+        renderProposalSite(data);
+      } catch(e) {
+        console.error('Erro ao decodificar proposta:', e);
+      }
+    }
+  })();
+
 </script>
 </body>
 </html>
