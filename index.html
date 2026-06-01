@@ -812,7 +812,7 @@
       background: #fff; border: 1.5px solid var(--border);
       border-radius: 12px; padding: 20px;
     }
-    .ps-spec-icon { font-size: 28px; margin-bottom: 8px; }
+    .ps-spec-icon { font-size: 28px; margin-bottom: 8px; display: none; }
     .ps-spec-label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
     .ps-spec-value { font-size: 22px; font-weight: 900; color: var(--accent); margin: 4px 0; }
     .ps-spec-sub { font-size: 12px; color: var(--muted); }
@@ -832,10 +832,57 @@
     }
     .ps-eco-card.ps-eco-highlight .ps-eco-label { color: rgba(255,255,255,.75); }
     .ps-eco-card.ps-eco-highlight .ps-eco-value { color: var(--primary); }
-    .ps-eco-icon { font-size: 28px; margin-bottom: 8px; }
+    .ps-eco-icon { font-size: 28px; margin-bottom: 8px; display: none; }
     .ps-eco-card .ps-eco-label { font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
     .ps-eco-card .ps-eco-value { font-size: 22px; font-weight: 900; color: var(--accent); margin: 4px 0; }
     .ps-eco-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    /* Benefits strip */
+    .ps-benefits-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0,0,0,.08);
+      margin-bottom: 32px;
+      border: 1px solid #ececec;
+    }
+    @media (max-width: 700px) { .ps-benefits-strip { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 440px) { .ps-benefits-strip { grid-template-columns: 1fr; } }
+    .ps-benefit-card {
+      padding: 28px 24px;
+      border-right: 1px solid #ececec;
+      border-bottom: 1px solid #ececec;
+      text-align: center;
+    }
+    .ps-benefit-card:nth-child(3n) { border-right: none; }
+    .ps-benefit-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .ps-benefit-value {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0d0d0d;
+      line-height: 1;
+      letter-spacing: -0.5px;
+    }
+    .ps-benefit-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .ps-benefit-card.ps-benefit-highlight {
+      background: #0d0d0d;
+    }
+    .ps-benefit-card.ps-benefit-highlight .ps-benefit-label { color: rgba(255,255,255,.5); }
+    .ps-benefit-card.ps-benefit-highlight .ps-benefit-value { color: var(--primary); }
+    .ps-benefit-card.ps-benefit-highlight .ps-benefit-sub { color: rgba(255,255,255,.5); }
     /* Payment grid */
     .ps-payment-grid {
       display: grid;
@@ -1611,7 +1658,7 @@
               <div class="p-hybrid-item"><div class="p-hybrid-item-dot"></div>Transição instantânea e automática</div>
               <div class="p-hybrid-item"><div class="p-hybrid-item-dot"></div>Otimização inteligente do uso de energia</div>
               <div class="p-hybrid-item"><div class="p-hybrid-item-dot"></div>Energia contínua e expansível (solar + rede)</div>
-              <div class="p-hybrid-item"><div class="p-hybrid-item-dot"></div>Solução discreta, moderna e valorizadora do imóvel</div>
+              <div class="p-hybrid-item"><div class="p-hybrid-item-dot"></div>Solução discreta, moderna e de alto padrão</div>
             </div>
           </div>
         </div>
@@ -1973,7 +2020,7 @@
       <div class="p-section">
         <div class="urgency-banner" id="urgencyBanner" style="margin-bottom:14px">
           <div class="urgency-banner-inner">
-            <div class="urgency-icon">⚠️</div>
+            <div class="urgency-icon"></div>
             <div class="urgency-text-wrap">
               <div class="urgency-title">Oferta por Tempo Limitado</div>
               <div class="urgency-text">Estoque e condições desta proposta são limitados. Os valores, equipamentos e condições de pagamento apresentados estão sujeitos a alteração sem aviso prévio.</div>
@@ -2029,7 +2076,7 @@
             <div class="p-warranty-item">Eficiência dos painéis solares</div>
           </div>
           <div class="p-warranty-card">
-            <div class="p-warranty-years">12</div>
+            <div class="p-warranty-years">15</div>
             <div class="p-warranty-unit">Anos</div>
             <div class="p-warranty-item">Microinversores</div>
           </div>
@@ -2177,7 +2224,14 @@
       vendedora: vendNome,
       vendedoraFone: vendFone,
       equipamentos: activeEquipments,
-      generatedDate: new Date().toLocaleDateString('pt-BR')
+      generatedDate: new Date().toLocaleDateString('pt-BR'),
+      warPainel: vNum('warPainel') || 25,
+      warMicroinv: vNum('warMicroinv') || 15,
+      warInvStr: vNum('warInvStr') || 10,
+      warInvStr: vNum('warInvStr') || 10,
+      warBateria: vNum('warBateria') || 5,
+      warInstalacao: vNum('warInstalacao') || 1,
+      warAssistencia: v('warAssistencia') || 'Inclusa'
     };
   }
 
@@ -2217,8 +2271,6 @@
     const ecoMensal = data.ecoOverride ? parseFloat(data.ecoOverride) : (monthlyGenKwh * tarifa);
     const paybackMeses = data.projectValue && ecoMensal ? Math.round(data.projectValue / ecoMensal) : 0;
     const eco25anos = ecoMensal * 12 * 25;
-    const valorizacaoMin = data.projectValue ? data.projectValue * 0.03 : 0;
-    const valorizacaoMax = data.projectValue ? data.projectValue * 0.05 : 0;
     const validity = data.validityDays || 15;
     const today = data.generatedDate || new Date().toLocaleDateString('pt-BR');
     const validUntil = new Date(Date.now() + validity * 864e5).toLocaleDateString('pt-BR');
@@ -2263,24 +2315,24 @@
       <!-- Nav lateral -->
       <nav class="ps-nav">
         <div class="ps-nav-brand">ENER<span>TUR</span></div>
-        <a href="#ps-sobre">🏢 Sobre Nós</a>
-        <a href="#ps-sistema">☀️ Seu Sistema</a>
+        <a href="#ps-sobre">Sobre Nós</a>
+        <a href="#ps-sistema">Seu Sistema</a>
         ${navEquipItem}
-        <a href="#ps-economia">💰 Economia</a>
-        <a href="#ps-servicos">🔧 Serviços</a>
-        <a href="#ps-pagamento">💳 Pagamento</a>
-        <a href="#ps-garantias">🛡️ Garantias</a>
+        <a href="#ps-economia">Economia</a>
+        <a href="#ps-servicos">Serviços</a>
+        <a href="#ps-pagamento">Pagamento</a>
+        <a href="#ps-garantias">Garantias</a>
       </nav>
 
       <!-- Bottom nav mobile -->
       <nav class="ps-bottom-nav">
-        <a href="#ps-sobre">🏢</a>
-        <a href="#ps-sistema">☀️</a>
-        ${hasEquip ? '<a href="#ps-equipamentos">🔌</a>' : ''}
-        <a href="#ps-economia">💰</a>
-        <a href="#ps-servicos">🔧</a>
-        <a href="#ps-pagamento">💳</a>
-        <a href="#ps-garantias">🛡️</a>
+        <a href="#ps-sobre">Sobre</a>
+        <a href="#ps-sistema">Sistema</a>
+        ${hasEquip ? '<a href="#ps-equipamentos">Equip.</a>' : ''}
+        <a href="#ps-economia">Economia</a>
+        <a href="#ps-servicos">Serviços</a>
+        <a href="#ps-pagamento">Pagamento</a>
+        <a href="#ps-garantias">Garantias</a>
       </nav>
 
       <!-- Main content -->
@@ -2293,10 +2345,44 @@
             <div class="ps-hero-tagline">Proposta Solar Personalizada</div>
             <div class="ps-hero-client">${data.clientName || 'Cliente'}</div>
             <div class="ps-hero-meta">
-              <span>📅 Emitida em ${today}</span>
-              <span>⏳ Válida até ${validUntil}</span>
-              ${data.clientAddr ? `<span>📍 ${data.clientAddr}</span>` : ''}
+              <span>Emitida em ${today}</span>
+              <span>Válida até ${validUntil}</span>
+              ${data.clientAddr ? `<span>${data.clientAddr}</span>` : ''}
             </div>
+          </div>
+        </section>
+
+        <!-- Benefícios Principais -->
+        <section class="ps-benefits-strip">
+          <div class="ps-benefit-card">
+            <div class="ps-benefit-label">Economia Mensal</div>
+            <div class="ps-benefit-value">${ecoMensal ? fmt(ecoMensal) : '—'}</div>
+            <div class="ps-benefit-sub">Redução imediata na fatura</div>
+          </div>
+          <div class="ps-benefit-card">
+            <div class="ps-benefit-label">Segurança Energética</div>
+            <div class="ps-benefit-value">Autônoma</div>
+            <div class="ps-benefit-sub">Geração própria de energia</div>
+          </div>
+          <div class="ps-benefit-card">
+            <div class="ps-benefit-label">Autonomia</div>
+            <div class="ps-benefit-value">100%</div>
+            <div class="ps-benefit-sub">Independência da distribuidora</div>
+          </div>
+          <div class="ps-benefit-card ps-benefit-highlight">
+            <div class="ps-benefit-label">Payback Estimado</div>
+            <div class="ps-benefit-value">${paybackMeses ? Math.round(paybackMeses / 12 * 10) / 10 + ' anos' : '—'}</div>
+            <div class="ps-benefit-sub">Retorno do investimento</div>
+          </div>
+          <div class="ps-benefit-card">
+            <div class="ps-benefit-label">Equipamentos</div>
+            <div class="ps-benefit-value">Premium</div>
+            <div class="ps-benefit-sub">Marcas líderes do setor</div>
+          </div>
+          <div class="ps-benefit-card">
+            <div class="ps-benefit-label">Garantia</div>
+            <div class="ps-benefit-value">${data.warPainel || 25} anos</div>
+            <div class="ps-benefit-sub">Nos painéis solares</div>
           </div>
         </section>
 
@@ -2322,10 +2408,10 @@
             Nossa missão é democratizar a energia solar, tornando-a acessível e viável para residências, empresas e propriedades rurais em todo o Brasil.
           </p>
           <div class="ps-diffs-grid">
-            <div class="ps-diff-card">✅ Instalação com padrão premium</div>
-            <div class="ps-diff-card">✅ Suporte pós-venda dedicado</div>
-            <div class="ps-diff-card">✅ Homologação junto à distribuidora inclusa</div>
-            <div class="ps-diff-card">✅ Projeto técnico e elétrico completo</div>
+            <div class="ps-diff-card">Instalação com padrão premium</div>
+            <div class="ps-diff-card">Suporte pós-venda dedicado</div>
+            <div class="ps-diff-card">Homologação junto à distribuidora inclusa</div>
+            <div class="ps-diff-card">Projeto técnico e elétrico completo</div>
           </div>
         </section>
 
@@ -2335,38 +2421,32 @@
           <h2 class="ps-section-h2">Especificações Técnicas do Projeto</h2>
           <div class="ps-spec-grid">
             <div class="ps-spec-card">
-              <div class="ps-spec-icon">🔆</div>
               <div class="ps-spec-label">Módulos Fotovoltaicos</div>
               <div class="ps-spec-value">${data.modQty || '—'} un.</div>
               <div class="ps-spec-sub">${data.modModel || ''}</div>
             </div>
             <div class="ps-spec-card">
-              <div class="ps-spec-icon">⚡</div>
               <div class="ps-spec-label">Potência Total</div>
               <div class="ps-spec-value">${data.totalPower || '—'}</div>
               <div class="ps-spec-sub">${data.modPower ? data.modPower + ' W por módulo' : ''}</div>
             </div>
             <div class="ps-spec-card">
-              <div class="ps-spec-icon">📊</div>
               <div class="ps-spec-label">Geração Mensal Est.</div>
               <div class="ps-spec-value">${data.monthlyGen || '—'}</div>
               <div class="ps-spec-sub">Média estimada</div>
             </div>
             <div class="ps-spec-card">
-              <div class="ps-spec-icon">🔄</div>
               <div class="ps-spec-label">Inversor</div>
               <div class="ps-spec-value">${data.invQty || '—'} × ${data.invPower || '—'} kW</div>
               <div class="ps-spec-sub">${data.invModel || ''}</div>
             </div>
             ${data.hasBattery && data.batteryKwh ? `
             <div class="ps-spec-card">
-              <div class="ps-spec-icon">🔋</div>
               <div class="ps-spec-label">Bateria</div>
               <div class="ps-spec-value">${data.batteryKwh} kWh</div>
               <div class="ps-spec-sub">${data.batModel || ''}</div>
             </div>` : ''}
             <div class="ps-spec-card">
-              <div class="ps-spec-icon">🏠</div>
               <div class="ps-spec-label">Tipo de Instalação</div>
               <div class="ps-spec-value">${data.installType || '—'}</div>
               <div class="ps-spec-sub">${data.conexaoType || ''}</div>
@@ -2382,25 +2462,16 @@
           <h2 class="ps-section-h2">O Retorno do Seu Investimento</h2>
           <div class="ps-eco-grid">
             <div class="ps-eco-card ps-eco-highlight">
-              <div class="ps-eco-icon">💵</div>
               <div class="ps-eco-label">Economia Mensal</div>
               <div class="ps-eco-value">${fmt(ecoMensal)}</div>
             </div>
             <div class="ps-eco-card">
-              <div class="ps-eco-icon">⏱️</div>
               <div class="ps-eco-label">Payback Estimado</div>
               <div class="ps-eco-value">${paybackMeses ? paybackMeses + ' meses' : '—'}</div>
             </div>
             <div class="ps-eco-card">
-              <div class="ps-eco-icon">📈</div>
               <div class="ps-eco-label">Economia em 25 anos</div>
               <div class="ps-eco-value">${fmt(eco25anos)}</div>
-            </div>
-            <div class="ps-eco-card">
-              <div class="ps-eco-icon">🏡</div>
-              <div class="ps-eco-label">Valorização do Imóvel</div>
-              <div class="ps-eco-value">+3% a +5%</div>
-              <div class="ps-eco-sub">Estimativa: ${fmt(valorizacaoMin)} – ${fmt(valorizacaoMax)}</div>
             </div>
           </div>
           ${data.projectValue ? `
@@ -2421,15 +2492,15 @@
           <p class="ps-section-title">Nossos Serviços</p>
           <h2 class="ps-section-h2">Soluções Completas em Energia Solar</h2>
           <div class="ps-services-grid">
-            <div class="ps-service-card"><span>☀️</span>Instalação de Sistema Solar Fotovoltaico</div>
-            <div class="ps-service-card"><span>🔧</span>Manutenção Preventiva e Corretiva</div>
-            <div class="ps-service-card"><span>🧹</span>Limpeza de Painéis Solares</div>
-            <div class="ps-service-card"><span>📡</span>Monitoramento Remoto do Sistema</div>
-            <div class="ps-service-card"><span>📋</span>Homologação junto à Distribuidora</div>
-            <div class="ps-service-card"><span>📄</span>Laudo Técnico para Seguradora</div>
-            <div class="ps-service-card"><span>🔌</span>Ampliação de Sistema Existente</div>
-            <div class="ps-service-card"><span>🚗</span>Instalação de Carregador Veicular (EV Charger)</div>
-            <div class="ps-service-card"><span>💡</span>Consultoria Energética</div>
+            <div class="ps-service-card">Instalação de Sistema Solar Fotovoltaico</div>
+            <div class="ps-service-card">Manutenção Preventiva e Corretiva</div>
+            <div class="ps-service-card">Limpeza de Painéis Solares</div>
+            <div class="ps-service-card">Monitoramento Remoto do Sistema</div>
+            <div class="ps-service-card">Homologação junto à Distribuidora</div>
+            <div class="ps-service-card">Laudo Técnico para Seguradora</div>
+            <div class="ps-service-card">Ampliação de Sistema Existente</div>
+            <div class="ps-service-card">Instalação de Carregador Veicular (EV Charger)</div>
+            <div class="ps-service-card">Consultoria Energética</div>
           </div>
         </section>
 
@@ -2439,17 +2510,14 @@
           <h2 class="ps-section-h2">Facilidade para Você Começar</h2>
           <div class="ps-payment-grid">
             <div class="ps-payment-card">
-              <div class="ps-payment-icon">💵</div>
               <div class="ps-payment-name">À Vista</div>
               <div class="ps-payment-desc">Desconto especial para pagamento antecipado. Melhor condição disponível.</div>
             </div>
             <div class="ps-payment-card">
-              <div class="ps-payment-icon">🏦</div>
               <div class="ps-payment-name">Financiamento</div>
               <div class="ps-payment-desc">Parcele em até 84 meses com taxas competitivas. Aprovação rápida.</div>
             </div>
             <div class="ps-payment-card">
-              <div class="ps-payment-icon">💳</div>
               <div class="ps-payment-name">Cartão de Crédito</div>
               <div class="ps-payment-desc">Parcelamento em até 12x. Aceitos todos os principais cartões.</div>
             </div>
@@ -2462,28 +2530,28 @@
           <h2 class="ps-section-h2">Tranquilidade a Longo Prazo</h2>
           <div class="ps-warranty-grid">
             <div class="ps-warranty-card">
-              <div class="ps-warranty-years">25</div>
+              <div class="ps-warranty-years">${data.warPainel || 25}</div>
               <div class="ps-warranty-unit">Anos</div>
-              <div class="ps-warranty-item">Painéis Solares</div>
+              <div class="ps-warranty-item">Painel Solar</div>
             </div>
             <div class="ps-warranty-card">
-              <div class="ps-warranty-years">12</div>
+              <div class="ps-warranty-years">${data.warMicroinv || 15}</div>
               <div class="ps-warranty-unit">Anos</div>
-              <div class="ps-warranty-item">Inversor</div>
+              <div class="ps-warranty-item">Microinversor</div>
             </div>
             <div class="ps-warranty-card">
-              <div class="ps-warranty-years">5</div>
+              <div class="ps-warranty-years">${data.warBateria || 5}</div>
               <div class="ps-warranty-unit">Anos</div>
               <div class="ps-warranty-item">Bateria</div>
             </div>
             <div class="ps-warranty-card">
-              <div class="ps-warranty-years">1</div>
+              <div class="ps-warranty-years">${data.warInstalacao || 1}</div>
               <div class="ps-warranty-unit">Ano</div>
               <div class="ps-warranty-item">Instalação</div>
             </div>
             <div class="ps-warranty-card" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
               <div class="ps-warranty-years" style="color:#fff">✓</div>
-              <div class="ps-warranty-unit" style="color:rgba(255,255,255,.8)">Inclusa</div>
+              <div class="ps-warranty-unit" style="color:rgba(255,255,255,.8)">${data.warAssistencia || 'Inclusa'}</div>
               <div class="ps-warranty-item" style="color:rgba(255,255,255,.9)">Assistência Técnica</div>
             </div>
           </div>
