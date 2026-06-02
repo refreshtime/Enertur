@@ -228,14 +228,16 @@
     @media (max-width: 600px) { .spec-grid { grid-template-columns: 1fr 1fr; } }
 
     .spec-box {
-      background: var(--bg);
+      background: #fff;
       border-radius: 10px;
-      padding: 14px 16px;
-      border-left: 4px solid var(--primary);
+      padding: 16px 18px;
+      border-left: 3px solid var(--primary);
+      border: 1.5px solid #ececec;
+      border-left: 3px solid var(--primary);
     }
-    .spec-box .spec-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
-    .spec-box .spec-value { font-size: 20px; font-weight: 800; color: var(--accent); margin-top: 2px; }
-    .spec-box .spec-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .spec-box .spec-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; font-weight:700; }
+    .spec-box .spec-value { font-size: 20px; font-weight: 900; color: var(--accent); margin-top: 4px; line-height:1; letter-spacing:-.3px; }
+    .spec-box .spec-sub { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight:600; }
 
     /* ── Financial Hero Dashboard ── */
     .financial-hero {
@@ -292,9 +294,9 @@
     .fh-card.fh-primary .fh-sub { color: rgba(255,255,255,.5); }
 
     .investment-banner {
-      background: #0d0d0d;
+      background: var(--accent);
       color: #fff;
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 22px 28px;
       display: flex;
       align-items: center;
@@ -302,26 +304,27 @@
       margin-bottom: 16px;
       flex-wrap: wrap;
       gap: 12px;
+      border-top: 3px solid var(--primary);
     }
-    .investment-banner .inv-label { font-size: 14px; opacity: .85; }
-    .investment-banner .inv-value { font-size: 32px; font-weight: 900; color: var(--primary); }
-    .investment-banner .inv-sub { font-size: 13px; opacity: .75; }
+    .investment-banner .inv-label { font-size: 11px; opacity:.6; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px; }
+    .investment-banner .inv-value { font-size: 34px; font-weight: 900; color: var(--primary); line-height:1; }
+    .investment-banner .inv-sub { font-size: 12px; opacity: .7; margin-top:4px; }
 
     .economy-banner {
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      color: #fff;
-      border-radius: 12px;
+      background: var(--bg);
+      border-radius: 14px;
       padding: 22px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+      border: 1.5px solid #ececec;
     }
-    .economy-banner .eco-label { font-size: 14px; opacity: .85; }
-    .economy-banner .eco-value { font-size: 32px; font-weight: 900; color: var(--primary); }
-    .economy-banner .eco-year { font-size: 13px; opacity: .75; }
+    .economy-banner .eco-card { text-align:center; padding: 10px; }
+    .economy-banner .eco-card:not(:last-child) { border-right: 1px solid #ececec; }
+    .economy-banner .eco-label { font-size: 10px; opacity:.7; text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-bottom:6px; color:var(--muted); }
+    .economy-banner .eco-value { font-size: 24px; font-weight: 900; color: var(--primary); line-height:1; }
+    .economy-banner .eco-year { font-size: 11px; color: var(--muted); margin-top:4px; }
 
     .detail-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .detail-table th {
@@ -1883,6 +1886,7 @@
     const invPower  = getN('invPower');
     const invModel  = get('invModel') || '—';
     const hasBat    = document.getElementById('hasBattery').checked;
+    const hasBattOnly = hasBat && batKwh > 0 && (!modQty || modQty === 0);
     const batKwh    = getN('batteryKwh');
     const batModel  = get('batModel');
     const batDesc   = get('batDesc');
@@ -1972,26 +1976,26 @@
       </div>
 
       <div class="spec-grid">
-        <div class="spec-box">
+        ${!hasBattOnly ? `<div class="spec-box">
           <div class="spec-label">Potência Total</div>
           <div class="spec-value">${totalPwDisp}</div>
           <div class="spec-sub">${modQty ? modQty + ' módulos × ' + modPower + ' W' : ''}</div>
-        </div>
-        <div class="spec-box">
+        </div>` : ''}
+        ${!hasBattOnly ? `<div class="spec-box">
           <div class="spec-label">Geração Mensal</div>
           <div class="spec-value">${genKwh}</div>
           <div class="spec-sub">Estimativa mensal</div>
-        </div>
-        <div class="spec-box">
+        </div>` : ''}
+        ${!hasBattOnly ? `<div class="spec-box">
           <div class="spec-label">Módulos</div>
           <div class="spec-value">${modQty || '—'}</div>
           <div class="spec-sub">${modModel}</div>
-        </div>
-        <div class="spec-box">
+        </div>` : ''}
+        ${!hasBattOnly ? `<div class="spec-box">
           <div class="spec-label">Inversores</div>
           <div class="spec-value">${invQty > 1 ? invQty + ' un.' : (invQty || '—')}</div>
           <div class="spec-sub">${invModel}${invPower ? (invQty > 1 ? ' · ' + invPower + ' kW/un. (' + (invQty * invPower).toFixed(1) + ' kW total)' : ' · ' + invPower + ' kW') : ''}</div>
-        </div>
+        </div>` : ''}
         <div class="spec-box">
           <div class="spec-label">Bateria</div>
           <div class="spec-value">${hasBat ? batKwh + ' kWh' : '—'}</div>
@@ -2014,15 +2018,25 @@
         ${paybackStr ? '<div style="text-align:right"><div style="font-size:12px;opacity:.75">Retorno estimado</div><div style="font-size:22px;font-weight:800;color:#a8f0a8">' + paybackStr + '</div></div>' : ''}
       </div>` : ''}
 
-      <div class="economy-banner">
-        <div>
-          <div class="eco-label">Economia mensal estimada na fatura</div>
+      ${!hasBattOnly ? `<div class="economy-banner">
+        <div class="eco-card">
+          <div class="eco-label">Economia Mensal</div>
           <div class="eco-value">${fmtBRL(ecoMonthly)}</div>
-          <div class="eco-year">${ecoAnual ? 'Economia anual estimada: ' + fmtBRL(ecoAnual) : ''}</div>
+          <div class="eco-year">por mês</div>
         </div>
-      </div>
+        <div class="eco-card">
+          <div class="eco-label">Economia Anual</div>
+          <div class="eco-value">${fmtBRL(ecoAnual)}</div>
+          <div class="eco-year">em 12 meses</div>
+        </div>
+        <div class="eco-card">
+          <div class="eco-label">Economia em 25 anos</div>
+          <div class="eco-value">${fmtBRL(ecoAnual * 25)}</div>
+          <div class="eco-year">vida útil do sistema</div>
+        </div>
+      </div>` : ''}
 
-      ${buildComparisonChart(bill, ecoMonthly, projectVal)}
+      ${!hasBattOnly ? buildComparisonChart(bill, ecoMonthly, projectVal) : ''}
 
       <div class="p-page-break"></div>
 
@@ -2030,10 +2044,7 @@
       <table class="detail-table">
         <thead><tr><th>Item</th><th>Detalhe</th><th>Valor</th></tr></thead>
         <tbody>
-          <tr><td>Módulo Solar</td><td>${modModel}</td><td>${modPower ? modPower + ' W / unid.' : '—'}</td></tr>
-          <tr><td>Quantidade de Módulos</td><td>${modQty} unidades</td><td>${totalPwDisp}</td></tr>
-          <tr><td>${invQty > 1 ? invQty + ' Inversores' : 'Inversor'}</td><td>${invModel}</td><td>${invPower ? invPower + ' kW' + (invQty > 1 ? ' / unid.' : '') : '—'}</td></tr>
-          ${invQty > 1 ? '<tr><td></td><td>Potência total dos inversores</td><td>' + (invQty * invPower).toFixed(1) + ' kW</td></tr>' : ''}
+          ${!hasBattOnly ? `<tr><td>Módulo Solar</td><td>${modModel}</td><td>${modPower ? modPower + ' W / unid.' : '—'}</td></tr><tr><td>Quantidade de Módulos</td><td>${modQty} unidades</td><td>${totalPwDisp}</td></tr><tr><td>${invQty > 1 ? invQty + ' Inversores' : 'Inversor'}</td><td>${invModel}</td><td>${invPower ? invPower + ' kW' + (invQty > 1 ? ' / unid.' : '') : '—'}</td></tr>${invQty > 1 ? '<tr><td></td><td>Potência total dos inversores</td><td>' + (invQty * invPower).toFixed(1) + ' kW</td></tr>' : ''}` : ''}
           <tr><td>Bateria</td><td>${hasBat ? (batModel || 'Armazenamento') + ' — ' + batKwh + ' kWh' : 'Não inclusa'}</td><td>${hasBat ? batKwh + ' kWh' : '—'}</td></tr>
           ${hasBat && batDesc ? '<tr><td></td><td colspan="2" style="font-size:12px;color:var(--muted);font-style:italic">' + batDesc + '</td></tr>' : ''}
           <tr><td>Geração Mensal Estimada</td><td>${modQty} módulos</td><td>${genKwh}/mês</td></tr>
@@ -2479,7 +2490,7 @@
               Proteção real. Autonomia total. Sem depender de ninguém.
             </div>
           </div>
-        </section>` : perdaPassada5 > 0 ? `
+        </section>` : (data.modQty > 0) ? `
         <section style="background:var(--accent);padding:64px;color:#fff" id="ps-impacto">
           <div style="max-width:680px;margin:0 auto;text-align:center">
             <div style="font-size:10px;font-weight:800;letter-spacing:3px;color:var(--primary);text-transform:uppercase;margin-bottom:18px">Análise de Impacto Financeiro</div>
@@ -2660,7 +2671,7 @@
           </div>
 
           ${(data.projectValue && data.showPayback !== false) ? `
-          <div style="background:var(--accent);color:#fff;border-radius:14px;padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+          <div style="background:var(--accent);color:#fff;border-radius:14px;padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:${data.hasBattery && data.batteryKwh ? '20px' : '0'}">
             <div>
               <div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">Investimento Total</div>
               <div style="font-size:32px;font-weight:900;color:var(--primary);line-height:1.1">${fmt(data.projectValue)}</div>
@@ -2670,6 +2681,23 @@
               <div style="font-size:28px;font-weight:900">${paybackMeses ? Math.round(paybackMeses/12*10)/10 + ' anos' : '—'}</div>
               <div style="font-size:12px;opacity:.5;margin-top:4px">${paybackMeses ? paybackMeses + ' meses' : ''}</div>
             </div>
+          </div>` : ''}
+          ${(data.hasBattery && data.batteryKwh && !isBatteryOnly) ? `
+          <div style="margin-top:20px">
+            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--primary);margin-bottom:12px">⚡ Autonomia da Bateria — ${data.batteryKwh} kWh</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="background:var(--accent);border-radius:12px;padding:22px 18px;text-align:center;border-top:3px solid var(--primary)">
+                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.5);margin-bottom:8px">Uso Simultâneo</div>
+                <div style="font-size:32px;font-weight:900;color:var(--primary);line-height:1">${autoSimH ? autoSimH + 'h' : '—'}</div>
+                <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:6px">todos os equip. ligados</div>
+              </div>
+              <div style="background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:22px 18px;text-align:center;border-top:3px solid var(--primary)">
+                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px">Uso Não Simultâneo</div>
+                <div style="font-size:32px;font-weight:900;color:var(--accent);line-height:1">${autoNaoSimH ? autoNaoSimH + 'h' : '—'}</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:6px">uso escalonado</div>
+              </div>
+            </div>
+            ${!autoSimH ? '<div style="font-size:12px;color:var(--muted);margin-top:10px;padding:12px;background:var(--bg);border-radius:8px">Selecione os equipamentos no gerador para calcular a autonomia.</div>' : ''}
           </div>` : ''}
           `}
         </section>
