@@ -1886,8 +1886,8 @@
     const invPower  = getN('invPower');
     const invModel  = get('invModel') || '—';
     const hasBat    = document.getElementById('hasBattery').checked;
-    const hasBattOnly = hasBat && batKwh > 0 && (!modQty || modQty === 0);
     const batKwh    = getN('batteryKwh');
+    const hasBattOnly = hasBat && batKwh > 0 && (!modQty || modQty === 0);
     const batModel  = get('batModel');
     const batDesc   = get('batDesc');
     const instType    = document.querySelector('input[name=installType]:checked').value;
