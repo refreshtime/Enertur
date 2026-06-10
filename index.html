@@ -1219,6 +1219,104 @@
       .p-hybrid-card--bat .p-hybrid-card-body { background: #1a1a10 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .p-hybrid-section { break-inside: avoid; margin-bottom: 10px !important; }
     }
+
+    /* ══════════════════════════════════════════
+       NOVO DESIGN DE IMPRESSÃO — HEADER + METRICS
+       ══════════════════════════════════════════ */
+    .p-print-header {
+      display: none; /* oculto na tela, visível apenas na impressão */
+    }
+    .p-metrics-grid {
+      display: none; /* oculto na tela, visível apenas na impressão */
+    }
+
+    @media print {
+      /* Ocultar hero antigo e substituir pelo novo header */
+      .p-hero,
+      .p-company-strip,
+      .p-client-banner { display: none !important; }
+
+      /* Novo cabeçalho escuro */
+      .p-print-header {
+        display: block !important;
+        background: #1a1a10 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color: #fff;
+        padding: 28px 36px 24px;
+        margin-bottom: 0;
+        break-inside: avoid;
+      }
+      .p-print-logo {
+        font-size: 30px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        margin-bottom: 3px;
+        color: #fff;
+      }
+      .p-print-logo span { color: #c9a84c; }
+      .p-print-subtitle {
+        font-size: 9px;
+        letter-spacing: 3.5px;
+        color: rgba(201,168,76,0.75);
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+      .p-print-client {
+        font-size: 36px;
+        font-weight: 900;
+        color: #c9a84c;
+        line-height: 1.1;
+        margin-bottom: 7px;
+      }
+      .p-print-dates {
+        font-size: 11px;
+        color: rgba(255,255,255,0.55);
+      }
+
+      /* Grade de métricas */
+      .p-metrics-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        border: 1.5px solid #e0e0e0;
+        margin-bottom: 18px;
+        break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .p-metric-card {
+        padding: 16px 20px;
+        border-right: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+        background: #fff;
+      }
+      .p-metric-card:nth-child(3n) { border-right: none; }
+      .p-metric-card--dark {
+        background: #1a1a10 !important;
+      }
+      .p-metric-label {
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 6px;
+      }
+      .p-metric-card--dark .p-metric-label { color: rgba(255,255,255,0.45); }
+      .p-metric-value {
+        font-size: 26px;
+        font-weight: 900;
+        color: #1a1a10;
+        line-height: 1;
+        margin-bottom: 5px;
+      }
+      .p-metric-card--dark .p-metric-value { color: #c9a84c; }
+      .p-metric-desc {
+        font-size: 10px;
+        color: #999;
+      }
+      .p-metric-card--dark .p-metric-desc { color: rgba(255,255,255,0.4); }
+    }
 </style>
 </head>
 <body>
@@ -1933,6 +2031,46 @@
 
     const preview = document.getElementById('preview');
     preview.innerHTML = `
+      <div class="p-print-header">
+        <div class="p-print-logo">ENER<span>TUR</span></div>
+        <div class="p-print-subtitle">Proposta Solar Personalizada</div>
+        <div class="p-print-client">${name}</div>
+        <div class="p-print-dates">Emitida em ${today} &nbsp;&middot;&nbsp; V&aacute;lida at&eacute; ${new Date(Date.now()+validity*864e5).toLocaleDateString('pt-BR')}</div>
+      </div>
+
+      <div class="p-metrics-grid">
+        <div class="p-metric-card">
+          <div class="p-metric-label">Economia Mensal</div>
+          <div class="p-metric-value">${bill && ecoMonthly > 0 ? fmtBRL(ecoMonthly) : '—'}</div>
+          <div class="p-metric-desc">Redu&ccedil;&atilde;o imediata na fatura</div>
+        </div>
+        <div class="p-metric-card">
+          <div class="p-metric-label">Seguran&ccedil;a Energ&eacute;tica</div>
+          <div class="p-metric-value">${hasBat ? 'Aut&ocirc;noma' : 'Conectada'}</div>
+          <div class="p-metric-desc">Gera&ccedil;&atilde;o pr&oacute;pria de energia</div>
+        </div>
+        <div class="p-metric-card">
+          <div class="p-metric-label">Entrega Expressa</div>
+          <div class="p-metric-value">20 dias</div>
+          <div class="p-metric-desc">Prazo m&eacute;dio &uacute;teis</div>
+        </div>
+        <div class="p-metric-card p-metric-card--dark">
+          <div class="p-metric-label">Payback Estimado</div>
+          <div class="p-metric-value">${paybackStr || '—'}</div>
+          <div class="p-metric-desc">Retorno do investimento</div>
+        </div>
+        <div class="p-metric-card">
+          <div class="p-metric-label">Equipamentos</div>
+          <div class="p-metric-value">Premium</div>
+          <div class="p-metric-desc">Marcas l&iacute;deres do setor</div>
+        </div>
+        <div class="p-metric-card">
+          <div class="p-metric-label">Garantia dos Pain&eacute;is</div>
+          <div class="p-metric-value">25 anos</div>
+          <div class="p-metric-desc">Gerando economia</div>
+        </div>
+      </div>
+
       <div class="p-hero">
         <div class="p-hero-left">
           <div class="p-hero-logo-wrap">
