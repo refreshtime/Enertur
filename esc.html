@@ -228,16 +228,14 @@
     @media (max-width: 600px) { .spec-grid { grid-template-columns: 1fr 1fr; } }
 
     .spec-box {
-      background: #fff;
+      background: var(--bg);
       border-radius: 10px;
-      padding: 16px 18px;
-      border-left: 3px solid var(--primary);
-      border: 1.5px solid #ececec;
-      border-left: 3px solid var(--primary);
+      padding: 14px 16px;
+      border-left: 4px solid var(--primary);
     }
-    .spec-box .spec-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; font-weight:700; }
-    .spec-box .spec-value { font-size: 20px; font-weight: 900; color: var(--accent); margin-top: 4px; line-height:1; letter-spacing:-.3px; }
-    .spec-box .spec-sub { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight:600; }
+    .spec-box .spec-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .spec-box .spec-value { font-size: 20px; font-weight: 800; color: var(--accent); margin-top: 2px; }
+    .spec-box .spec-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
     /* ── Financial Hero Dashboard ── */
     .financial-hero {
@@ -294,9 +292,9 @@
     .fh-card.fh-primary .fh-sub { color: rgba(255,255,255,.5); }
 
     .investment-banner {
-      background: var(--accent);
+      background: #0d0d0d;
       color: #fff;
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 22px 28px;
       display: flex;
       align-items: center;
@@ -304,27 +302,26 @@
       margin-bottom: 16px;
       flex-wrap: wrap;
       gap: 12px;
-      border-top: 3px solid var(--primary);
     }
-    .investment-banner .inv-label { font-size: 11px; opacity:.6; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px; }
-    .investment-banner .inv-value { font-size: 34px; font-weight: 900; color: var(--primary); line-height:1; }
-    .investment-banner .inv-sub { font-size: 12px; opacity: .7; margin-top:4px; }
+    .investment-banner .inv-label { font-size: 14px; opacity: .85; }
+    .investment-banner .inv-value { font-size: 32px; font-weight: 900; color: var(--primary); }
+    .investment-banner .inv-sub { font-size: 13px; opacity: .75; }
 
     .economy-banner {
-      background: var(--bg);
-      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: #fff;
+      border-radius: 12px;
       padding: 22px 28px;
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 16px;
-      margin-bottom: 20px;
-      border: 1.5px solid #ececec;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
-    .economy-banner .eco-card { text-align:center; padding: 10px; }
-    .economy-banner .eco-card:not(:last-child) { border-right: 1px solid #ececec; }
-    .economy-banner .eco-label { font-size: 10px; opacity:.7; text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-bottom:6px; color:var(--muted); }
-    .economy-banner .eco-value { font-size: 24px; font-weight: 900; color: var(--primary); line-height:1; }
-    .economy-banner .eco-year { font-size: 11px; color: var(--muted); margin-top:4px; }
+    .economy-banner .eco-label { font-size: 14px; opacity: .85; }
+    .economy-banner .eco-value { font-size: 32px; font-weight: 900; color: var(--primary); }
+    .economy-banner .eco-year { font-size: 13px; opacity: .75; }
 
     .detail-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .detail-table th {
@@ -1219,104 +1216,6 @@
       .p-hybrid-card--bat .p-hybrid-card-body { background: #1a1a10 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .p-hybrid-section { break-inside: avoid; margin-bottom: 10px !important; }
     }
-
-    /* ══════════════════════════════════════════
-       NOVO DESIGN DE IMPRESSÃO — HEADER + METRICS
-       ══════════════════════════════════════════ */
-    .p-print-header {
-      display: none; /* oculto na tela, visível apenas na impressão */
-    }
-    .p-metrics-grid {
-      display: none; /* oculto na tela, visível apenas na impressão */
-    }
-
-    @media print {
-      /* Ocultar hero antigo e substituir pelo novo header */
-      .p-hero,
-      .p-company-strip,
-      .p-client-banner { display: none !important; }
-
-      /* Novo cabeçalho escuro */
-      .p-print-header {
-        display: block !important;
-        background: #1a1a10 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        color: #fff;
-        padding: 28px 36px 24px;
-        margin-bottom: 0;
-        break-inside: avoid;
-      }
-      .p-print-logo {
-        font-size: 30px;
-        font-weight: 900;
-        letter-spacing: 1px;
-        margin-bottom: 3px;
-        color: #fff;
-      }
-      .p-print-logo span { color: #c9a84c; }
-      .p-print-subtitle {
-        font-size: 9px;
-        letter-spacing: 3.5px;
-        color: rgba(201,168,76,0.75);
-        text-transform: uppercase;
-        margin-bottom: 16px;
-      }
-      .p-print-client {
-        font-size: 36px;
-        font-weight: 900;
-        color: #c9a84c;
-        line-height: 1.1;
-        margin-bottom: 7px;
-      }
-      .p-print-dates {
-        font-size: 11px;
-        color: rgba(255,255,255,0.55);
-      }
-
-      /* Grade de métricas */
-      .p-metrics-grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr);
-        border: 1.5px solid #e0e0e0;
-        margin-bottom: 18px;
-        break-inside: avoid;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .p-metric-card {
-        padding: 16px 20px;
-        border-right: 1px solid #e0e0e0;
-        border-bottom: 1px solid #e0e0e0;
-        background: #fff;
-      }
-      .p-metric-card:nth-child(3n) { border-right: none; }
-      .p-metric-card--dark {
-        background: #1a1a10 !important;
-      }
-      .p-metric-label {
-        font-size: 8px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: #999;
-        margin-bottom: 6px;
-      }
-      .p-metric-card--dark .p-metric-label { color: rgba(255,255,255,0.45); }
-      .p-metric-value {
-        font-size: 26px;
-        font-weight: 900;
-        color: #1a1a10;
-        line-height: 1;
-        margin-bottom: 5px;
-      }
-      .p-metric-card--dark .p-metric-value { color: #c9a84c; }
-      .p-metric-desc {
-        font-size: 10px;
-        color: #999;
-      }
-      .p-metric-card--dark .p-metric-desc { color: rgba(255,255,255,0.4); }
-    }
 </style>
 </head>
 <body>
@@ -1400,8 +1299,7 @@
       <label>Modelo do Módulo</label>
       <select id="modModelSel" onchange="onModModelChange(this)" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;color:var(--text);background:#fafbfc;font-family:inherit">
         <option value="">— Selecionar modelo —</option>
-        <option value="MODULO BIFACIAL 144 CEL N TYPE 590W BLACK FRAME CABO 1.2M RONMA SOLAR" data-power="590">Módulo Bifacial 144 cel. N-Type 590W Black Frame Cabo 1.2M Ronma Solar</option>
-        <option value="MODULO BIFACIAL 144 CEL N TYPE 590W BLACK FRAME CABO 0.3M RONMA SOLAR" data-power="590">Módulo Bifacial 144 cel. N-Type 590W Black Frame Cabo 0.3M Ronma Solar</option>
+        <option value="MODULO BIFACIAL 144 CEL N TYPE 590W BLACK FRAME CABO 1.2M RONMA SOLAR" data-power="590">Módulo Bifacial 144 cel. N-Type 590W Black Frame Ronma Solar</option>
         <option value="MODULO BIFACIAL 115 CEL. PERC 550W CABO 1.3M MAXEON" data-power="550">Módulo Bifacial 115 cel. PERC 550W Maxeon</option>
         <option value="custom">Outro (digitar manualmente)…</option>
       </select>
@@ -1986,7 +1884,6 @@
     const invModel  = get('invModel') || '—';
     const hasBat    = document.getElementById('hasBattery').checked;
     const batKwh    = getN('batteryKwh');
-    const hasBattOnly = hasBat && batKwh > 0 && (!modQty || modQty === 0);
     const batModel  = get('batModel');
     const batDesc   = get('batDesc');
     const instType    = document.querySelector('input[name=installType]:checked').value;
@@ -2031,46 +1928,6 @@
 
     const preview = document.getElementById('preview');
     preview.innerHTML = `
-      <div class="p-print-header">
-        <div class="p-print-logo">ENER<span>TUR</span></div>
-        <div class="p-print-subtitle">Proposta Solar Personalizada</div>
-        <div class="p-print-client">${name}</div>
-        <div class="p-print-dates">Emitida em ${today} &nbsp;&middot;&nbsp; V&aacute;lida at&eacute; ${new Date(Date.now()+validity*864e5).toLocaleDateString('pt-BR')}</div>
-      </div>
-
-      <div class="p-metrics-grid">
-        <div class="p-metric-card">
-          <div class="p-metric-label">Economia Mensal</div>
-          <div class="p-metric-value">${bill && ecoMonthly > 0 ? fmtBRL(ecoMonthly) : '—'}</div>
-          <div class="p-metric-desc">Redu&ccedil;&atilde;o imediata na fatura</div>
-        </div>
-        <div class="p-metric-card">
-          <div class="p-metric-label">Seguran&ccedil;a Energ&eacute;tica</div>
-          <div class="p-metric-value">${hasBat ? 'Aut&ocirc;noma' : 'Conectada'}</div>
-          <div class="p-metric-desc">Gera&ccedil;&atilde;o pr&oacute;pria de energia</div>
-        </div>
-        <div class="p-metric-card">
-          <div class="p-metric-label">Entrega Expressa</div>
-          <div class="p-metric-value">20 dias</div>
-          <div class="p-metric-desc">Prazo m&eacute;dio &uacute;teis</div>
-        </div>
-        <div class="p-metric-card p-metric-card--dark">
-          <div class="p-metric-label">Payback Estimado</div>
-          <div class="p-metric-value">${paybackStr || '—'}</div>
-          <div class="p-metric-desc">Retorno do investimento</div>
-        </div>
-        <div class="p-metric-card">
-          <div class="p-metric-label">Equipamentos</div>
-          <div class="p-metric-value">Premium</div>
-          <div class="p-metric-desc">Marcas l&iacute;deres do setor</div>
-        </div>
-        <div class="p-metric-card">
-          <div class="p-metric-label">Garantia dos Pain&eacute;is</div>
-          <div class="p-metric-value">25 anos</div>
-          <div class="p-metric-desc">Gerando economia</div>
-        </div>
-      </div>
-
       <div class="p-hero">
         <div class="p-hero-left">
           <div class="p-hero-logo-wrap">
@@ -2115,26 +1972,26 @@
       </div>
 
       <div class="spec-grid">
-        ${!hasBattOnly ? `<div class="spec-box">
+        <div class="spec-box">
           <div class="spec-label">Potência Total</div>
           <div class="spec-value">${totalPwDisp}</div>
           <div class="spec-sub">${modQty ? modQty + ' módulos × ' + modPower + ' W' : ''}</div>
-        </div>` : ''}
-        ${!hasBattOnly ? `<div class="spec-box">
+        </div>
+        <div class="spec-box">
           <div class="spec-label">Geração Mensal</div>
           <div class="spec-value">${genKwh}</div>
           <div class="spec-sub">Estimativa mensal</div>
-        </div>` : ''}
-        ${!hasBattOnly ? `<div class="spec-box">
+        </div>
+        <div class="spec-box">
           <div class="spec-label">Módulos</div>
           <div class="spec-value">${modQty || '—'}</div>
           <div class="spec-sub">${modModel}</div>
-        </div>` : ''}
-        ${!hasBattOnly ? `<div class="spec-box">
+        </div>
+        <div class="spec-box">
           <div class="spec-label">Inversores</div>
           <div class="spec-value">${invQty > 1 ? invQty + ' un.' : (invQty || '—')}</div>
           <div class="spec-sub">${invModel}${invPower ? (invQty > 1 ? ' · ' + invPower + ' kW/un. (' + (invQty * invPower).toFixed(1) + ' kW total)' : ' · ' + invPower + ' kW') : ''}</div>
-        </div>` : ''}
+        </div>
         <div class="spec-box">
           <div class="spec-label">Bateria</div>
           <div class="spec-value">${hasBat ? batKwh + ' kWh' : '—'}</div>
@@ -2157,25 +2014,15 @@
         ${paybackStr ? '<div style="text-align:right"><div style="font-size:12px;opacity:.75">Retorno estimado</div><div style="font-size:22px;font-weight:800;color:#a8f0a8">' + paybackStr + '</div></div>' : ''}
       </div>` : ''}
 
-      ${!hasBattOnly ? `<div class="economy-banner">
-        <div class="eco-card">
-          <div class="eco-label">Economia Mensal</div>
+      <div class="economy-banner">
+        <div>
+          <div class="eco-label">Economia mensal estimada na fatura</div>
           <div class="eco-value">${fmtBRL(ecoMonthly)}</div>
-          <div class="eco-year">por mês</div>
+          <div class="eco-year">${ecoAnual ? 'Economia anual estimada: ' + fmtBRL(ecoAnual) : ''}</div>
         </div>
-        <div class="eco-card">
-          <div class="eco-label">Economia Anual</div>
-          <div class="eco-value">${fmtBRL(ecoAnual)}</div>
-          <div class="eco-year">em 12 meses</div>
-        </div>
-        <div class="eco-card">
-          <div class="eco-label">Economia em 25 anos</div>
-          <div class="eco-value">${fmtBRL(ecoAnual * 25)}</div>
-          <div class="eco-year">vida útil do sistema</div>
-        </div>
-      </div>` : ''}
+      </div>
 
-      ${!hasBattOnly ? buildComparisonChart(bill, ecoMonthly, projectVal) : ''}
+      ${buildComparisonChart(bill, ecoMonthly, projectVal)}
 
       <div class="p-page-break"></div>
 
@@ -2183,7 +2030,10 @@
       <table class="detail-table">
         <thead><tr><th>Item</th><th>Detalhe</th><th>Valor</th></tr></thead>
         <tbody>
-          ${!hasBattOnly ? `<tr><td>Módulo Solar</td><td>${modModel}</td><td>${modPower ? modPower + ' W / unid.' : '—'}</td></tr><tr><td>Quantidade de Módulos</td><td>${modQty} unidades</td><td>${totalPwDisp}</td></tr><tr><td>${invQty > 1 ? invQty + ' Inversores' : 'Inversor'}</td><td>${invModel}</td><td>${invPower ? invPower + ' kW' + (invQty > 1 ? ' / unid.' : '') : '—'}</td></tr>${invQty > 1 ? '<tr><td></td><td>Potência total dos inversores</td><td>' + (invQty * invPower).toFixed(1) + ' kW</td></tr>' : ''}` : ''}
+          <tr><td>Módulo Solar</td><td>${modModel}</td><td>${modPower ? modPower + ' W / unid.' : '—'}</td></tr>
+          <tr><td>Quantidade de Módulos</td><td>${modQty} unidades</td><td>${totalPwDisp}</td></tr>
+          <tr><td>${invQty > 1 ? invQty + ' Inversores' : 'Inversor'}</td><td>${invModel}</td><td>${invPower ? invPower + ' kW' + (invQty > 1 ? ' / unid.' : '') : '—'}</td></tr>
+          ${invQty > 1 ? '<tr><td></td><td>Potência total dos inversores</td><td>' + (invQty * invPower).toFixed(1) + ' kW</td></tr>' : ''}
           <tr><td>Bateria</td><td>${hasBat ? (batModel || 'Armazenamento') + ' — ' + batKwh + ' kWh' : 'Não inclusa'}</td><td>${hasBat ? batKwh + ' kWh' : '—'}</td></tr>
           ${hasBat && batDesc ? '<tr><td></td><td colspan="2" style="font-size:12px;color:var(--muted);font-style:italic">' + batDesc + '</td></tr>' : ''}
           <tr><td>Geração Mensal Estimada</td><td>${modQty} módulos</td><td>${genKwh}/mês</td></tr>
@@ -2368,32 +2218,18 @@
   // Key map: long → short (saves ~50% URL size)
   const _K = {clientName:'cn',clientAddr:'ca',billValue:'bv',consumoAtual:'co',tarifa:'ta',ecoOverride:'eo',modQty:'mq',modPower:'mp',modModel:'mm',totalPower:'tp',monthlyGen:'mg',invQty:'iq',invPower:'ip',invModel:'im',projectValue:'pv',validityDays:'vd',installType:'it',conexaoType:'ct',hasBattery:'hb',batteryKwh:'bk',batModel:'bm',batDesc:'bd',batQty:'by',vendedora:'ve',vendedoraFone:'vf',equipamentos:'eq',generatedDate:'gd',warPainel:'wp',warMicroinv:'wm',warInvStr:'wi',warBateria:'wb',warInstalacao:'ws',warAssistencia:'wa',showPayback:'sp'};
   const _R = Object.fromEntries(Object.entries(_K).map(([k,v])=>[v,k]));
-  // UTF-8 safe base64 (handles ã, ç, etc.)
-  function _b64enc(str) {
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,(m,p)=>String.fromCharCode(parseInt(p,16))))
-      .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-  }
-  function _b64dec(str) {
-    str = str.replace(/-/g,'+').replace(/_/g,'/');
-    while(str.length%4) str+='=';
-    return decodeURIComponent(atob(str).split('').map(c=>'%'+c.charCodeAt(0).toString(16).padStart(2,'0')).join(''));
-  }
   function encodeData(obj) {
     const s={};
     for(const[k,v]of Object.entries(obj)) s[_K[k]||k]=v;
-    return _b64enc(JSON.stringify(s));
+    return btoa(unescape(encodeURIComponent(JSON.stringify(s))));
   }
   function decodeData(str) {
     try {
-      const s=JSON.parse(_b64dec(str));
+      const s=JSON.parse(decodeURIComponent(escape(atob(str))));
       const o={};
       for(const[k,v]of Object.entries(s)) o[_R[k]||k]=v;
       return o;
-    } catch(e) {
-      // fallback: try old btoa format
-      try { return JSON.parse(decodeURIComponent(escape(atob(str)))); } catch(e2) {}
-      return null;
-    }
+    } catch(e) { return null; }
   }
 
   function collectFormData() {
@@ -2629,7 +2465,7 @@
               Proteção real. Autonomia total. Sem depender de ninguém.
             </div>
           </div>
-        </section>` : (data.modQty > 0) ? `
+        </section>` : perdaPassada5 > 0 ? `
         <section style="background:var(--accent);padding:64px;color:#fff" id="ps-impacto">
           <div style="max-width:680px;margin:0 auto;text-align:center">
             <div style="font-size:10px;font-weight:800;letter-spacing:3px;color:var(--primary);text-transform:uppercase;margin-bottom:18px">Análise de Impacto Financeiro</div>
@@ -2810,7 +2646,7 @@
           </div>
 
           ${(data.projectValue && data.showPayback !== false) ? `
-          <div style="background:var(--accent);color:#fff;border-radius:14px;padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:${data.hasBattery && data.batteryKwh ? '20px' : '0'}">
+          <div style="background:var(--accent);color:#fff;border-radius:14px;padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
             <div>
               <div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">Investimento Total</div>
               <div style="font-size:32px;font-weight:900;color:var(--primary);line-height:1.1">${fmt(data.projectValue)}</div>
@@ -2820,23 +2656,6 @@
               <div style="font-size:28px;font-weight:900">${paybackMeses ? Math.round(paybackMeses/12*10)/10 + ' anos' : '—'}</div>
               <div style="font-size:12px;opacity:.5;margin-top:4px">${paybackMeses ? paybackMeses + ' meses' : ''}</div>
             </div>
-          </div>` : ''}
-          ${(data.hasBattery && data.batteryKwh && !isBatteryOnly) ? `
-          <div style="margin-top:20px">
-            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--primary);margin-bottom:12px">⚡ Autonomia da Bateria — ${data.batteryKwh} kWh</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div style="background:var(--accent);border-radius:12px;padding:22px 18px;text-align:center;border-top:3px solid var(--primary)">
-                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.5);margin-bottom:8px">Uso Simultâneo</div>
-                <div style="font-size:32px;font-weight:900;color:var(--primary);line-height:1">${autoSimH ? autoSimH + 'h' : '—'}</div>
-                <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:6px">todos os equip. ligados</div>
-              </div>
-              <div style="background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:22px 18px;text-align:center;border-top:3px solid var(--primary)">
-                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px">Uso Não Simultâneo</div>
-                <div style="font-size:32px;font-weight:900;color:var(--accent);line-height:1">${autoNaoSimH ? autoNaoSimH + 'h' : '—'}</div>
-                <div style="font-size:11px;color:var(--muted);margin-top:6px">uso escalonado</div>
-              </div>
-            </div>
-            ${!autoSimH ? '<div style="font-size:12px;color:var(--muted);margin-top:10px;padding:12px;background:var(--bg);border-radius:8px">Selecione os equipamentos no gerador para calcular a autonomia.</div>' : ''}
           </div>` : ''}
           `}
         </section>
