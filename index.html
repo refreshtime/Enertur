@@ -1223,55 +1223,63 @@
     /* ══════════════════════════════════════════
        NOVO DESIGN DE IMPRESSÃO — HEADER + METRICS
        ══════════════════════════════════════════ */
-    .p-print-header {
-      display: none; /* oculto na tela, visível apenas na impressão */
-    }
-    .p-metrics-grid {
-      display: none; /* oculto na tela, visível apenas na impressão */
-    }
+    .p-print-hero-left { display: none; }
+    .p-metrics-grid    { display: none; }
 
     @media print {
-      /* Ocultar hero antigo e substituir pelo novo header */
-      .p-hero,
+      /* Hero: ocultar lado esquerdo original, manter foto à direita */
+      .p-hero {
+        display: flex !important;
+        border-radius: 0 !important;
+        margin-bottom: 0 !important;
+        box-shadow: none !important;
+        min-height: 180px;
+        break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .p-hero-left { display: none !important; }
       .p-company-strip,
       .p-client-banner { display: none !important; }
 
-      /* Novo cabeçalho escuro */
-      .p-print-header {
-        display: block !important;
+      /* Novo lado esquerdo escuro */
+      .p-print-hero-left {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: space-between;
         background: #1a1a10 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color: #fff;
-        padding: 28px 36px 24px;
-        margin-bottom: 0;
-        break-inside: avoid;
+        padding: 24px 28px;
+        min-width: 260px;
+        flex: 0 0 42%;
       }
       .p-print-logo {
-        font-size: 30px;
+        font-size: 26px;
         font-weight: 900;
         letter-spacing: 1px;
-        margin-bottom: 3px;
         color: #fff;
+        margin-bottom: 2px;
       }
       .p-print-logo span { color: #c9a84c; }
       .p-print-subtitle {
-        font-size: 9px;
-        letter-spacing: 3.5px;
-        color: rgba(201,168,76,0.75);
+        font-size: 8px;
+        letter-spacing: 3px;
+        color: rgba(201,168,76,0.7);
         text-transform: uppercase;
-        margin-bottom: 16px;
+        margin-bottom: 18px;
       }
       .p-print-client {
-        font-size: 36px;
+        font-size: 30px;
         font-weight: 900;
         color: #c9a84c;
-        line-height: 1.1;
-        margin-bottom: 7px;
+        line-height: 1.15;
+        margin-bottom: 8px;
       }
       .p-print-dates {
-        font-size: 11px;
-        color: rgba(255,255,255,0.55);
+        font-size: 10px;
+        color: rgba(255,255,255,0.5);
       }
 
       /* Grade de métricas */
@@ -2031,13 +2039,6 @@
 
     const preview = document.getElementById('preview');
     preview.innerHTML = `
-      <div class="p-print-header">
-        <div class="p-print-logo">ENER<span>TUR</span></div>
-        <div class="p-print-subtitle">Proposta Solar Personalizada</div>
-        <div class="p-print-client">${name}</div>
-        <div class="p-print-dates">Emitida em ${today} &nbsp;&middot;&nbsp; V&aacute;lida at&eacute; ${new Date(Date.now()+validity*864e5).toLocaleDateString('pt-BR')}</div>
-      </div>
-
       <div class="p-metrics-grid">
         <div class="p-metric-card">
           <div class="p-metric-label">Economia Mensal</div>
@@ -2072,6 +2073,16 @@
       </div>
 
       <div class="p-hero">
+        <div class="p-print-hero-left">
+          <div>
+            <div class="p-print-logo">ENER<span>TUR</span></div>
+            <div class="p-print-subtitle">Proposta Solar Personalizada</div>
+          </div>
+          <div>
+            <div class="p-print-client">${name}</div>
+            <div class="p-print-dates">Emitida em ${today} &middot; V&aacute;lida at&eacute; ${new Date(Date.now()+validity*864e5).toLocaleDateString('pt-BR')}</div>
+          </div>
+        </div>
         <div class="p-hero-left">
           <div class="p-hero-logo-wrap">
             <img src="logo.png" class="p-hero-logo-img" alt="Enertur Energia Solar"
